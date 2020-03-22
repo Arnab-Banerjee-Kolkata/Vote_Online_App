@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PublicList">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbarlist"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="Public Elections"
+        app:titleTextAppearance="@style/azo" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="This section contains a list of upcoming/ongoing elections for the general public. Select one to proceed.\n\nPublic elections : "
+        android:padding="10dp"
+        android:elevation="1dp"
+        app:layout_constraintTop_toBottomOf="@id/toolbarlist"
+        app:layout_constraintBottom_toTopOf="@id/list"/>
+
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:padding="2dp"
+        android:background="@drawable/boxbg"
+        android:dividerHeight="2dp"
+        android:divider="#6F6F6F"
+        android:elevation="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView6"
+        android:backgroundTint="@color/shade"
+        android:backgroundTintMode="add"/>
+
+    <ImageView
+        android:id="@+id/listbg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="fitEnd"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</android.support.constraint.ConstraintLayout>
