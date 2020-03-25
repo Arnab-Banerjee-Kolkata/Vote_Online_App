@@ -8,13 +8,39 @@
         android:id="@+id/textView15"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="15dp"
-        android:text="Name"
+        android:padding="5dp"
+        android:text="Type"
         android:fontFamily="@font/azo"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageView3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/electionStateName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="State"
+        android:fontFamily="@font/azo"
+        android:textSize="14dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/electionPhase"
+        app:layout_constraintTop_toBottomOf="@id/textView15"/>
+
+    <TextView
+        android:id="@+id/electionPhase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:padding="5dp"
+        android:text="Phase : "
+        android:fontFamily="@font/azo"
+        android:textSize="14dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/electionStateName"
+        app:layout_constraintEnd_toStartOf="@id/imageView3"
+        app:layout_constraintTop_toBottomOf="@id/textView15"/>
 
     <ImageView
         android:id="@+id/imageView3"
