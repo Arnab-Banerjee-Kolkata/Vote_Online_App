@@ -44,16 +44,18 @@ public class PublicList extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        ImageView imageView1 = findViewById(R.id.listbg);
-        int resid = R.drawable.wait_bg_right;
+        ImageView imageView1 = findViewById(R.id.listbg1);
+        int resid = R.drawable.wait_bg_left;
         Glide
                 .with(this)
                 .load(resid).into(imageView1);
-        ServerCall serverCall = new ServerCall();
-        serverCall.getPublicElectionList(getApplicationContext(), PublicList.this);
-    }
-
-    void showList(ArrayList<ElectionListItem> electionlist) {
+        ImageView imageView2 = findViewById(R.id.listbg2);
+        resid = R.drawable.wait_bg_right;
+        Glide
+                .with(this)
+                .load(resid).into(imageView2);
+        Intent intent = getIntent();
+        ArrayList<ElectionListItem> electionlist = (ArrayList<ElectionListItem>) intent.getSerializableExtra("list");
 
         class MyAdapter extends ArrayAdapter<ElectionListItem> {
             ArrayList<ElectionListItem> list;
@@ -78,7 +80,7 @@ public class PublicList extends AppCompatActivity {
                 phase = row.findViewById(R.id.electionPhase);
                 status = row.findViewById(R.id.textView14);
                 type.setText(list.get(position).getType());
-                phase.setText(phase.getText()+list.get(position).getPhaseCode());
+                phase.setText(phase.getText() + list.get(position).getPhaseCode());
                 state.setText(list.get(position).getState());
                 if (list.get(position).getStatus() == 0) {
                     status.setText("Upcoming");
@@ -93,20 +95,20 @@ public class PublicList extends AppCompatActivity {
         list = findViewById(R.id.list);
         final MyAdapter arrayAdapter = new MyAdapter(electionlist, this.getBaseContext());
         list.setAdapter(arrayAdapter);
-        /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 list.setEnabled(false);
                 Intent intent = new Intent(getApplicationContext(), PublicElection.class);
-                intent.putExtra("NAME", arrayAdapter.getItem(position).getName());
+                intent.putExtra("NAME", arrayAdapter.getItem(position).getType());
                 startActivity(intent);
             }
-        });*/
+        });
     }
 
-    /*@Override
+    @Override
     protected void onResume() {
         list.setEnabled(true);
         super.onResume();
-    }*/
+    }
 }
