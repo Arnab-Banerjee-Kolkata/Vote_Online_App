@@ -33,9 +33,9 @@ public class PublicList extends AppCompatActivity {
         setTheme(MainActivity.TM.getThemeId());
         setContentView(R.layout.activity_public_list);
 
-        final int x=MainActivity.TM.getThemeId();
+        final int x = MainActivity.TM.getThemeId();
 
-        context=this;
+        context = this;
         Toolbar toolbar = findViewById(R.id.toolbarlist);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -49,18 +49,20 @@ public class PublicList extends AppCompatActivity {
         Glide
                 .with(this)
                 .load(resid).into(imageView1);
+        ServerCall serverCall = new ServerCall();
+        serverCall.getPublicElectionList(getApplicationContext(), PublicList.this);
+    }
 
-        ArrayList<ListItem> electionlist = new ArrayList<ListItem>();
-        electionlist.add(new ListItem("LS Remote", 1));
-        electionlist.add(new ListItem("VS Remote", 0));
-        class MyAdapter extends ArrayAdapter<ListItem> {
-            ArrayList<ListItem> list;
+    void showList(ArrayList<ElectionListItem> electionlist) {
+
+        class MyAdapter extends ArrayAdapter<ElectionListItem> {
+            ArrayList<ElectionListItem> list;
             Context context;
 
-            MyAdapter(ArrayList<ListItem> list, Context context) {
+            MyAdapter(ArrayList<ElectionListItem> list, Context context) {
                 super(context, R.layout.election_card, list);
                 this.list = list;
-                this.context=context;
+                this.context = context;
             }
 
             @NonNull
@@ -68,26 +70,30 @@ public class PublicList extends AppCompatActivity {
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 ConstraintLayout row = (ConstraintLayout) layoutInflater.inflate(R.layout.election_card, parent, false);
-                TextView name, state;
+                TextView type, state, phase, status;
                 ImageView indicator;
                 indicator = row.findViewById(R.id.imageView3);
-                name = row.findViewById(R.id.textView15);
-                state = row.findViewById(R.id.textView14);
-                name.setText(list.get(position).getName());
-                if (list.get(position).getState() == 0) {
-                    state.setText("Upcoming");
+                type = row.findViewById(R.id.textView15);
+                state = row.findViewById(R.id.electionStateName);
+                phase = row.findViewById(R.id.electionPhase);
+                status = row.findViewById(R.id.textView14);
+                type.setText(list.get(position).getType());
+                phase.setText(phase.getText()+list.get(position).getPhaseCode());
+                state.setText(list.get(position).getState());
+                if (list.get(position).getStatus() == 0) {
+                    status.setText("Upcoming");
                     indicator.setImageResource(R.drawable.yellow);
                 } else {
-                    state.setText("Ongoing");
+                    status.setText("Ongoing");
                     indicator.setImageResource(R.drawable.green);
                 }
                 return row;
             }
         }
         list = findViewById(R.id.list);
-        final MyAdapter arrayAdapter=new MyAdapter(electionlist,this.getBaseContext());
+        final MyAdapter arrayAdapter = new MyAdapter(electionlist, this.getBaseContext());
         list.setAdapter(arrayAdapter);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 list.setEnabled(false);
@@ -95,12 +101,12 @@ public class PublicList extends AppCompatActivity {
                 intent.putExtra("NAME", arrayAdapter.getItem(position).getName());
                 startActivity(intent);
             }
-        });
+        });*/
     }
 
-    @Override
+    /*@Override
     protected void onResume() {
         list.setEnabled(true);
         super.onResume();
-    }
+    }*/
 }
