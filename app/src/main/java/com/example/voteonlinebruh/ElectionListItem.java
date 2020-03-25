@@ -1,6 +1,8 @@
 package com.example.voteonlinebruh;
 
-public class ElectionListItem {
+import java.io.Serializable;
+
+public class ElectionListItem implements Serializable {
     private String electionId;
     private String state;
     private String type;

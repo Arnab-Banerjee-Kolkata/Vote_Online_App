@@ -18,6 +18,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ServerCall {
+    class myRunnable implements Runnable {
+        Intent intent;
+        Context mContext;
+
+        myRunnable(Intent intent, Context mContext) {
+            this.intent = intent;
+            this.mContext = mContext;
+        }
+
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(1000);
+                WaitScreen.terminate = true;
+                mContext.startActivity(intent);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     void validateDetails(String aadhaarNo, final String boothId, final Context mContext, final LoginPage loginPage) {
         Response.Listener<String> listener = new Response.Listener<String>() {
             @Override
@@ -26,7 +47,6 @@ public class ServerCall {
                 Map<String, String> params = new HashMap<>();
                 JSONObject jsonResponse = null;
                 response = "{" + response + "}";
-                WaitScreen.terminate = true;
 
                 try {
                     jsonResponse = new JSONObject(response.substring(1, response.length() - 1));
@@ -44,7 +64,8 @@ public class ServerCall {
                     } else {
                         Intent intent = new Intent(mContext, VotingInstructions.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        mContext.startActivity(intent);
+                        myRunnable thread = new myRunnable(intent, mContext);
+                        new Thread(thread).start();
                         loginPage.finish();
                     }
 
@@ -91,15 +112,14 @@ public class ServerCall {
                 Map<String, String> params = new HashMap<>();
                 JSONObject jsonResponse = null;
 
-                WaitScreen.terminate = true;
-
                 try {
                     jsonResponse = new JSONObject(response);
                     boolean success = jsonResponse.getBoolean("success");
                     if (success) {
                         Intent intent = new Intent(mContext, OtpPage.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        mContext.startActivity(intent);
+                        myRunnable thread = new myRunnable(intent, mContext);
+                        new Thread(thread).start();
                         votingInstructions.finish();
                     } else {
                         Toast.makeText(mContext, "Could not send otp", Toast.LENGTH_SHORT).show();
@@ -141,8 +161,6 @@ public class ServerCall {
                 Map<String, String> params = new HashMap<>();
                 JSONObject jsonResponse = null;
 
-                WaitScreen.terminate = true;
-
                 try {
                     jsonResponse = new JSONObject(response);
                     boolean success = jsonResponse.getBoolean("success");
@@ -156,7 +174,8 @@ public class ServerCall {
                     } else {
                         Intent intent = new Intent(mContext, VotingPage.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        mContext.startActivity(intent);
+                        myRunnable thread = new myRunnable(intent, mContext);
+                        new Thread(thread).start();
                         otpPage.finish();
                     }
 
@@ -195,17 +214,14 @@ public class ServerCall {
         queue.add(postValidateOtp);
     }
 
-    void getPublicElectionList(final Context mContext, final PublicList publicList) {
+    void getPublicElectionList(final Context mContext) {
         final ArrayList<ElectionListItem> electionlist = new ArrayList<ElectionListItem>();
 
         Response.Listener<String> listener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 
-                WaitScreen.terminate = true;
                 JSONObject jsonResponse = null;
-
-                WaitScreen.terminate = true;
 
                 try {
                     jsonResponse = new JSONObject(response);
@@ -227,12 +243,17 @@ public class ServerCall {
                                     elections.getString("startTime"),
                                     elections.getString("endTime")));
                         }
-                        publicList.showList(electionlist);
+                        final Intent intent = new Intent(mContext, PublicList.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra("list", electionlist);
+
+                        myRunnable thread = new myRunnable(intent, mContext);
+                        new Thread(thread).start();
                     }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(mContext,"Something went wrong",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
                     //Toast.makeText(mContext, response, Toast.LENGTH_LONG).show();
                 }
             }
@@ -302,7 +323,7 @@ public class ServerCall {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    //Toast.makeText(mContext,"Something went wrong",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext,"Something went wrong",Toast.LENGTH_SHORT).show();
                     //Toast.makeText(mContext, responseArray, Toast.LENGTH_LONG).show();
                 }
             }

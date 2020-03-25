@@ -80,7 +80,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 pub.setEnabled(false);
-                Intent intent = new Intent(getApplicationContext(), PublicList.class);
+                ServerCall serverCall = new ServerCall();
+                serverCall.getPublicElectionList(getApplicationContext());
+                Intent intent = new Intent(getBaseContext(), WaitScreen.class);
+                intent.putExtra("LABEL", "Refreshing");
                 startActivity(intent);
             }
         });
