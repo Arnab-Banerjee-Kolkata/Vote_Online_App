@@ -14,54 +14,54 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 public class WaitScreen extends AppCompatActivity {
-    private Handler dotHandler=new Handler();
+    private Handler dotHandler = new Handler();
     private boolean threadStop;
-    protected static boolean terminate=false;
+    protected static boolean terminate = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTheme(MainActivity.TM.getThemeId());
         setContentView(R.layout.activity_wait_screen);
-        Intent intent=getIntent();
-        String text=intent.getStringExtra("LABEL");
-        TextView label=findViewById(R.id.label);
+        Intent intent = getIntent();
+        String text = intent.getStringExtra("LABEL");
+        TextView label = findViewById(R.id.label);
         label.setText(text);
+        final ImageView left, right;
+        left = findViewById(R.id.bg_left);
+        right = findViewById(R.id.bg_right);
 
-        final ImageView left,right;
-        left=findViewById(R.id.bg_left);
-        right=findViewById(R.id.bg_right);
-
-        int resid=R.drawable.wait_bg_left;
+        int resid = R.drawable.wait_bg_left;
         Glide
                 .with(this)
                 .load(resid).into(left);
-        resid=R.drawable.wait_bg_right;
+        resid = R.drawable.wait_bg_right;
         Glide
                 .with(this)
                 .load(resid).into(right);
 
-        final ImageView imageView=findViewById(R.id.votehand);
-        final ImageView imageView1=findViewById(R.id.votemike);
+        final ImageView imageView = findViewById(R.id.votehand);
+        final ImageView imageView1 = findViewById(R.id.votemike);
 
-        resid=R.drawable.votehand;
+        resid = R.drawable.votehand;
         Glide
                 .with(this)
                 .load(resid).into(imageView);
-        resid=R.drawable.votemike;
+        resid = R.drawable.votemike;
         Glide
                 .with(this)
                 .load(resid).into(imageView1);
 
         final Animation translate_up = AnimationUtils.loadAnimation(this, R.anim.translate_up);
         final Animation translate_down = AnimationUtils.loadAnimation(this, R.anim.translate_down);
-        final Animation hands=AnimationUtils.loadAnimation(this,R.anim.entry_hands);
-        final Animation handsback=AnimationUtils.loadAnimation(this,R.anim.entry_hands_retract);
-        final Animation mike=AnimationUtils.loadAnimation(this,R.anim.entry_mike);
-        final Animation mikeback=AnimationUtils.loadAnimation(this,R.anim.entry_mike_retract);
-        final TextView dot1,dot2,dot3;
-        dot1=findViewById(R.id.dot1);
-        dot2=findViewById(R.id.dot2);
-        dot3=findViewById(R.id.dot3);
+        final Animation hands = AnimationUtils.loadAnimation(this, R.anim.entry_hands);
+        final Animation handsback = AnimationUtils.loadAnimation(this, R.anim.entry_hands_retract);
+        final Animation mike = AnimationUtils.loadAnimation(this, R.anim.entry_mike);
+        final Animation mikeback = AnimationUtils.loadAnimation(this, R.anim.entry_mike_retract);
+        final TextView dot1, dot2, dot3;
+        dot1 = findViewById(R.id.dot1);
+        dot2 = findViewById(R.id.dot2);
+        dot3 = findViewById(R.id.dot3);
 
         hands.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -100,14 +100,15 @@ public class WaitScreen extends AppCompatActivity {
         });
         imageView.startAnimation(hands);
 
-        class myRunnable implements Runnable{
+
+        class myRunnable implements Runnable {
             @Override
             public void run() {
                 try {
-                    for(int i=0;i>=0&&!threadStop;i++) {
-                        Log.d("Wait Thread","i="+i);
-                        if(terminate==true)
-                            terminate();
+                    for (int i = 0; i >= 0 && !threadStop; i++) {
+                        Log.d("Wait Thread", "i=" + i);
+                        if(terminate)
+                            finish();
                         switch (i % 4) {
                             case 0:
                                 dotHandler.post(new Runnable() {
@@ -151,18 +152,18 @@ public class WaitScreen extends AppCompatActivity {
                                         left.startAnimation(translate_down);
                                     }
                                 });
+
                                 break;
                         }
                         Thread.sleep(1000);
                     }
-                }
-                catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }
-        myRunnable thread=new myRunnable();
-        threadStop=false;
+        myRunnable thread = new myRunnable();
+        threadStop = false;
         new Thread(thread).start();
     }
 
@@ -173,14 +174,9 @@ public class WaitScreen extends AppCompatActivity {
 
     @Override
     public void finish() {
-        threadStop=true;
+        Log.d("Wait Thread","Terminated");
+        terminate=false;
+        threadStop = true;
         super.finish();
-
-    }
-    protected void terminate()
-    {
-        threadStop=true;
-        super.finish();
-
     }
 }
