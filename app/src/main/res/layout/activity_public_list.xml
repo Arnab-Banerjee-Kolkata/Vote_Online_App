@@ -28,10 +28,7 @@
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="50dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
+        android:layout_margin="5dp"
         android:padding="2dp"
         android:background="@drawable/boxbg"
         android:dividerHeight="2dp"
@@ -43,10 +40,22 @@
         android:backgroundTintMode="add"/>
 
     <ImageView
-        android:id="@+id/listbg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scaleType="fitEnd"
+        android:id="@+id/listbg1"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:scaleType="fitXY"
+        android:alpha="0.3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/listbg2"
+        app:layout_constraintBottom_toBottomOf="parent" />
+    <ImageView
+        android:id="@+id/listbg2"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:scaleType="fitXY"
+        android:alpha="0.3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/listbg1"
         app:layout_constraintBottom_toBottomOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

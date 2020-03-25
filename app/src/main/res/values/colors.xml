@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="darkBg">#202020</color>
+    <color name="darkBg">#CD202020</color>
     <color name="lightBg">#A0A0A0</color>
     <color name="shade">#1A000000</color>
     <color name="button">#59699EFF</color>
