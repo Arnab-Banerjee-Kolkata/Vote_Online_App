@@ -301,6 +301,8 @@ public class ServerCall {
                         boolean validAuth = jsonResponse.getBoolean("validAuth");
                         boolean validElection = jsonResponse.getBoolean("validElection");
                         boolean validAadhaar = jsonResponse.getBoolean("validAadhaar");
+                        boolean validApproval=jsonResponse.getBoolean("validApproval");
+                        boolean validConstituency=jsonResponse.getBoolean("validConstituency");
 
                         if (!validAuth)
                             Toast.makeText(mContext, "Un-authourised access request", Toast.LENGTH_SHORT).show();
@@ -308,6 +310,10 @@ public class ServerCall {
                             Toast.makeText(mContext, "Election details not found", Toast.LENGTH_SHORT).show();
                         else if (!validAadhaar)
                             Toast.makeText(mContext, "Un-registered/ Invalid aadhaar", Toast.LENGTH_SHORT).show();
+                        else if(!validApproval)
+                            Toast.makeText(mContext, "Voter not approved", Toast.LENGTH_LONG).show();
+                        else if(!validConstituency)
+                            Toast.makeText(mContext, "Voter's constituency does not belong to this election", Toast.LENGTH_LONG).show();
                     } else {
                         JSONArray array = new JSONArray(responseArray);
                         int len = array.length();
