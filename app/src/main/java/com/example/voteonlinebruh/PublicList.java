@@ -8,6 +8,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -82,12 +84,28 @@ public class PublicList extends AppCompatActivity {
                 type.setText(list.get(position).getType());
                 phase.setText(phase.getText() + list.get(position).getPhaseCode());
                 state.setText(list.get(position).getState());
-                if (list.get(position).getStatus() == 0) {
-                    status.setText("Upcoming");
-                    indicator.setImageResource(R.drawable.yellow);
-                } else {
-                    status.setText("Ongoing");
-                    indicator.setImageResource(R.drawable.green);
+                int status_code = list.get(position).getStatus();
+                switch (status_code) {
+                    case 0:
+                        status.setText("Upcoming");
+                        indicator.setImageResource(R.drawable.upcoming);
+                        break;
+                    case 1:
+                        status.setText("Ongoing");
+                        indicator.setImageResource(R.drawable.ongoing);
+                        break;
+                    case 2:
+                        status.setText("Pending Result");
+                        indicator.setImageResource(R.drawable.pend_res);
+                        break;
+                    case 3:
+                        status.setText("Result Published");
+                        indicator.setImageResource(R.drawable.complete);
+                        break;
+                    case 4:
+                        status.setText("Cancelled");
+                        indicator.setImageResource(R.drawable.canceld);
+                        break;
                 }
                 return row;
             }
@@ -98,10 +116,29 @@ public class PublicList extends AppCompatActivity {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                list.setEnabled(false);
-                Intent intent = new Intent(getApplicationContext(), PublicElection.class);
-                intent.putExtra("NAME", arrayAdapter.getItem(position).getType());
-                startActivity(intent);
+                switch (arrayAdapter.getItem(position).getStatus()) {
+                    case 0:
+                        list.setEnabled(false);
+                        Intent intent = new Intent(getApplicationContext(), LandingPage.class);
+                        intent.putExtra("TIME", arrayAdapter.getItem(position).getStartTime());
+                        startActivity(intent);
+                        break;
+                    case 1:
+                        list.setEnabled(false);
+                        intent = new Intent(getApplicationContext(), PublicElection.class);
+                        intent.putExtra("NAME", arrayAdapter.getItem(position).getType());
+                        startActivity(intent);
+                        break;
+                    case 2:
+                        Toast.makeText(context,"Please stay tuned until the result is declared.",Toast.LENGTH_LONG).show();
+                        break;
+                    case 3:
+                        Toast.makeText(context,"Result is declared, check results section.",Toast.LENGTH_LONG).show();
+                        break;
+                    case 4:
+                        Toast.makeText(context,"Election has been cancelled!",Toast.LENGTH_LONG).show();
+                        break;
+                }
             }
         });
     }
