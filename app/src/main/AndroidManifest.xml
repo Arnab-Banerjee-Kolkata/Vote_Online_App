@@ -10,6 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Light">
+        <activity android:name=".ResultsSimplified"></activity>
         <activity
             android:name=".Splash"
             android:screenOrientation="portrait">
@@ -20,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ViewResult"
+            android:name=".ResultsDetailed"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ElectionResult"
@@ -67,14 +68,13 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
     </application>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-permission
         android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
