@@ -34,7 +34,7 @@ public class ElectionResult extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 listView.setEnabled(false);
-                Intent intent = new Intent(getApplicationContext(), ViewResult.class);
+                Intent intent = new Intent(getApplicationContext(), ResultsSimplified.class);
                 intent.putExtra("NAME", (String)adapter.getItem(position));
                 startActivity(intent);
             }

@@ -6,17 +6,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class ViewResult extends AppCompatActivity {
+public class ResultsDetailed extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(MainActivity.TM.getThemeId());
-        setContentView(R.layout.activity_view_result);
+        int themeid = MainActivity.TM.getThemeId();
+        setTheme(themeid);
+        setContentView(R.layout.activity_results_detailed);
 
         String ELECTION_NAME = getIntent().getStringExtra("NAME");
 
@@ -31,12 +34,24 @@ public class ViewResult extends AppCompatActivity {
 
         TabLayout tabLayout = findViewById(R.id.tab);
         final ViewPager viewPager = findViewById(R.id.pager);
-        if (MainActivity.TM.getThemeId() == R.style.AppTheme_Light)
-            tabLayout.setBackgroundColor(getResources().getColor(R.color.lightBg));
-        else
-            tabLayout.setBackgroundColor(getResources().getColor(android.R.color.black));
+
         //DUMMY VALUES
-        String state = "West Bengal";
+        String states[] = {"Assam", "Bihar", "Karnataka", "Maharashtra", "West Bengal"};
+
+
+        Spinner spinner = findViewById(R.id.spinner);
+
+        if (themeid == R.style.AppTheme_Light) {
+            tabLayout.setBackgroundColor(getResources().getColor(R.color.lightBg));
+            spinner.setPopupBackgroundResource(R.drawable.spinnerbglight);
+        } else {
+            tabLayout.setBackgroundColor(getResources().getColor(android.R.color.black));
+            spinner.setPopupBackgroundResource(R.drawable.spinnerbgdark);
+        }
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, states);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(arrayAdapter);
+
         ArrayList name = new ArrayList(),
                 sym = new ArrayList(),
                 seat = new ArrayList();
@@ -80,8 +95,6 @@ public class ViewResult extends AppCompatActivity {
         votes.add("5555");
         votes.add("5555");
 
-        TextView textView = findViewById(R.id.state_name);
-        textView.setText(state);
         Bundle args = new Bundle(),
                 args2 = new Bundle();
         args.putStringArrayList("NAMES", name);
@@ -92,7 +105,7 @@ public class ViewResult extends AppCompatActivity {
         args2.putStringArrayList("CAND_NAME", can_name);
         args2.putStringArrayList("PAR_NAME", p_name);
         args2.putStringArrayList("VOTES", votes);
-        args2.putString("STATE_NAME", state);
+        args2.putString("STATE_NAME", "igdhud");
         args2.putInt("ROWS", 5);
         FragmentAdapter fragmentAdapter = new FragmentAdapter(this, getSupportFragmentManager(), args, args2);
         viewPager.setAdapter(fragmentAdapter);

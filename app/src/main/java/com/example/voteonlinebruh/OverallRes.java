@@ -42,7 +42,7 @@ public class OverallRes extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_overall_res, container, false);
-
+        int themeId=MainActivity.TM.getThemeId();
         //CHART CODE
         PieChart chart=v.findViewById(R.id.chart);
         chart.setBackgroundColor(Color.TRANSPARENT);
@@ -53,7 +53,7 @@ public class OverallRes extends Fragment {
         chart.setRotationEnabled(false);
         chart.setHoleColor(Color.TRANSPARENT);
         chart.setTransparentCircleAlpha(000);
-        chart.setHoleRadius(35f);
+        chart.setHoleRadius(40f);
         chart.setMaxAngle(180f); // HALF CHART
         chart.setRotationAngle(180f);
         chart.setDrawEntryLabels(false);
@@ -65,11 +65,12 @@ public class OverallRes extends Fragment {
         PieDataSet dataSet = new PieDataSet(values, "Election Results");
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(6f);
-        dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        dataSet.setColors(ColorTemplate.VORDIPLOM_COLORS);
         PieData data=new PieData(dataSet);
         chart.animateY(1000);
         data.setValueTextSize(15f);
         data.setValueTypeface(ResourcesCompat.getFont(chart.getContext(),R.font.azo));
+        data.setValueTextColor(Color.BLACK);
         data.setValueFormatter(new IValueFormatter() {
             @Override
             public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
@@ -80,7 +81,6 @@ public class OverallRes extends Fragment {
         chart.setData(data);
         chart.setCenterText((int)data.getYValueSum()+"/"+(int)data.getYValueSum());
         chart.setCenterTextTypeface(ResourcesCompat.getFont(chart.getContext(),R.font.azo));
-        chart.setCenterTextColor(Color.WHITE);
         chart.setCenterTextSize(15f);
         chart.setCenterTextOffset(0,-10);
         chart.getLegend().setEnabled(false);
@@ -102,6 +102,13 @@ public class OverallRes extends Fragment {
             seats.setText((String) seat.get(i));
             color.setBackgroundColor(legend[i].formColor);
             tableLayout.addView(row);
+        }
+        if (themeId == R.style.AppTheme_Light) {
+            chart.setCenterTextColor(Color.BLACK);
+            tableLayout.setBackgroundResource(android.R.drawable.dialog_holo_light_frame);
+        } else{
+            chart.setCenterTextColor(Color.WHITE);
+            tableLayout.setBackgroundResource(android.R.drawable.dialog_holo_dark_frame);
         }
         return v;
     }
