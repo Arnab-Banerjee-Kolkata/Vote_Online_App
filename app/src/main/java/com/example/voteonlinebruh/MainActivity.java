@@ -11,7 +11,7 @@ import android.widget.ImageButton;
 
 public class MainActivity extends AppCompatActivity {
 
-    static boolean schduledRestart = false;
+    static boolean scheduledRestart = false;
     static ThemeManager TM = new ThemeManager();
 
     CardView pub, pri, man, res;
@@ -50,11 +50,11 @@ public class MainActivity extends AppCompatActivity {
                 if (TM.getThemeId() == R.style.AppTheme_Light) {
                     TM.change(0);
                     edit.putBoolean("themeLight", false);
-                    schduledRestart = true;
+                    scheduledRestart = true;
                 } else {
                     TM.change(1);
                     edit.putBoolean("themeLight", true);
-                    schduledRestart = true;
+                    scheduledRestart = true;
                 }
                 edit.apply();
                 onResume();
@@ -69,8 +69,6 @@ public class MainActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
-        /*UI CODE TO SHOW ARRAY-LIST OF AVAILABLE ELECTIONS*/
 
         pub = findViewById(R.id.public_button);
         pri = findViewById(R.id.private_button);
@@ -122,8 +120,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (schduledRestart) {
-            schduledRestart = false;
+        if (scheduledRestart) {
+            scheduledRestart = false;
             Intent i = new Intent(getBaseContext(),MainActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);

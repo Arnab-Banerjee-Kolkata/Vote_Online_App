@@ -42,7 +42,7 @@ public class PublicElection extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 b.setEnabled(false);
-                Intent intent=new Intent(getApplicationContext(),LandingPage.class);
+                Intent intent=new Intent(getApplicationContext(),LoginPage.class);
                 startActivity(intent);
 
             }
