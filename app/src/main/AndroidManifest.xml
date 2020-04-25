@@ -10,9 +10,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Light">
-        <activity android:name=".ResultsSimplified"></activity>
+        <activity android:name=".activities.ResultsSimplified"
+            android:screenOrientation="portrait">
+        </activity>
         <activity
-            android:name=".Splash"
+            android:name=".activities.Splash"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,53 +23,53 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ResultsDetailed"
+            android:name=".activities.ResultsDetailed"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ElectionResult"
+            android:name=".activities.ResultList"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ManageOptions"
+            android:name=".activities.ManageOptions"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ManageElection"
+            android:name=".activities.ManageElection"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".PrivateElection"
+            android:name=".activities.PrivateElection"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".PublicList"
+            android:name=".activities.PublicElectionList"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".PublicElection"
+            android:name=".activities.PublicElectionEntryPoint"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Thanks"
+            android:name=".activities.Thanks"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Demo"
+            android:name=".activities.Demo"
             android:theme="@style/DialogTheme" />
         <activity
-            android:name=".OtpPage"
+            android:name=".activities.OtpPage"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".VotingPage"
+            android:name=".activities.VotingPage"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".VotingInstructions"
+            android:name=".activities.VotingInstructions"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".LandingPage"
+            android:name=".activities.LandingPage"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".WaitScreen"
+            android:name=".activities.WaitScreen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".LoginPage"
+            android:name=".activities.LoginPage"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:screenOrientation="portrait" />
     </application>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

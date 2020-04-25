@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ResultsDetailed">
+    tools:context=".activities.ResultsDetailed">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -77,5 +77,35 @@
         app:layout_constraintTop_toTopOf="parent"
         app:title="Result"
         app:titleTextAppearance="@style/azo" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/errorMessage"
+        android:visibility="invisible"
+        android:gravity="center"
+        android:textSize="18dp"
+        android:text="Results not yet declared for selected state !"
+        android:padding="30dp"/>
+
+    <RelativeLayout
+        android:id="@+id/waitRel2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        android:gravity="center"
+        android:background="#80000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ProgressBar
+            android:layout_width="100dp"
+            android:layout_height="100dp" />
+
+    </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

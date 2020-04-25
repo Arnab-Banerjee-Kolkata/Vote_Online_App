@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ResultsSimplified">
+    tools:context=".activities.ResultsSimplified">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -103,6 +103,15 @@
         android:elevation="0dp"
         app:layout_constraintTop_toTopOf="parent"
         app:title="Result"
-        app:titleTextAppearance="@style/azo" />
+        app:titleTextAppearance="@style/azo" >
+
+        <ImageView
+            android:id="@+id/indicator2"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_gravity="end" />
+
+    </android.support.v7.widget.Toolbar>
 
 </android.support.constraint.ConstraintLayout>
