@@ -82,10 +82,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tab"
         android:id="@+id/errorMessage"
         android:visibility="invisible"
         android:gravity="center"
+        app:layout_constraintVertical_bias=".6"
         android:textSize="18dp"
         android:text="Results not yet declared for selected state !"
         android:padding="30dp"/>

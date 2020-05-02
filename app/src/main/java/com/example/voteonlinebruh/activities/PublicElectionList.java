@@ -69,7 +69,6 @@ public class PublicElectionList extends AppCompatActivity {
                         Intent intent = new Intent(getApplicationContext(), PublicElectionEntryPoint.class);
                         intent.putExtra("NAME", arrayAdapter.getItem(position).getType());
                         startActivity(intent);
-                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                         break;
                     case 2:
                         Toast.makeText(context, "Please stay tuned until the result is declared.", Toast.LENGTH_LONG).show();

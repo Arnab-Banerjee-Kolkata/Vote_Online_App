@@ -179,5 +179,6 @@ public class WaitScreen extends AppCompatActivity {
         terminate = false;
         threadStop = true;
         super.finish();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 }
