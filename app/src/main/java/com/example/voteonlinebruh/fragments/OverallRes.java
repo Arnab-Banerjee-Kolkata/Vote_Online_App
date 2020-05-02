@@ -45,13 +45,13 @@ public class OverallRes extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_overall_res, container, false);
-        int themeId= MainActivity.TM.getThemeId();
+        int themeId = MainActivity.TM.getThemeId();
         //CHART CODE
-        PieChart chart=v.findViewById(R.id.chart);
+        PieChart chart = v.findViewById(R.id.chart);
         chart.setBackgroundColor(Color.TRANSPARENT);
         chart.setUsePercentValues(false);
         chart.getDescription().setEnabled(false);
-        chart.setCenterTextTypeface(ResourcesCompat.getFont(chart.getContext(),R.font.azo));
+        chart.setCenterTextTypeface(ResourcesCompat.getFont(chart.getContext(), R.font.azo));
         chart.setDrawHoleEnabled(true);
         chart.setRotationEnabled(false);
         chart.setHoleColor(Color.TRANSPARENT);
@@ -63,40 +63,40 @@ public class OverallRes extends Fragment {
         chart.setUsePercentValues(false);
         ArrayList<PieEntry> values = new ArrayList<>();
         for (int i = 0; i < rows; i++) {
-            values.add(new PieEntry(Float.parseFloat((String)seat.get(i)),(String)name.get(i)));
+            values.add(new PieEntry(Float.parseFloat((String) seat.get(i)), (String) name.get(i)));
         }
         PieDataSet dataSet = new PieDataSet(values, "Election Results");
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(6f);
         dataSet.setColors(ColorTemplate.VORDIPLOM_COLORS);
-        PieData data=new PieData(dataSet);
+        PieData data = new PieData(dataSet);
         chart.animateY(1000);
         data.setValueTextSize(15f);
-        data.setValueTypeface(ResourcesCompat.getFont(chart.getContext(),R.font.azo));
+        data.setValueTypeface(ResourcesCompat.getFont(chart.getContext(), R.font.azo));
         data.setValueTextColor(Color.BLACK);
         data.setValueFormatter(new IValueFormatter() {
             @Override
             public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-                return ""+(int)value;
+                return "" + (int) value;
             }
         });
         chart.invalidate();
         chart.setData(data);
-        chart.setCenterText((int)data.getYValueSum()+"/"+(int)data.getYValueSum());
-        chart.setCenterTextTypeface(ResourcesCompat.getFont(chart.getContext(),R.font.azo));
+        chart.setCenterText((int) data.getYValueSum() + "/" + (int) data.getYValueSum());
+        chart.setCenterTextTypeface(ResourcesCompat.getFont(chart.getContext(), R.font.azo));
         chart.setCenterTextSize(15f);
-        chart.setCenterTextOffset(0,-10);
+        chart.setCenterTextOffset(0, -10);
         chart.getLegend().setEnabled(false);
-        LegendEntry[] legend=chart.getLegend().getEntries();
+        LegendEntry[] legend = chart.getLegend().getEntries();
 
         //TABLE CODE
         TableLayout tableLayout = v.findViewById(R.id.table);
         for (int i = 0; i < rows; i++) {
-            View view=inflater.inflate(R.layout.row,container,false);
+            View view = inflater.inflate(R.layout.row, container, false);
             TableRow row = view.findViewById(R.id.rowwwww);
-            if(i%2==1)
+            if (i % 2 == 1)
                 row.setBackgroundColor(getResources().getColor(R.color.shade));
-            View color=view.findViewById(R.id.color);
+            View color = view.findViewById(R.id.color);
             TextView names = view.findViewById(R.id.partynum),
                     seats = view.findViewById(R.id.seatnum);
             ImageView syms = view.findViewById(R.id.imnum);
@@ -109,7 +109,7 @@ public class OverallRes extends Fragment {
         if (themeId == R.style.AppTheme_Light) {
             chart.setCenterTextColor(Color.BLACK);
             tableLayout.setBackgroundResource(android.R.drawable.dialog_holo_light_frame);
-        } else{
+        } else {
             chart.setCenterTextColor(Color.WHITE);
             tableLayout.setBackgroundResource(android.R.drawable.dialog_holo_dark_frame);
         }

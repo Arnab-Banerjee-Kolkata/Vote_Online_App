@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
 import com.example.voteonlinebruh.R;
 
 public class VotingInstructions extends AppCompatActivity implements View.OnClickListener {
@@ -26,7 +27,7 @@ public class VotingInstructions extends AppCompatActivity implements View.OnClic
             themeId = R.style.ConfirmTheme_Light;
         } else {
             setTheme(R.style.dTheme_Dark);
-            themeId=R.style.ConfirmTheme_Dark;
+            themeId = R.style.ConfirmTheme_Dark;
         }
         setContentView(R.layout.activity_voting_instructions);
         proceed = findViewById(R.id.proceed);

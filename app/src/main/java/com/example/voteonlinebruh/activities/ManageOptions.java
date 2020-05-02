@@ -2,6 +2,7 @@ package com.example.voteonlinebruh.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
 import com.example.voteonlinebruh.R;
 
 public class ManageOptions extends AppCompatActivity {

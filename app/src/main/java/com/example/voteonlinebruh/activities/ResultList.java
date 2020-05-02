@@ -3,24 +3,17 @@ package com.example.voteonlinebruh.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
+
 import com.example.voteonlinebruh.R;
-import com.example.voteonlinebruh.adapters.ListViewForElectionListAdapter;
 import com.example.voteonlinebruh.adapters.ListViewForResultListAdapter;
 import com.example.voteonlinebruh.apiCalls.ServerCall;
 import com.example.voteonlinebruh.models.ResultListItem;
+
 import java.util.ArrayList;
 
 public class ResultList extends AppCompatActivity {
@@ -41,7 +34,7 @@ public class ResultList extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        context=this;
+        context = this;
 
         Intent intent = getIntent();
         final ArrayList<ResultListItem> resultlist = (ArrayList<ResultListItem>) intent.getSerializableExtra("list");
@@ -55,10 +48,11 @@ public class ResultList extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 listView.setEnabled(false);
                 ServerCall serverCall = new ServerCall();
-                serverCall.getOverallResult(resultlist.get(position).getType(),resultlist.get(position).getElectionId(),getApplicationContext());
+                serverCall.getOverallResult(resultlist.get(position).getType(), resultlist.get(position).getElectionId(), getApplicationContext());
                 Intent intent = new Intent(getBaseContext(), WaitScreen.class);
                 intent.putExtra("LABEL", "Hold on");
                 startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
     }

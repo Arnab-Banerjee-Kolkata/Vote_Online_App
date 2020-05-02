@@ -12,7 +12,7 @@ public class ThemeManager {
             themeId = R.style.AppTheme_Light;
     }
 
-    public  int getThemeId() {
+    public int getThemeId() {
         return themeId;
     }
 }

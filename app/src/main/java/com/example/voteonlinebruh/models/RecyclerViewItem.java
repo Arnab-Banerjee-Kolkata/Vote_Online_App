@@ -1,11 +1,11 @@
 package com.example.voteonlinebruh.models;
 
-public class Item {
+public class RecyclerViewItem {
     
     private String pname,cname;
     private int indicator;
     private String imgUrl;
-    public Item(String imgUrl,String pname,String cname,int indicator)
+    public RecyclerViewItem(String imgUrl, String pname, String cname, int indicator)
     {
         this.imgUrl=imgUrl;
         this.cname=cname;

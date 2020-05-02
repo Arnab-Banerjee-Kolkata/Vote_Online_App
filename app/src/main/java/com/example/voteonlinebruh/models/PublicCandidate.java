@@ -1,14 +1,12 @@
 package com.example.voteonlinebruh.models;
 
-public class PublicCandidate
-{
+public class PublicCandidate {
     private String name, partyName, symbol;
 
-    public PublicCandidate(String name, String partyName, String symbol)
-    {
-        this.name=name;
-        this.partyName=partyName;
-        this.symbol=symbol;
+    public PublicCandidate(String name, String partyName, String symbol) {
+        this.name = name;
+        this.partyName = partyName;
+        this.symbol = symbol;
     }
 
     public String getPartyName() {

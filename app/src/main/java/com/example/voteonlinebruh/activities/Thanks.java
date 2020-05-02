@@ -3,6 +3,7 @@ package com.example.voteonlinebruh.activities;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
+
 import com.bumptech.glide.Glide;
 import com.example.voteonlinebruh.R;
 

@@ -4,9 +4,8 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
 import com.example.voteonlinebruh.apiCalls.StringRequest;
 
-public class VolleyGetRequest extends StringRequest
-{
-    int MY_SOCKET_TIMEOUT_MS=60000;
+public class VolleyGetRequest extends StringRequest {
+    int MY_SOCKET_TIMEOUT_MS = 60000;
 
     public VolleyGetRequest(String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         super(Method.GET, url, null, listener, errorListener);

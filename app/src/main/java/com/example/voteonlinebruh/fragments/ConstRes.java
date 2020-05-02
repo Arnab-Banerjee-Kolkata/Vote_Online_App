@@ -43,14 +43,16 @@ public class ConstRes extends Fragment {
         class MyAdapter extends ArrayAdapter<ArrayList> {
             ArrayList list;
             Context context;
+
             MyAdapter(ArrayList list, Context context) {
                 super(context, R.layout.const_list_card, list);
                 this.list = list;
-                this.context=context;
+                this.context = context;
             }
+
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                CardView v = (CardView)layoutInflater.inflate(R.layout.const_list_card, parent, false);
+                CardView v = (CardView) layoutInflater.inflate(R.layout.const_list_card, parent, false);
                 TextView con = v.findViewById(R.id.conName),
                         sta = v.findViewById(R.id.stateName),
                         can = v.findViewById(R.id.candName),
@@ -60,12 +62,12 @@ public class ConstRes extends Fragment {
                 sta.setText(state_name);
                 can.setText((String) cand_name.get(position));
                 par.setText((String) par_name.get(position));
-                vot.setText("Votes : "+(String) votes.get(position));
-                Log.d("came","here");
+                vot.setText("Votes : " + (String) votes.get(position));
+                Log.d("came", "here");
                 return v;
             }
         }
-        final MyAdapter arrayAdapter=new MyAdapter(cons_name,view.getContext());
+        final MyAdapter arrayAdapter = new MyAdapter(cons_name, view.getContext());
         listView.setAdapter(arrayAdapter);
         return view;
     }

@@ -10,6 +10,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.example.voteonlinebruh.R;
 
@@ -107,7 +108,7 @@ public class WaitScreen extends AppCompatActivity {
                 try {
                     for (int i = 0; i >= 0 && !threadStop; i++) {
                         Log.d("Wait Thread", "i=" + i);
-                        if(terminate)
+                        if (terminate)
                             finish();
                         switch (i % 4) {
                             case 0:
@@ -174,8 +175,8 @@ public class WaitScreen extends AppCompatActivity {
 
     @Override
     public void finish() {
-        Log.d("Wait Thread","Terminated");
-        terminate=false;
+        Log.d("Wait Thread", "Terminated");
+        terminate = false;
         threadStop = true;
         super.finish();
     }

@@ -11,17 +11,18 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.example.voteonlinebruh.R;
 
 public class Demo extends AppCompatActivity {
 
-    private Handler handler=new Handler();
-    private boolean threadstop=false;
+    private Handler handler = new Handler();
+    private boolean threadstop = false;
 
-    ImageView imageView,shadowcut,shadowbot;
-    Animation fadein,fadeout,scale_slow,scale_fast;
-    View shadowfull,party,cand,sym,indi,tap1,tap2,tap3,tap4;
+    ImageView imageView, shadowcut, shadowbot;
+    Animation fadein, fadeout, scale_slow, scale_fast;
+    View shadowfull, party, cand, sym, indi, tap1, tap2, tap3, tap4;
     TextView text;
 
     @Override
@@ -33,42 +34,42 @@ public class Demo extends AppCompatActivity {
         final int resid1 = R.drawable.vote_demo_1;
         final int resid2 = R.drawable.vote_demo_2;
         final int resid3 = R.drawable.vote_demo_3;
-        final Context context=getApplicationContext();
+        final Context context = getApplicationContext();
 
-        class optimize implements Runnable{
+        class optimize implements Runnable {
 
             @Override
             public void run() {
 
-                fadein= AnimationUtils.loadAnimation(context,R.anim.fade_in);
+                fadein = AnimationUtils.loadAnimation(context, R.anim.fade_in);
                 fadein.setDuration(1000);
-                fadeout= AnimationUtils.loadAnimation(context,R.anim.fade_out);
+                fadeout = AnimationUtils.loadAnimation(context, R.anim.fade_out);
                 fadeout.setDuration(1000);
-                scale_slow= AnimationUtils.loadAnimation(context,R.anim.scaleslow);
-                scale_fast= AnimationUtils.loadAnimation(context,R.anim.scalefast);
-                text=findViewById(R.id.text);
-                shadowfull=findViewById(R.id.shadowfull);
-                party=findViewById(R.id.party_high);
-                cand=findViewById(R.id.cand_high);
-                sym=findViewById(R.id.sym_high);
-                indi=findViewById(R.id.ind_high);
-                shadowcut=findViewById(R.id.shadow_cut);
-                tap1=findViewById(R.id.tap1);
-                tap2=findViewById(R.id.tap2);
-                tap3=findViewById(R.id.tap3);
-                tap4=findViewById(R.id.tap4);
-                shadowbot=findViewById(R.id.shadow_bot);
+                scale_slow = AnimationUtils.loadAnimation(context, R.anim.scaleslow);
+                scale_fast = AnimationUtils.loadAnimation(context, R.anim.scalefast);
+                text = findViewById(R.id.text);
+                shadowfull = findViewById(R.id.shadowfull);
+                party = findViewById(R.id.party_high);
+                cand = findViewById(R.id.cand_high);
+                sym = findViewById(R.id.sym_high);
+                indi = findViewById(R.id.ind_high);
+                shadowcut = findViewById(R.id.shadow_cut);
+                tap1 = findViewById(R.id.tap1);
+                tap2 = findViewById(R.id.tap2);
+                tap3 = findViewById(R.id.tap3);
+                tap4 = findViewById(R.id.tap4);
+                shadowbot = findViewById(R.id.shadow_bot);
             }
         }
-        optimize o=new optimize();
+        optimize o = new optimize();
         new Thread(o).start();
 
-        class myRunnable implements Runnable{
+        class myRunnable implements Runnable {
             @Override
             public void run() {
                 try {
-                    for(int i=0;i>=0&&!threadstop;i++) {
-                        Log.d("Animation Thread","i="+i);
+                    for (int i = 0; i >= 0 && !threadstop; i++) {
+                        Log.d("Animation Thread", "i=" + i);
                         switch (i % 20) {
                             case 0:
                                 handler.post(new Runnable() {
@@ -320,16 +321,15 @@ public class Demo extends AppCompatActivity {
                         }
                         Thread.sleep(1000);
                     }
-                }
-                catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }
-        myRunnable thread=new myRunnable();
+        myRunnable thread = new myRunnable();
         new Thread(thread).start();
 
-        ImageButton cl=findViewById(R.id.closediag);
+        ImageButton cl = findViewById(R.id.closediag);
         cl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -340,7 +340,7 @@ public class Demo extends AppCompatActivity {
 
     @Override
     public void finish() {
-        threadstop=true;
+        threadstop = true;
         super.finish();
     }
 }

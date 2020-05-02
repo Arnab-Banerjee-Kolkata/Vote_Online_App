@@ -15,17 +15,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.apiCalls.ServerCall;
 
 
-public class LoginPage extends AppCompatActivity{
+public class LoginPage extends AppCompatActivity {
     Button login;
     Context mContext;
-
-
-    private Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +32,6 @@ public class LoginPage extends AppCompatActivity{
         setContentView(R.layout.activity_login_page);
 
         mContext = this.getApplicationContext();
-
-        //UI CODE STARTS HERE
 
         Toolbar toolbar = findViewById(R.id.toolbarlogin);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
@@ -50,8 +46,6 @@ public class LoginPage extends AppCompatActivity{
         Glide
                 .with(this)
                 .load(resid).into(imageView);
-
-        //ET CODE
 
         final EditText ets[] = new EditText[12];
         ets[0] = findViewById(R.id.et1);
@@ -159,7 +153,7 @@ public class LoginPage extends AppCompatActivity{
 
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if ((keyCode == KeyEvent.KEYCODE_DEL || keyCode == KeyEvent.KEYCODE_BACK ) && event.getAction() == KeyEvent.ACTION_DOWN) {
+                if ((keyCode == KeyEvent.KEYCODE_DEL || keyCode == KeyEvent.KEYCODE_BACK) && event.getAction() == KeyEvent.ACTION_DOWN) {
                     if (ets[index].getText().toString().isEmpty() && index != 0) {
                         ets[index - 1].requestFocus();
                         ets[index - 1].setText("");
@@ -196,8 +190,6 @@ public class LoginPage extends AppCompatActivity{
         ets[10].setOnKeyListener(new listener(10));
         ets[11].setOnKeyListener(new listener(11));
 
-        //UI CODE ENDS AND VALIDATION CODE STARTS HERE
-
         final EditText boothid = findViewById(R.id.boothid);
 
         login = findViewById(R.id.loginbut);
@@ -220,10 +212,8 @@ public class LoginPage extends AppCompatActivity{
 
                     login.setEnabled(false);
 
-                    //VALUES TO WORK WITH ->
                     String AADHAARID = uid;
                     String BOOTHID = boothid.getText().toString();
-
 
                     SharedPreferences p = getSharedPreferences("VoterDetails", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = p.edit();
@@ -231,15 +221,13 @@ public class LoginPage extends AppCompatActivity{
                     editor.putString("boothId", BOOTHID);
                     editor.apply();
 
-
                     ServerCall serverCall = new ServerCall();
                     serverCall.validateDetails(AADHAARID, BOOTHID, mContext, LoginPage.this);
 
-
-                    //ACTUAL WAIT SCREEN CALL
                     Intent intent = new Intent(getApplicationContext(), WaitScreen.class);
                     intent.putExtra("LABEL", "Validating");
                     startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
                 } catch (Exception e) {
                     Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();

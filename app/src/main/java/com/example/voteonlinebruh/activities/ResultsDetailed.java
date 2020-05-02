@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.adapters.FragmentAdapter;
+import com.example.voteonlinebruh.apiCalls.ScreenControl;
 import com.example.voteonlinebruh.apiCalls.ServerCall;
 import com.example.voteonlinebruh.models.ConstituencyWiseResultList;
 import com.example.voteonlinebruh.models.PartywiseResultList;
@@ -38,9 +39,6 @@ public class ResultsDetailed extends AppCompatActivity {
         int themeid = MainActivity.TM.getThemeId();
         setTheme(themeid);
         setContentView(R.layout.activity_results_detailed);
-
-        String ELECTION_NAME = getIntent().getStringExtra("NAME");
-
         Toolbar toolbar = findViewById(R.id.toolbarvres);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -78,7 +76,9 @@ public class ResultsDetailed extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 rel.setVisibility(View.VISIBLE);
-                stateName=list.get(position).getStateName();
+                ScreenControl screenControl = new ScreenControl();
+                screenControl.makeScreenUnresponsive(ResultsDetailed.this.getWindow());
+                stateName = list.get(position).getStateName();
                 ServerCall serverCall = new ServerCall();
                 serverCall.getOverallResult(type, electionId,
                         list.get(position).getStateCode(),
@@ -96,7 +96,7 @@ public class ResultsDetailed extends AppCompatActivity {
 
     public void release(boolean status) {
         final ViewPager viewPager = findViewById(R.id.pager);
-        TextView message=findViewById(R.id.errorMessage);
+        TextView message = findViewById(R.id.errorMessage);
         if (!status) {
             message.setVisibility(View.VISIBLE);
             viewPager.removeAllViews();
@@ -143,12 +143,12 @@ public class ResultsDetailed extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            for(PartywiseResultList i:partyresultlist){
+            for (PartywiseResultList i : partyresultlist) {
                 name.add(i.getPartyname());
                 seat.add(Integer.toString(i.getSeatsWon()));
                 sym.add(i.getPartySymbol());
             }
-            for(ConstituencyWiseResultList i:constresultlist){
+            for (ConstituencyWiseResultList i : constresultlist) {
                 con_name.add(i.getConstituencyName());
                 can_name.add(i.getCandidateName());
                 p_name.add(i.getPartyName());
@@ -187,6 +187,8 @@ public class ResultsDetailed extends AppCompatActivity {
                 }
             });
         }
+        ScreenControl screenControl = new ScreenControl();
+        screenControl.makeWindowResponsive(ResultsDetailed.this.getWindow());
         rel.setVisibility(View.GONE);
     }
 }

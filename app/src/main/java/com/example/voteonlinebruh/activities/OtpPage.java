@@ -15,20 +15,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.apiCalls.ServerCall;
 
-public class OtpPage extends AppCompatActivity
-{
+public class OtpPage extends AppCompatActivity {
     Context mContext;
     Button login;
 
     int themeId;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTheme(MainActivity.TM.getThemeId());
         if (MainActivity.TM.getThemeId() == R.style.AppTheme_Light)
@@ -37,7 +36,7 @@ public class OtpPage extends AppCompatActivity
             themeId = R.style.ConfirmTheme_Dark;
         setContentView(R.layout.activity_otp_page);
 
-        mContext=getApplicationContext();
+        mContext = getApplicationContext();
         ImageView imageView = findViewById(R.id.otpbg);
         int resid = R.drawable.log_bot;
         Glide
@@ -132,7 +131,7 @@ public class OtpPage extends AppCompatActivity
                 try {
                     String otp;
                     WaitScreen.terminate = false;
-                    otp="";
+                    otp = "";
                     for (EditText x : ets)
                         otp += x.getText().toString();
                     if (otp.length() != 4) {
@@ -141,35 +140,19 @@ public class OtpPage extends AppCompatActivity
                     }
 
                     login.setEnabled(false);
+                    SharedPreferences sharedPreferences = getSharedPreferences("VoterDetails", Context.MODE_PRIVATE);
 
-                    //TO BE REMOVED
-                    //Toast.makeText(getBaseContext(), otp, Toast.LENGTH_SHORT).show();
-
-                    SharedPreferences sharedPreferences=getSharedPreferences("VoterDetails", Context.MODE_PRIVATE);
-
-                    //VALUES TO WORK WITH ->
                     String OTP = otp;
-                    String boothId=sharedPreferences.getString("boothId","0");
-                    String aadhaarNo=sharedPreferences.getString("aadhaarNo","");
+                    String boothId = sharedPreferences.getString("boothId", "0");
+                    String aadhaarNo = sharedPreferences.getString("aadhaarNo", "");
 
-
-
-                    //DUMMY CODE TO DEMONSTRATE WORKING OF WAIT SCREEN BY TERMINATING AFTER 4 SECONDS
-                    //REPLACE THREAD WITH SERVER RESPONSE CODE
-
-
-                    ServerCall serverCall=new ServerCall();
+                    ServerCall serverCall = new ServerCall();
                     serverCall.validateOtp(aadhaarNo, boothId, OTP, mContext, OtpPage.this);
 
-
-
-
-
-
-                    //ACTUAL WAIT SCREEN CALL
                     Intent intent = new Intent(getApplicationContext(), WaitScreen.class);
-                    intent.putExtra("LABEL","Authenticating");
+                    intent.putExtra("LABEL", "Authenticating");
                     startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
                 } catch (Exception e) {
                     Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();

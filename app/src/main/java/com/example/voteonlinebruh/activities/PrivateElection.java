@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+
 import com.bumptech.glide.Glide;
 import com.example.voteonlinebruh.R;
 
@@ -16,7 +17,7 @@ public class PrivateElection extends AppCompatActivity {
         setTheme(MainActivity.TM.getThemeId());
         setContentView(R.layout.activity_private_election);
 
-        Toolbar toolbar=findViewById(R.id.toolbarpriv);
+        Toolbar toolbar = findViewById(R.id.toolbarpriv);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

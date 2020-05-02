@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+
 import com.bumptech.glide.Glide;
 import com.example.voteonlinebruh.R;
 
@@ -21,9 +22,9 @@ public class PublicElectionEntryPoint extends AppCompatActivity {
         setContentView(R.layout.activity_public_election);
 
         //SELECTED OPTION IS FOUND HERE
-        String ELECTION_NAME=getIntent().getStringExtra("NAME");
+        String ELECTION_NAME = getIntent().getStringExtra("NAME");
 
-        Toolbar toolbar=findViewById(R.id.toolbarpub);
+        Toolbar toolbar = findViewById(R.id.toolbarpub);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,12 +38,12 @@ public class PublicElectionEntryPoint extends AppCompatActivity {
         Glide
                 .with(this)
                 .load(resid).into(imageView1);
-        b =findViewById(R.id.login);
+        b = findViewById(R.id.login);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 b.setEnabled(false);
-                Intent intent=new Intent(getApplicationContext(), LoginPage.class);
+                Intent intent = new Intent(getApplicationContext(), LoginPage.class);
                 startActivity(intent);
 
             }

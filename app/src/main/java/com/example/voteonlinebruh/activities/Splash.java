@@ -13,9 +13,11 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
+
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.example.voteonlinebruh.R;
+
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
 public class Splash extends AppCompatActivity {

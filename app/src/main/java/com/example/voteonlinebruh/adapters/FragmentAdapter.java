@@ -12,12 +12,12 @@ import com.example.voteonlinebruh.fragments.ConstRes;
 public class FragmentAdapter extends FragmentPagerAdapter {
 
     private Context context;
-    private Bundle args,args2;
+    private Bundle args, args2;
 
     public FragmentAdapter(Context context, FragmentManager fm, Bundle args, Bundle args2) {
         super(fm);
-        this.context=context;
-        this.args=args;
+        this.context = context;
+        this.args = args;
         this.args2 = args2;
     }
 

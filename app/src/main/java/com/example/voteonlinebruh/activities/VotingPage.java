@@ -16,15 +16,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.apiCalls.ServerCall;
-import com.example.voteonlinebruh.adapters.itemAdapter;
-import com.example.voteonlinebruh.models.Item;
+import com.example.voteonlinebruh.adapters.RecyclerViewAdapter;
+import com.example.voteonlinebruh.models.RecyclerViewItem;
 import com.example.voteonlinebruh.models.PublicCandidate;
+
 import java.util.ArrayList;
 
 public class VotingPage extends AppCompatActivity {
-    ArrayList<Item> item_list;
+    ArrayList<RecyclerViewItem> recyclerViewItem_list;
     int selected = -1;
 
     Button done;
@@ -62,6 +64,7 @@ public class VotingPage extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), WaitScreen.class);
         intent.putExtra("LABEL", "Fetching Panel");
         startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
 
         //dialogbox
@@ -95,9 +98,9 @@ public class VotingPage extends AppCompatActivity {
                 //VALUES TO WORK WITH->
                 if (selected >= 0) {
                     done.setEnabled(false);
-                    String PARTY = item_list.get(selected).getPname();
-                    String CANDIDATE = item_list.get(selected).getCname();
-                    Toast.makeText(context, item_list.get(selected).getPname() + "\n" + item_list.get(selected).getCname(), Toast.LENGTH_SHORT).show();
+                    String PARTY = recyclerViewItem_list.get(selected).getPname();
+                    String CANDIDATE = recyclerViewItem_list.get(selected).getCname();
+                    Toast.makeText(context, recyclerViewItem_list.get(selected).getPname() + "\n" + recyclerViewItem_list.get(selected).getCname(), Toast.LENGTH_SHORT).show();
                     AlertDialog dialog = builder.create();
                     dialog.setCanceledOnTouchOutside(false);
                     dialog.setCancelable(false);
@@ -130,23 +133,23 @@ public class VotingPage extends AppCompatActivity {
     public void showList(ArrayList<PublicCandidate> publicCandidates) {
         int len = publicCandidates.size();
 
-        item_list = new ArrayList<>();
+        recyclerViewItem_list = new ArrayList<>();
 
         for (int i = 0; i < len; i++) {
-            item_list.add(new Item(publicCandidates.get(i).getSymbol(), publicCandidates.get(i).getPartyName(), publicCandidates.get(i).getName(), R.drawable.bulboff));
+            recyclerViewItem_list.add(new RecyclerViewItem(publicCandidates.get(i).getSymbol(), publicCandidates.get(i).getPartyName(), publicCandidates.get(i).getName(), R.drawable.bulboff));
         }
 
         final RecyclerView recyclerView = findViewById(R.id.rec);
         recyclerView.setHasFixedSize(true);
         final LinearLayoutManager layoutManager;
         layoutManager = new LinearLayoutManager(this);
-        final itemAdapter adapter = new itemAdapter(item_list, getApplicationContext());
+        final RecyclerViewAdapter adapter = new RecyclerViewAdapter(recyclerViewItem_list, getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
         //BULB CHANGE CODE
 
-        adapter.setOnItemClickListener(new itemAdapter.OnItemClickListener() {
+        adapter.setOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 if (position != selected) {

@@ -9,6 +9,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
+
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.apiCalls.ServerCall;
 import com.example.voteonlinebruh.models.ThemeManager;
@@ -50,15 +51,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        CollapsingToolbarLayout collapsingToolbarLayout=findViewById(R.id.collapsingToolbarLayout);
+        CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsingToolbarLayout);
 
         final ImageButton button = findViewById(R.id.themeToggle);
         if (TM.getThemeId() == R.style.AppTheme_Light) {
             button.setImageDrawable(getDrawable(R.drawable.ic_moon_black_24dp));
             toolbar.setNavigationIcon(R.drawable.ic_close_black_24dp);
             collapsingToolbarLayout.setContentScrimColor(getResources().getColor(R.color.lightBg));
-        }
-        else {
+        } else {
             button.setImageDrawable(getDrawable(R.drawable.ic_wb_sunny_black_24dp));
             toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
             collapsingToolbarLayout.setContentScrimColor(getResources().getColor(android.R.color.black));
@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getBaseContext(), WaitScreen.class);
                 intent.putExtra("LABEL", "Refreshing");
                 startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
 
@@ -124,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getBaseContext(), WaitScreen.class);
                 intent.putExtra("LABEL", "Refreshing");
                 startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
 
@@ -136,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         if (scheduledRestart) {
             scheduledRestart = false;
-            Intent i = new Intent(getBaseContext(),MainActivity.class);
+            Intent i = new Intent(getBaseContext(), MainActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

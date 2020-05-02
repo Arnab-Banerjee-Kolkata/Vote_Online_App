@@ -20,7 +20,6 @@ import com.example.voteonlinebruh.activities.ResultsSimplified;
 import com.example.voteonlinebruh.activities.VotingInstructions;
 import com.example.voteonlinebruh.activities.VotingPage;
 import com.example.voteonlinebruh.activities.WaitScreen;
-import com.example.voteonlinebruh.models.ConstituencyWiseResultList;
 import com.example.voteonlinebruh.models.ElectionListItem;
 import com.example.voteonlinebruh.models.PartywiseResultList;
 import com.example.voteonlinebruh.models.PublicCandidate;
@@ -34,8 +33,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class ServerCall {
     class myRunnable implements Runnable {
@@ -475,7 +472,7 @@ public class ServerCall {
                         final SharedPreferences.Editor edit = pref.edit();
                         edit.putString("list", response);
                         edit.apply();
-                        getConstituencyResult(type,electionId,stateCode,mContext,resultsDetailed,pref);
+                        getConstituencyResult(type, electionId, stateCode, mContext, resultsDetailed, pref);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

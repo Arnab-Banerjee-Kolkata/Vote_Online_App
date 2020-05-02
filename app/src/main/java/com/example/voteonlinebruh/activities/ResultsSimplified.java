@@ -29,6 +29,7 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+
 import java.util.ArrayList;
 
 public class ResultsSimplified extends AppCompatActivity {
@@ -49,20 +50,21 @@ public class ResultsSimplified extends AppCompatActivity {
             }
         });
         Button button = findViewById(R.id.detailBut);
-        final Intent intent=getIntent();
+        final Intent intent = getIntent();
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ServerCall serverCall = new ServerCall();
-                serverCall.getStatelist(intent.getIntExtra("electionId",0),intent.getStringExtra("type"),getApplicationContext());
+                serverCall.getStatelist(intent.getIntExtra("electionId", 0), intent.getStringExtra("type"), getApplicationContext());
                 Intent intent = new Intent(getBaseContext(), WaitScreen.class);
                 intent.putExtra("LABEL", "Hold on");
                 startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
-        int status=intent.getIntExtra("status",0);
-        int totalSeats=intent.getIntExtra("totalSeats",0);
-        ImageView indicator=findViewById(R.id.indicator2);
+        int status = intent.getIntExtra("status", 0);
+        int totalSeats = intent.getIntExtra("totalSeats", 0);
+        ImageView indicator = findViewById(R.id.indicator2);
         switch (status) {
             case 2:
                 indicator.setImageResource(R.drawable.pend_res);
@@ -89,7 +91,7 @@ public class ResultsSimplified extends AppCompatActivity {
         chart.setUsePercentValues(false);
         ArrayList<PieEntry> values = new ArrayList<>();
         for (int i = 0; i < resultlist.size(); i++) {
-            values.add(new PieEntry(resultlist.get(i).getSeatsWon(),resultlist.get(i).getPartyname()));
+            values.add(new PieEntry(resultlist.get(i).getSeatsWon(), resultlist.get(i).getPartyname()));
         }
         PieDataSet dataSet = new PieDataSet(values, "");
         dataSet.setSliceSpace(3f);
@@ -117,7 +119,7 @@ public class ResultsSimplified extends AppCompatActivity {
         chart.setCenterTextSize(20f);
         chart.getLegend().setEnabled(true);
         chart.setExtraOffsets(0.f, 5.f, 0.f, 5.f);
-        Legend leg=chart.getLegend();
+        Legend leg = chart.getLegend();
         leg.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
         LegendEntry[] legend = leg.getEntries();
 
@@ -129,7 +131,7 @@ public class ResultsSimplified extends AppCompatActivity {
             data.setValueTextColor(Color.BLACK);
             leg.setTextColor(Color.BLACK);
             tableLayout.setBackgroundResource(android.R.drawable.dialog_holo_light_frame);
-        } else{
+        } else {
             dataSet.setValueLineColor(Color.WHITE);
             chart.setCenterTextColor(Color.WHITE);
             data.setValueTextColor(Color.WHITE);
@@ -145,7 +147,7 @@ public class ResultsSimplified extends AppCompatActivity {
             TextView names = view.findViewById(R.id.partynum),
                     seats = view.findViewById(R.id.seatnum);
             ImageView syms = view.findViewById(R.id.imnum);
-            String resUrl = getString(R.string.web_host)+resultlist.get(i).getPartySymbol()+"?i=1";
+            String resUrl = getString(R.string.web_host) + resultlist.get(i).getPartySymbol() + "?i=1";
             names.setText(resultlist.get(i).getPartyname());
             Glide
                     .with(this)
