@@ -2,6 +2,7 @@ package com.example.voteonlinebruh.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -41,11 +42,27 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+        CollapsingToolbarLayout collapsingToolbarLayout=findViewById(R.id.collapsingToolbarLayout);
+
         final ImageButton button = findViewById(R.id.themeToggle);
-        if (TM.getThemeId() == R.style.AppTheme_Light)
+        if (TM.getThemeId() == R.style.AppTheme_Light) {
             button.setImageDrawable(getDrawable(R.drawable.ic_moon_black_24dp));
-        else
+            toolbar.setNavigationIcon(R.drawable.ic_close_black_24dp);
+            collapsingToolbarLayout.setContentScrimColor(getResources().getColor(R.color.lightBg));
+        }
+        else {
             button.setImageDrawable(getDrawable(R.drawable.ic_wb_sunny_black_24dp));
+            toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
+            collapsingToolbarLayout.setContentScrimColor(getResources().getColor(android.R.color.black));
+        }
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,15 +78,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 edit.apply();
                 onResume();
-            }
-        });
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_close_black_24dp);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
             }
         });
 
