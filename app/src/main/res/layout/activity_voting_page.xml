@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:background="#000">
+        android:background="?attr/colorSecondary">
         <Button
             android:id="@+id/donebutton"
             android:layout_width="140dp"

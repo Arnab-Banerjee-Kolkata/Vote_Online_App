@@ -2,7 +2,8 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:padding="5dp">
 
     <TextView
         android:id="@+id/electionName"
@@ -22,6 +23,7 @@
         android:padding="5dp"
         android:text="Type"
         android:fontFamily="@font/azo"
+        android:textStyle="italic"
         android:textSize="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,6 +37,7 @@
         android:layout_marginEnd="10dp"
         android:padding="5dp"
         android:text="Year"
+        android:textStyle="normal"
         android:fontFamily="@font/azo"
         android:textSize="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -57,6 +60,7 @@
         android:layout_height="wrap_content"
         android:text="Status"
         android:textSize="12dp"
+        android:textStyle="normal"
         android:padding="5dp"
         android:fontFamily="@font/azo"
         android:layout_marginEnd="5dp"

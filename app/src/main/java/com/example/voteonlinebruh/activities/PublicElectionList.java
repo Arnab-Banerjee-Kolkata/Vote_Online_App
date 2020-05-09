@@ -51,7 +51,7 @@ public class PublicElectionList extends AppCompatActivity {
                 .with(this)
                 .load(resid).into(imageView2);
         Intent intent = getIntent();
-        ArrayList<ElectionListItem> electionlist = (ArrayList<ElectionListItem>) intent.getSerializableExtra("list");
+        final ArrayList<ElectionListItem> electionlist = (ArrayList<ElectionListItem>) intent.getSerializableExtra("list");
 
 
         list = findViewById(R.id.list);
@@ -67,7 +67,9 @@ public class PublicElectionList extends AppCompatActivity {
                     case 1:
                         list.setEnabled(false);
                         Intent intent = new Intent(getApplicationContext(), PublicElectionEntryPoint.class);
-                        intent.putExtra("NAME", arrayAdapter.getItem(position).getType());
+                        intent.putExtra("NAME", arrayAdapter.getItem(position).getName());
+                        intent.putExtra("electionId",arrayAdapter.getItem(position).getElectionId());
+                        intent.putExtra("electionType",arrayAdapter.getItem(position).getType());
                         startActivity(intent);
                         break;
                     case 2:

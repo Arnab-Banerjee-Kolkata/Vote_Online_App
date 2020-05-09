@@ -1,5 +1,7 @@
 package com.example.voteonlinebruh.models;
 
+import com.example.voteonlinebruh.utility.CaseConverter;
+
 import java.io.Serializable;
 
 public class ConstituencyWiseResultList implements Serializable {
@@ -7,8 +9,9 @@ public class ConstituencyWiseResultList implements Serializable {
     private int voteCount;
 
     public ConstituencyWiseResultList(String constituencyName, String candidateName, String partyName, String partySymbol, int voteCount) {
-        this.constituencyName = constituencyName;
-        this.candidateName = candidateName;
+        CaseConverter converter=new CaseConverter();
+        this.constituencyName = converter.toCamelCase(constituencyName);
+        this.candidateName = converter.toCamelCase(candidateName);
         this.partyName = partyName;
         this.partySymbol = partySymbol;
         this.voteCount = voteCount;

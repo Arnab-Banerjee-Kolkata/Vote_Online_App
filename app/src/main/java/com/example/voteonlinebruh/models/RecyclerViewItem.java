@@ -1,5 +1,7 @@
 package com.example.voteonlinebruh.models;
 
+import com.example.voteonlinebruh.utility.CaseConverter;
+
 public class RecyclerViewItem {
     
     private String pname,cname;
@@ -7,8 +9,9 @@ public class RecyclerViewItem {
     private String imgUrl;
     public RecyclerViewItem(String imgUrl, String pname, String cname, int indicator)
     {
+        CaseConverter converter=new CaseConverter();
         this.imgUrl=imgUrl;
-        this.cname=cname;
+        this.cname=converter.toCamelCase(cname);
         this.pname=pname;
         this.indicator=indicator;
     }

@@ -10,7 +10,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_margin="5dp"
-        android:src="@drawable/ic_close_black_24dp"
+        android:src="@drawable/ic_close_white_24dp"
         android:id="@+id/closediag"
         android:elevation="1dp"
         android:background="#5B000000"

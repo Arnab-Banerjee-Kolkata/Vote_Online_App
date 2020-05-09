@@ -12,14 +12,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.activities.ResultList;
-import com.example.voteonlinebruh.activities.LoginPage;
 import com.example.voteonlinebruh.activities.OtpPage;
 import com.example.voteonlinebruh.activities.PublicElectionList;
 import com.example.voteonlinebruh.activities.ResultsDetailed;
 import com.example.voteonlinebruh.activities.ResultsSimplified;
-import com.example.voteonlinebruh.activities.VotingInstructions;
 import com.example.voteonlinebruh.activities.VotingPage;
 import com.example.voteonlinebruh.activities.WaitScreen;
+import com.example.voteonlinebruh.models.ConstituencyWiseResultList;
 import com.example.voteonlinebruh.models.ElectionListItem;
 import com.example.voteonlinebruh.models.PartywiseResultList;
 import com.example.voteonlinebruh.models.PublicCandidate;
@@ -56,124 +55,8 @@ public class ServerCall {
         }
     }
 
-    public void validateDetails(String aadhaarNo, final String boothId, final Context mContext, final LoginPage loginPage) {
-        Response.Listener<String> listener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-                Map<String, String> params = new HashMap<>();
-                JSONObject jsonResponse = null;
-                response = "{" + response + "}";
-
-                try {
-                    jsonResponse = new JSONObject(response.substring(1, response.length() - 1));
-                    boolean success = jsonResponse.getBoolean("success");
-                    if (!success) {
-                        boolean validAuth = jsonResponse.getBoolean("validAuth");
-                        boolean validBooth = jsonResponse.getBoolean("validBooth");
-                        boolean validAadhaar = jsonResponse.getBoolean("validAadhaar");
-                        if (!validAuth)
-                            Toast.makeText(mContext, "Un-authourised access request", Toast.LENGTH_SHORT).show();
-                        else if (!validBooth)
-                            Toast.makeText(mContext, "Enter correct booth Id", Toast.LENGTH_SHORT).show();
-                        else if (!validAadhaar)
-                            Toast.makeText(mContext, "Invalid/Un-registered aadhaar number", Toast.LENGTH_SHORT).show();
-                        WaitScreen.terminate = true;
-                    } else {
-                        Intent intent = new Intent(mContext, VotingInstructions.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        myRunnable thread = new myRunnable(intent, mContext);
-                        new Thread(thread).start();
-                        loginPage.finish();
-                    }
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
-                    //Toast.makeText(mContext, response, Toast.LENGTH_LONG).show();
-                    WaitScreen.terminate = true;
-                    params.put("message", "Failed");
-                }
-            }
-        };
-
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                WaitScreen.terminate = true;
-                Toast.makeText(mContext, "Error occured. Try again", Toast.LENGTH_LONG).show();
-                System.out.println(error.toString());
-                //Toast.makeText(mContext,error.toString(),Toast.LENGTH_LONG).show();
-            }
-        };
-
-
-        String url = mContext.getString(R.string.web_host) + "/ValidateCredentials.php";
-        Map<String, String> params = new HashMap<>();
-        params.put("aadhaarNo", aadhaarNo);
-        params.put("boothId", boothId);
-        params.put("postAuthKey", mContext.getString(R.string.post_auth_key));
-
-
-        PostRequest postValidateDetails = new PostRequest(mContext, url, params, listener, errorListener);
-        RequestQueue queue = Volley.newRequestQueue(mContext);
-        queue.add(postValidateDetails);
-
-    }
-
-    public void sendVoterOtp(String aadhaarNo, final Context mContext, final VotingInstructions votingInstructions) {
-        Response.Listener<String> listener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-                Map<String, String> params = new HashMap<>();
-                JSONObject jsonResponse = null;
-
-                try {
-                    jsonResponse = new JSONObject(response);
-                    boolean success = jsonResponse.getBoolean("success");
-                    if (success) {
-                        Intent intent = new Intent(mContext, OtpPage.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        myRunnable thread = new myRunnable(intent, mContext);
-                        new Thread(thread).start();
-                        votingInstructions.finish();
-                    } else {
-                        Toast.makeText(mContext, "Could not send otp", Toast.LENGTH_SHORT).show();
-                        WaitScreen.terminate = true;
-                    }
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
-                    WaitScreen.terminate = true;
-                    params.put("message", "Failed");
-                }
-            }
-        };
-
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                WaitScreen.terminate = true;
-                Toast.makeText(mContext, "Error occured. Try again", Toast.LENGTH_LONG).show();
-            }
-        };
-
-        String url = mContext.getString(R.string.web_host) + "/TestSms.php";
-        Map<String, String> params = new HashMap<>();
-        params.put("aadhaarNo", aadhaarNo);
-        params.put("smsAuthKey", mContext.getString(R.string.sms_auth_key));
-
-
-        PostRequest postRequest = new PostRequest(mContext, url, params, listener, errorListener);
-        RequestQueue queue = Volley.newRequestQueue(mContext);
-        queue.add(postRequest);
-    }
-
-    public void validateOtp(String aadhaarNo, String boothId, String otp, final Context mContext, final OtpPage otpPage) {
+    public void validateBoothOtp(final int electionId, final String boothId, final String electionType, final String otp, final Context mContext, final OtpPage otpPage) {
+        final ArrayList<PublicCandidate> candidates = new ArrayList<PublicCandidate>();
         Response.Listener<String> listener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -182,23 +65,52 @@ public class ServerCall {
 
                 try {
                     jsonResponse = new JSONObject(response);
-                    boolean success = jsonResponse.getBoolean("success");
-                    if (!success) {
-                        boolean validAuth = jsonResponse.getBoolean("validAuth");
-                        boolean validApproval = jsonResponse.getBoolean("validApproval");
-                        if (!validAuth)
-                            Toast.makeText(mContext, "Un-authourised access request", Toast.LENGTH_LONG).show();
-                        else if (!validApproval)
-                            Toast.makeText(mContext, "Vote not approved at RPD", Toast.LENGTH_LONG).show();
+                    boolean validAuth = jsonResponse.getBoolean("validAuth");
+                    boolean validBooth = jsonResponse.getBoolean("validBooth");
+                    boolean validOtp = jsonResponse.getBoolean("validOtp");
+                    if (!validAuth) {
+                        Toast.makeText(mContext, "Un-authourised access request", Toast.LENGTH_LONG).show();
+                        WaitScreen.terminate = true;
+                    } else if (!validBooth) {
+                        Toast.makeText(mContext, "Invalid Booth ID !", Toast.LENGTH_LONG).show();
+                        WaitScreen.terminate = true;
+                    } else if (!validOtp) {
+                        Toast.makeText(mContext, "Incorrect OTP !", Toast.LENGTH_LONG).show();
                         WaitScreen.terminate = true;
                     } else {
-                        Intent intent = new Intent(mContext, VotingPage.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        myRunnable thread = new myRunnable(intent, mContext);
-                        new Thread(thread).start();
-                        otpPage.finish();
-                    }
+                        JSONObject parameters = jsonResponse.getJSONObject("sub");
+                        boolean success = parameters.getBoolean("success");
+                        if (!success) {
+                            boolean validInternalAuth = parameters.getBoolean("validInternalAuth");
+                            boolean validElection = parameters.getBoolean("validElection");
+                            boolean validParentElection = parameters.getBoolean("validParentElection");
+                            if (!validInternalAuth)
+                                Toast.makeText(mContext, "Invalid Key", Toast.LENGTH_LONG).show();
+                            if (!validElection)
+                                Toast.makeText(mContext, "Invalid election ID !", Toast.LENGTH_LONG).show();
+                            if (!validParentElection)
+                                Toast.makeText(mContext, "You have selected the wrong election !", Toast.LENGTH_LONG).show();
+                            WaitScreen.terminate = true;
+                        } else {
+                            JSONArray array2 = parameters.getJSONArray("candidates");
+                            int len2 = array2.length();
 
+                            for (int i = 0; i < len2; i++) {
+                                JSONObject elections = array2.getJSONObject(i);
+                                candidates.add(new PublicCandidate(elections.getInt("id"),
+                                        elections.getString("name"),
+                                        elections.getString("party"),
+                                        elections.getString("img")));
+                            }
+                            candidates.add(new PublicCandidate(0, "NONE OF THE ABOVE", "NOTA", ""));
+                            final Intent intent = new Intent(mContext, VotingPage.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.putExtra("list", candidates);
+                            myRunnable thread = new myRunnable(intent, mContext);
+                            new Thread(thread).start();
+                            otpPage.finish();
+                        }
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -221,14 +133,13 @@ public class ServerCall {
         };
 
 
-        String url = mContext.getString(R.string.web_host) + "/ValidateOtp.php";
+        String url = mContext.getString(R.string.web_host) + "/ValidateBoothOtp.php";
         Map<String, String> params = new HashMap<>();
-        params.put("category", "booth");
-        params.put("aadhaarNo", aadhaarNo);
         params.put("boothId", boothId);
         params.put("otp", otp);
         params.put("postAuthKey", mContext.getString(R.string.post_auth_key));
-
+        params.put("electionId", Integer.toString(electionId));
+        params.put("type", electionType);
 
         PostRequest postValidateOtp = new PostRequest(mContext, url, params, listener, errorListener);
         RequestQueue queue = Volley.newRequestQueue(mContext);
@@ -441,7 +352,9 @@ public class ServerCall {
     }
 
     //Overloaded method for statewise results
-    public void getOverallResult(final String type, final int electionId, final String stateCode, final Context mContext, final ResultsDetailed resultsDetailed, final SharedPreferences pref) {
+    public void getOverallResult(final String type, final int electionId, final String stateCode, final Context mContext, final ResultsDetailed resultsDetailed) {
+
+        final ArrayList<PartywiseResultList> partyresultlist = new ArrayList<PartywiseResultList>();
 
         Response.Listener<String> listener = new Response.Listener<String>() {
             @Override
@@ -465,14 +378,19 @@ public class ServerCall {
                         else if (!validType)
                             Toast.makeText(mContext, "Invalid election type !", Toast.LENGTH_SHORT).show();
                         else if (!validElection)
-                            resultsDetailed.release(false);
+                            resultsDetailed.release(null, null, false);
                     } else {
                         int status = jsonResponse.getInt("status");
                         int totalSeats = jsonResponse.getInt("totalSeats");
-                        final SharedPreferences.Editor edit = pref.edit();
-                        edit.putString("list", response);
-                        edit.apply();
-                        getConstituencyResult(type, electionId, stateCode, mContext, resultsDetailed, pref);
+                        JSONArray array = jsonResponse.getJSONArray("results");
+                        int len = array.length();
+                        for (int i = 0; i < len; i++) {
+                            JSONObject elections = array.getJSONObject(i);
+                            partyresultlist.add(new PartywiseResultList(elections.getString("partyName"),
+                                    elections.getInt("seatsWon"),
+                                    elections.getString("partySymbol")));
+                        }
+                        getConstituencyResult(type, electionId, stateCode, mContext, resultsDetailed, partyresultlist);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -503,7 +421,9 @@ public class ServerCall {
         queue.add(postShowOptions);
     }
 
-    public void getConstituencyResult(final String type, final int electionId, final String stateCode, final Context mContext, final ResultsDetailed resultsDetailed, final SharedPreferences pref) {
+    public void getConstituencyResult(final String type, final int electionId, final String stateCode, final Context mContext, final ResultsDetailed resultsDetailed, final ArrayList<PartywiseResultList> list) {
+
+        final ArrayList<ConstituencyWiseResultList> constresultlist = new ArrayList<ConstituencyWiseResultList>();
 
         Response.Listener<String> listener = new Response.Listener<String>() {
             @Override
@@ -526,13 +446,21 @@ public class ServerCall {
                         else if (!validType)
                             Toast.makeText(mContext, "Invalid election type !", Toast.LENGTH_SHORT).show();
                         else if (!validElection)
-                            resultsDetailed.release(false);
+                            resultsDetailed.release(null, null, false);
                     } else {
                         int status = jsonResponse.getInt("status");
-                        final SharedPreferences.Editor edit = pref.edit();
-                        edit.putString("list2", response);
-                        edit.apply();
-                        resultsDetailed.release(true);
+                        JSONArray array = jsonResponse.getJSONArray("results");
+                        int len = array.length();
+
+                        for (int i = 0; i < len; i++) {
+                            JSONObject elections = array.getJSONObject(i);
+                            constresultlist.add(new ConstituencyWiseResultList(elections.getString("constituencyName"),
+                                    elections.getString("candidateName"),
+                                    elections.getString("partyName"),
+                                    elections.getString("partySymbol"),
+                                    elections.getInt("voteCount")));
+                        }
+                        resultsDetailed.release(list, constresultlist, true);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -619,86 +547,6 @@ public class ServerCall {
         String url = mContext.getString(R.string.web_host) + "/ShowStateList.php";
         Map<String, String> params = new HashMap<>();
         params.put("postAuthKey", mContext.getString(R.string.post_auth_key));
-
-        PostRequest postShowOptions = new PostRequest(mContext, url, params, listener, errorListener);
-        RequestQueue queue = Volley.newRequestQueue(mContext);
-        queue.add(postShowOptions);
-    }
-
-    public void getPublicCandidateList(String aadhaarNo, String electionId, String electionName, final Context mContext,
-                                       final VotingPage votingPage) {
-        final ArrayList<PublicCandidate> publicCandidates = new ArrayList<>();
-
-        Response.Listener<String> listener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-                WaitScreen.terminate = true;
-
-                String responseArray = response.substring(0, response.lastIndexOf("{"));
-                response = response.substring(response.lastIndexOf("{"));
-
-                JSONObject jsonResponse = null;
-
-                WaitScreen.terminate = true;
-
-                try {
-                    jsonResponse = new JSONObject(response);
-                    boolean success = jsonResponse.getBoolean("success");
-                    if (!success) {
-                        boolean validAuth = jsonResponse.getBoolean("validAuth");
-                        boolean validElection = jsonResponse.getBoolean("validElection");
-                        boolean validAadhaar = jsonResponse.getBoolean("validAadhaar");
-                        boolean validApproval = jsonResponse.getBoolean("validApproval");
-                        boolean validConstituency = jsonResponse.getBoolean("validConstituency");
-
-                        if (!validAuth)
-                            Toast.makeText(mContext, "Un-authourised access request", Toast.LENGTH_SHORT).show();
-                        else if (!validElection)
-                            Toast.makeText(mContext, "Election details not found", Toast.LENGTH_SHORT).show();
-                        else if (!validAadhaar)
-                            Toast.makeText(mContext, "Un-registered/ Invalid aadhaar", Toast.LENGTH_SHORT).show();
-                        else if (!validApproval)
-                            Toast.makeText(mContext, "Voter not approved", Toast.LENGTH_LONG).show();
-                        else if (!validConstituency)
-                            Toast.makeText(mContext, "Voter's constituency does not belong to this election", Toast.LENGTH_LONG).show();
-                    } else {
-                        JSONArray array = new JSONArray(responseArray);
-                        int len = array.length();
-
-                        for (int i = 0; i < len; i++) {
-                            JSONObject candidate = array.getJSONObject(i);
-                            publicCandidates.add(new PublicCandidate(candidate.getString("candidateName"), candidate.getString("partyName"),
-                                    candidate.getString("symbol")));
-                        }
-                        votingPage.showList(publicCandidates);
-                    }
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
-                    //Toast.makeText(mContext, responseArray, Toast.LENGTH_LONG).show();
-                }
-            }
-        };
-
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(mContext, "Error Occured", Toast.LENGTH_LONG).show();
-            }
-        };
-
-
-        String url = mContext.getString(R.string.web_host) + "/ShowOptions.php";
-        Map<String, String> params = new HashMap<>();
-
-        params.put("aadhaarNo", aadhaarNo);
-        params.put("electionId", electionId);
-        params.put("electionName", electionName);
-        params.put("postAuthKey", mContext.getString(R.string.post_auth_key));
-
 
         PostRequest postShowOptions = new PostRequest(mContext, url, params, listener, errorListener);
         RequestQueue queue = Volley.newRequestQueue(mContext);

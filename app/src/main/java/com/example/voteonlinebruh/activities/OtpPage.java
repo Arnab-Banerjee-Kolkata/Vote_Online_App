@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -29,13 +30,15 @@ public class OtpPage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(MainActivity.TM.getThemeId());
-        if (MainActivity.TM.getThemeId() == R.style.AppTheme_Light)
-            themeId = R.style.ConfirmTheme_Light;
-        else
-            themeId = R.style.ConfirmTheme_Dark;
+        themeId=MainActivity.TM.getThemeId();
+        setTheme(themeId);
         setContentView(R.layout.activity_otp_page);
-
+        TextView disclaimer = findViewById(R.id.textView4);
+        if (themeId == R.style.AppTheme_Light) {
+            disclaimer.setBackgroundResource(R.drawable.spinnerbglight);
+        } else {
+            disclaimer.setBackgroundResource(R.drawable.spinnerbgdark);
+        }
         mContext = getApplicationContext();
         ImageView imageView = findViewById(R.id.otpbg);
         int resid = R.drawable.log_bot;
@@ -53,6 +56,8 @@ public class OtpPage extends AppCompatActivity {
         ets[2].setTransformationMethod(null);
         ets[3] = findViewById(R.id.otp4);
         ets[3].setTransformationMethod(null);
+
+        final EditText boothid = findViewById(R.id.boothid);
 
         class textFocus implements TextWatcher {
             private View view;
@@ -123,6 +128,9 @@ public class OtpPage extends AppCompatActivity {
         ets[3].setOnKeyListener(new listener(3));
 
         //VALIDATION CODE
+        final Bundle bundle = getIntent().getBundleExtra("bundle");
+        final int electionId = bundle.getInt("electionId");
+        final String electionType = bundle.getString("electionType");
 
         login = findViewById(R.id.verifybut);
         login.setOnClickListener(new View.OnClickListener() {
@@ -138,16 +146,15 @@ public class OtpPage extends AppCompatActivity {
                         otp = "";
                         throw new Exception("Please enter OTP !");
                     }
+                    if (boothid.getText().toString().isEmpty()) {
+                        throw new Exception("Please enter the booth ID !");
+                    }
 
+                    String boothId = boothid.getText().toString();
                     login.setEnabled(false);
-                    SharedPreferences sharedPreferences = getSharedPreferences("VoterDetails", Context.MODE_PRIVATE);
-
                     String OTP = otp;
-                    String boothId = sharedPreferences.getString("boothId", "0");
-                    String aadhaarNo = sharedPreferences.getString("aadhaarNo", "");
-
                     ServerCall serverCall = new ServerCall();
-                    serverCall.validateOtp(aadhaarNo, boothId, OTP, mContext, OtpPage.this);
+                    serverCall.validateBoothOtp(electionId, boothId, electionType, OTP, mContext, OtpPage.this);
 
                     Intent intent = new Intent(getApplicationContext(), WaitScreen.class);
                     intent.putExtra("LABEL", "Authenticating");
@@ -162,37 +169,10 @@ public class OtpPage extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this, themeId).setTitle("Confirm Log Out")
-                .setMessage("\nYou cannot go back ! You will be logged out.\nAre you sure you want to log out ?\n")
-                .setPositiveButton("Yes, Logout !", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        logout();
-                    }
-                })
-                .setNegativeButton("No !", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        AlertDialog dialog = builder.create();
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
-        dialog.show();
-    }
-
-    @Override
     protected void onResume() {
         login.setEnabled(true);
         super.onResume();
     }
-
-    void logout() {
-        super.onBackPressed();
-    }
-
     @Override
     public void finish() {
         super.finish();

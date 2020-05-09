@@ -13,6 +13,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.activities.MainActivity;
 import com.github.mikephil.charting.charts.PieChart;
@@ -31,6 +32,12 @@ public class OverallRes extends Fragment {
 
     private ArrayList name, sym, seat;
     private int rows;
+
+    public static OverallRes newInstance(Bundle args){
+        OverallRes overallRes=new OverallRes();
+        overallRes.setArguments(args);
+        return overallRes;
+    }
 
     @Override
     public void setArguments(@Nullable Bundle args) {
@@ -101,7 +108,11 @@ public class OverallRes extends Fragment {
                     seats = view.findViewById(R.id.seatnum);
             ImageView syms = view.findViewById(R.id.imnum);
             names.setText((String) name.get(i));
-            //syms.setImageResource((Integer) sym.get(i));
+            Glide.with(this)
+                    .load(sym.get(i))
+                    .placeholder(R.mipmap.ic_launcher)
+                    .error(R.mipmap.ic_launcher)
+                    .into(syms);
             seats.setText((String) seat.get(i));
             color.setBackgroundColor(legend[i].formColor);
             tableLayout.addView(row);

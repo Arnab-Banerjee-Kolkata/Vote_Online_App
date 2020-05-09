@@ -13,6 +13,7 @@ public class FragmentAdapter extends FragmentPagerAdapter {
 
     private Context context;
     private Bundle args, args2;
+    private Fragment firstFrag, secondFrag;
 
     public FragmentAdapter(Context context, FragmentManager fm, Bundle args, Bundle args2) {
         super(fm);
@@ -24,13 +25,12 @@ public class FragmentAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int i) {
         if (i == 0) {
-            OverallRes overallRes = new OverallRes();
-            overallRes.setArguments(args);
-            return overallRes;
+            firstFrag=OverallRes.newInstance(args);
+            firstFrag.onResume();
+            return firstFrag;
         } else {
-            ConstRes constRes = new ConstRes();
-            constRes.setArguments(args2);
-            return constRes;
+            secondFrag=ConstRes.newInstance(args2);
+            return secondFrag;
         }
     }
 

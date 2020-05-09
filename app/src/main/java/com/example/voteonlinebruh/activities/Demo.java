@@ -24,7 +24,6 @@ public class Demo extends AppCompatActivity {
     Animation fadein, fadeout, scale_slow, scale_fast;
     View shadowfull, party, cand, sym, indi, tap1, tap2, tap3, tap4;
     TextView text;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

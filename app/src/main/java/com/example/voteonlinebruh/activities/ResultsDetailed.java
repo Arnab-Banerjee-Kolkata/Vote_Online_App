@@ -2,11 +2,15 @@ package com.example.voteonlinebruh.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -16,7 +20,8 @@ import android.widget.TextView;
 
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.adapters.FragmentAdapter;
-import com.example.voteonlinebruh.apiCalls.ScreenControl;
+import com.example.voteonlinebruh.fragments.OverallRes;
+import com.example.voteonlinebruh.utility.ScreenControl;
 import com.example.voteonlinebruh.apiCalls.ServerCall;
 import com.example.voteonlinebruh.models.ConstituencyWiseResultList;
 import com.example.voteonlinebruh.models.PartywiseResultList;
@@ -27,8 +32,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class ResultsDetailed extends AppCompatActivity {
+public class ResultsDetailed extends FragmentActivity {
     RelativeLayout rel;
     TabLayout tabLayout;
     String stateName;
@@ -71,7 +77,6 @@ public class ResultsDetailed extends AppCompatActivity {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, states);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(arrayAdapter);
-        final SharedPreferences pref = getSharedPreferences("Vote.Online.Result", MODE_PRIVATE);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -83,8 +88,7 @@ public class ResultsDetailed extends AppCompatActivity {
                 serverCall.getOverallResult(type, electionId,
                         list.get(position).getStateCode(),
                         getApplicationContext(),
-                        ResultsDetailed.this,
-                        pref);
+                        ResultsDetailed.this);
             }
 
             @Override
@@ -94,7 +98,7 @@ public class ResultsDetailed extends AppCompatActivity {
         });
     }
 
-    public void release(boolean status) {
+    public void release(ArrayList<PartywiseResultList> partyresultlist, ArrayList<ConstituencyWiseResultList> constresultlist, boolean status) {
         final ViewPager viewPager = findViewById(R.id.pager);
         TextView message = findViewById(R.id.errorMessage);
         if (!status) {
@@ -102,6 +106,7 @@ public class ResultsDetailed extends AppCompatActivity {
             viewPager.removeAllViews();
             viewPager.setVisibility(View.GONE);
         } else {
+            viewPager.removeAllViews();
             viewPager.setVisibility(View.VISIBLE);
             message.setVisibility(View.INVISIBLE);
             ArrayList name = new ArrayList(),
@@ -111,38 +116,6 @@ public class ResultsDetailed extends AppCompatActivity {
                     can_name = new ArrayList(),
                     p_name = new ArrayList(),
                     votes = new ArrayList();
-            final ArrayList<PartywiseResultList> partyresultlist = new ArrayList<PartywiseResultList>();
-            final ArrayList<ConstituencyWiseResultList> constresultlist = new ArrayList<ConstituencyWiseResultList>();
-            SharedPreferences preferences = getSharedPreferences("Vote.Online.Result", MODE_PRIVATE);
-            String partyResponse = preferences.getString("list", "");
-            String constResponse = preferences.getString("list2", "");
-            try {
-                JSONObject jsonResponse = new JSONObject(partyResponse);
-                JSONArray array = jsonResponse.getJSONArray("results");
-                int len = array.length();
-
-                for (int i = 0; i < len; i++) {
-                    JSONObject elections = array.getJSONObject(i);
-                    partyresultlist.add(new PartywiseResultList(elections.getString("partyName"),
-                            elections.getInt("seatsWon"),
-                            elections.getString("partySymbol")));
-                }
-
-                jsonResponse = new JSONObject(constResponse);
-                array = jsonResponse.getJSONArray("results");
-                len = array.length();
-
-                for (int i = 0; i < len; i++) {
-                    JSONObject elections = array.getJSONObject(i);
-                    constresultlist.add(new ConstituencyWiseResultList(elections.getString("constituencyName"),
-                            elections.getString("candidateName"),
-                            elections.getString("partyName"),
-                            elections.getString("partySymbol"),
-                            elections.getInt("voteCount")));
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
             for (PartywiseResultList i : partyresultlist) {
                 name.add(i.getPartyname());
                 seat.add(Integer.toString(i.getSeatsWon()));
@@ -164,8 +137,11 @@ public class ResultsDetailed extends AppCompatActivity {
             args2.putStringArrayList("CAND_NAME", can_name);
             args2.putStringArrayList("PAR_NAME", p_name);
             args2.putStringArrayList("VOTES", votes);
-            args2.putString("STATE_NAME", "igdhud");
+            args2.putString("STATE_NAME", stateName);
             args2.putInt("ROWS", constresultlist.size());
+            List<Fragment> list=getSupportFragmentManager().getFragments();
+            for (int i = 0; i < list.size(); i++)
+                getSupportFragmentManager().beginTransaction().remove(list.get(i)).commitNow();
             FragmentAdapter fragmentAdapter = new FragmentAdapter(getBaseContext(), getSupportFragmentManager(), args, args2);
             viewPager.setAdapter(fragmentAdapter);
             viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));

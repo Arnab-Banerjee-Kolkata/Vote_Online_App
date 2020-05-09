@@ -1,16 +1,19 @@
 package com.example.voteonlinebruh.models;
 
+import com.example.voteonlinebruh.utility.CaseConverter;
+
 import java.io.Serializable;
 
 public class ResultListItem implements Serializable {
-    private int ElectionId, status;
+    private int electionId, status;
     private String type, name;
 
     public ResultListItem(int electionId, int status, String type, String name) {
-        ElectionId = electionId;
+        CaseConverter converter=new CaseConverter();
+        this.electionId = electionId;
         this.status = status;
         this.type = type;
-        this.name = name;
+        this.name = converter.toCamelCase(name);
     }
 
     public String getName() {
@@ -22,7 +25,7 @@ public class ResultListItem implements Serializable {
     }
 
     public int getElectionId() {
-        return ElectionId;
+        return electionId;
     }
 
     public int getStatus() {

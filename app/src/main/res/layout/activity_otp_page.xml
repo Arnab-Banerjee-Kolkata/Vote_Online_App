@@ -18,25 +18,51 @@
         android:id="@+id/otpbg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitEnd" />
+        android:scaleType="fitEnd"
+        android:alpha=".2"/>
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textStyle="italic"
         android:text="An OTP was sent to your registered phone number. Please show it to the polling officer present in the polling station."
         android:padding="10dp"
+        android:layout_margin="5dp"
         android:layout_marginTop="10dp"
         app:layout_constraintTop_toBottomOf="@id/toolbarotp" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout9"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/textView4">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Booth ID -" />
+
+        <EditText
+            android:id="@+id/boothid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:paddingStart="10dp"
+            android:layout_marginStart="5dp"/>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Enter the 4-digit booth OTP provided by the polling officer : "
-        android:padding="10dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        android:padding="15dp"
+        android:text="Provide the 4-digit booth OTP provided by the polling officer : "
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout9" />
 
     <LinearLayout
         android:id="@+id/linearLayout4"
@@ -44,15 +70,13 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        android:padding="5dp"
         app:layout_constraintTop_toBottomOf="@+id/textView5">
 
         <EditText
             android:id="@+id/otp1"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             android:gravity="center"
             android:inputType="numberPassword"
             android:maxLength="1"
@@ -62,7 +86,7 @@
             android:id="@+id/otp2"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             android:gravity="center"
             android:inputType="numberPassword"
             android:maxLength="1"
@@ -72,7 +96,7 @@
             android:id="@+id/otp3"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             android:gravity="center"
             android:inputType="numberPassword"
             android:maxLength="1"
@@ -82,7 +106,7 @@
             android:id="@+id/otp4"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             android:gravity="center"
             android:inputType="numberPassword"
             android:maxLength="1"
@@ -92,7 +116,7 @@
 
     <Button
         android:id="@+id/verifybut"
-        android:layout_width="220dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="@drawable/buttonbg"

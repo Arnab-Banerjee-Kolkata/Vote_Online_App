@@ -147,7 +147,7 @@ public class ResultsSimplified extends AppCompatActivity {
             TextView names = view.findViewById(R.id.partynum),
                     seats = view.findViewById(R.id.seatnum);
             ImageView syms = view.findViewById(R.id.imnum);
-            String resUrl = getString(R.string.web_host) + resultlist.get(i).getPartySymbol() + "?i=1";
+            String resUrl =resultlist.get(i).getPartySymbol();
             names.setText(resultlist.get(i).getPartyname());
             Glide
                     .with(this)

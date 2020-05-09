@@ -41,32 +41,20 @@
             android:id="@+id/bg_left"
             android:layout_width="0dp"
             android:layout_height="178dp"
-            android:layout_weight=".45"
+            android:layout_weight=".5"
             android:scaleType="fitEnd" />
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight=".1" />
 
         <ImageView
             android:id="@+id/bg_right"
             android:layout_width="0dp"
             android:layout_height="178dp"
-            android:layout_weight=".45"
+            android:layout_weight=".5"
             android:scaleType="fitEnd" />
 
     </LinearLayout>
 
-    <ImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:src="@drawable/wait_vote_box"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayout2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <LinearLayout
+        android:id="@+id/linearLayout8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -82,37 +70,23 @@
             android:layout_marginBottom="8dp"
             android:textSize="22dp" />
 
-        <TextView
-            android:id="@+id/dot1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:text=" . "
-            android:textSize="22dp"
-            android:visibility="invisible" />
-
-        <TextView
-            android:id="@+id/dot2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:text=". "
-            android:textSize="22dp"
-            android:visibility="invisible" />
-
-        <TextView
-            android:id="@+id/dot3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="."
-            android:textSize="22dp"
-            android:visibility="invisible" />
-
     </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/waitRel2"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout8">
+
+        <ProgressBar
+            style="@android:style/Widget.Holo.ProgressBar"
+            android:layout_width="50dp"
+            android:layout_height="50dp" />
+
+    </RelativeLayout>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbarloading"

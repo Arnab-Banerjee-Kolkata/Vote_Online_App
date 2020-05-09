@@ -1,12 +1,16 @@
 package com.example.voteonlinebruh.models;
 
-public class PublicCandidate {
-    private String name, partyName, symbol;
+import java.io.Serializable;
 
-    public PublicCandidate(String name, String partyName, String symbol) {
+public class PublicCandidate implements Serializable {
+    private String name, partyName, symbol;
+    private int id;
+
+    public PublicCandidate(int id, String name, String partyName, String symbol) {
         this.name = name;
         this.partyName = partyName;
         this.symbol = symbol;
+        this.id = id;
     }
 
     public String getPartyName() {
@@ -19,5 +23,9 @@ public class PublicCandidate {
 
     public String getName() {
         return name;
+    }
+
+    public int getId() {
+        return id;
     }
 }

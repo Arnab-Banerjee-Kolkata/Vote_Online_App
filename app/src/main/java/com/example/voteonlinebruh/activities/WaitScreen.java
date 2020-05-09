@@ -59,10 +59,6 @@ public class WaitScreen extends AppCompatActivity {
         final Animation handsback = AnimationUtils.loadAnimation(this, R.anim.entry_hands_retract);
         final Animation mike = AnimationUtils.loadAnimation(this, R.anim.entry_mike);
         final Animation mikeback = AnimationUtils.loadAnimation(this, R.anim.entry_mike_retract);
-        final TextView dot1, dot2, dot3;
-        dot1 = findViewById(R.id.dot1);
-        dot2 = findViewById(R.id.dot2);
-        dot3 = findViewById(R.id.dot3);
 
         hands.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -115,9 +111,6 @@ public class WaitScreen extends AppCompatActivity {
                                 dotHandler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        dot1.setVisibility(View.INVISIBLE);
-                                        dot2.setVisibility(View.INVISIBLE);
-                                        dot3.setVisibility(View.INVISIBLE);
                                         left.startAnimation(translate_up);
                                         right.startAnimation(translate_down);
                                     }
@@ -127,7 +120,6 @@ public class WaitScreen extends AppCompatActivity {
                                 dotHandler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        dot1.setVisibility(View.VISIBLE);
                                         right.startAnimation(translate_up);
                                         left.startAnimation(translate_down);
                                     }
@@ -137,9 +129,8 @@ public class WaitScreen extends AppCompatActivity {
                                 dotHandler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        dot2.setVisibility(View.VISIBLE);
-                                        left.startAnimation(translate_up);
                                         right.startAnimation(translate_down);
+                                        left.startAnimation(translate_up);
 
                                     }
                                 });
@@ -148,9 +139,8 @@ public class WaitScreen extends AppCompatActivity {
                                 dotHandler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        dot3.setVisibility(View.VISIBLE);
-                                        right.startAnimation(translate_up);
                                         left.startAnimation(translate_down);
+                                        right.startAnimation(translate_up);
                                     }
                                 });
 

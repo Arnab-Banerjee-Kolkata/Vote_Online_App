@@ -1,5 +1,7 @@
 package com.example.voteonlinebruh.models;
 
+import com.example.voteonlinebruh.utility.CaseConverter;
+
 import java.io.Serializable;
 
 public class ElectionListItem implements Serializable {
@@ -10,8 +12,9 @@ public class ElectionListItem implements Serializable {
     private int year;
 
     public ElectionListItem(int electionId, String name, String type, int status, int year) {
+        CaseConverter converter=new CaseConverter();
         this.electionId = electionId;
-        this.name = name;
+        this.name = converter.toCamelCase(name);
         this.type = type;
         this.status = status;
         this.year = year;

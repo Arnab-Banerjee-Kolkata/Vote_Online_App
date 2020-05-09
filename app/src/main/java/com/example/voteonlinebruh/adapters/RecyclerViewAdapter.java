@@ -76,26 +76,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull itemViewHolder itemViewHolder, int i) {
         RecyclerViewItem currentRecyclerViewItem = recyclerViewItemArrayList.get(i);
-        String resUrl = context.getString(R.string.web_host) + currentRecyclerViewItem.getImgUrl();
-
-        if (resUrl.indexOf("https://") == 0) {
-
-            Glide
-                    .with(itemViewHolder.imageView.getContext())
-                    .load(resUrl)
-                    .placeholder(R.mipmap.ic_launcher)
-                    .error(R.mipmap.ic_launcher)
-                    .into(itemViewHolder.imageView);
-        } else {
-            //resUrl="http://remote-voting.rf.gd/PartySymbols/resize.jpg";
-            //new DownloadImageTask(itemViewHolder.imageView).execute(resUrl);
-
-//            Picasso.with(context)
-//                    .load(resUrl)
-//                    .resize(itemViewHolder.imageView.getWidth(), itemViewHolder.imageView.getHeight()).into(itemViewHolder.imageView);
-//
-        }
-
+        String resUrl = context.getString(R.string.web_host)+'/'+ currentRecyclerViewItem.getImgUrl();
+        Glide
+                .with(itemViewHolder.imageView.getContext())
+                .load(resUrl)
+                .placeholder(R.mipmap.ic_launcher)
+                .error(R.mipmap.ic_launcher)
+                .into(itemViewHolder.imageView);
 
         itemViewHolder.textView1.setText(currentRecyclerViewItem.getPname());
         itemViewHolder.textView2.setText(currentRecyclerViewItem.getCname());
@@ -108,30 +95,5 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public int getItemCount() {
         return recyclerViewItemArrayList.size();
-    }
-
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
     }
 }

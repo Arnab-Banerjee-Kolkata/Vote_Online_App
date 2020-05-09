@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.models.ElectionListItem;
+import com.example.voteonlinebruh.utility.CaseConverter;
 
 import java.util.ArrayList;
 
@@ -38,7 +39,7 @@ public class ListViewForElectionListAdapter extends ArrayAdapter<ElectionListIte
         name = row.findViewById(R.id.electionName);
         year = row.findViewById(R.id.electionYear2);
         status = row.findViewById(R.id.textView14);
-        type.setText(list.get(position).getType());
+        type.setText(new CaseConverter().toCamelCase(list.get(position).getType()));
         name.setText(list.get(position).getName());
         year.setText(Integer.toString(list.get(position).getYear()));
         int status_code = list.get(position).getStatus();

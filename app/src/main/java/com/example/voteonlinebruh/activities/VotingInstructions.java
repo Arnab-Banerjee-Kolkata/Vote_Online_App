@@ -41,76 +41,25 @@ public class VotingInstructions extends AppCompatActivity implements View.OnClic
 
             }
         });
-
         mContext = getApplicationContext();
-
         proceed.setOnClickListener(this);
-
-        SharedPreferences voterDetails = getSharedPreferences("VoterDetails", MODE_PRIVATE);
-        aadhaarNo = voterDetails.getString("aadhaarNo", "");
-
     }
 
     @Override
     public void finish() {
         super.finish();
-
     }
 
     @Override
     public void onClick(View v) {
         if (v.equals(proceed)) {
-
             v.setEnabled(false);
-
-            //UN-COMMENT FOR SENDING SMS
-
-            /*ServerCall serverCall=new ServerCall();
-            serverCall.sendVoterOtp(aadhaarNo, mContext, VotingInstructions.this);
-
-
-
-            //ACTUAL WAIT SCREEN CALL
-
-            WaitScreen.terminate=false;
-            Intent intent = new Intent(getApplicationContext(), WaitScreen.class);
-            intent.putExtra("LABEL","Sending OTP");
-            startActivity(intent);*/
-
-
-            //COMMENT FOR SENDING SMS
-
             Intent intent = new Intent(mContext, OtpPage.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            final Bundle bundle=getIntent().getBundleExtra("bundle");
+            intent.putExtra("bundle",bundle);
             mContext.startActivity(intent);
-
-            VotingInstructions.this.finish();
-
-
         }
-
-    }
-
-    @Override
-    public void onBackPressed() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this, themeId).setTitle("Confirm Log Out")
-                .setMessage("\nYou cannot go back ! You will be logged out.\nAre you sure you want to log out ?\n")
-                .setPositiveButton("Yes, Logout !", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        logout();
-                    }
-                })
-                .setNegativeButton("No !", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        AlertDialog dialog = builder.create();
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
-        dialog.show();
     }
 
     @Override
@@ -118,9 +67,5 @@ public class VotingInstructions extends AppCompatActivity implements View.OnClic
         demo.setEnabled(true);
         proceed.setEnabled(true);
         super.onResume();
-    }
-
-    void logout() {
-        super.onBackPressed();
     }
 }

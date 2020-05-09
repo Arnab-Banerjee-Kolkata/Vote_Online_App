@@ -14,7 +14,7 @@
             android:id="@+id/v"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/white"
+            android:background="#808080"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <LinearLayout
@@ -73,7 +73,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/white"
+            android:background="#808080"
             app:layout_constraintTop_toBottomOf="@id/l"
             app:layout_constraintBottom_toBottomOf="parent"/>
 

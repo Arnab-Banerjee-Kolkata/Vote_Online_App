@@ -7,7 +7,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 2
-        versionName "Alpha 2.1"
+        versionName "Alpha 3.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -40,7 +40,7 @@ dependencies {
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 
     ///Picasso Do not update
-    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
     //Chart
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'

@@ -9,10 +9,11 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.apiCalls.ServerCall;
-import com.example.voteonlinebruh.models.ThemeManager;
+import com.example.voteonlinebruh.utility.ThemeManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
         CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsingToolbarLayout);
 
         final ImageButton button = findViewById(R.id.themeToggle);

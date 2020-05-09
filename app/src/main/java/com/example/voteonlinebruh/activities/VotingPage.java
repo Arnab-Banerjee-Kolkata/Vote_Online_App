@@ -33,12 +33,12 @@ public class VotingPage extends AppCompatActivity {
 
     String electionId, electionName, aadhaarNo, boothId;
     Context mContext, context = this;
+    int themeId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTheme(MainActivity.TM.getThemeId());
-        int themeId;
         if (MainActivity.TM.getThemeId() == R.style.AppTheme_Light)
             themeId = R.style.ConfirmTheme_Light;
         else
@@ -56,29 +56,14 @@ public class VotingPage extends AppCompatActivity {
         electionId = pref2.getString("electionId", "");
         electionName = pref2.getString("electionName", "");
 
-
-        ServerCall serverCall = new ServerCall();
-        serverCall.getPublicCandidateList(aadhaarNo, electionId, electionName, mContext, VotingPage.this);
-
-
-        Intent intent = new Intent(getApplicationContext(), WaitScreen.class);
-        intent.putExtra("LABEL", "Fetching Panel");
-        startActivity(intent);
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-
-
         //dialogbox
         final AlertDialog.Builder builder = new AlertDialog.Builder(this, themeId).setTitle("Confirm Submission\n\n")
                 .setMessage("\nPlease confirm your vote for your selected candidate. Your vote will be registered on confirmation.\n")
                 .setPositiveButton("Yes, I Confirm !", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(getApplicationContext(), Thanks.class);
-
-                        //REGISTER VOTE & DESTROY ACTIVITY HERE
-
-
-                        startActivity(intent);
+                        ServerCall serverCall=new ServerCall();
+                        //serverCall.storeVote()
                     }
                 })
                 .setNegativeButton("No, I Want To Change !", new DialogInterface.OnClickListener() {
@@ -91,46 +76,7 @@ public class VotingPage extends AppCompatActivity {
         //DUMMY CHECKING CODE
 
         done = findViewById(R.id.donebutton);
-        done.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //VALUES TO WORK WITH->
-                if (selected >= 0) {
-                    done.setEnabled(false);
-                    String PARTY = recyclerViewItem_list.get(selected).getPname();
-                    String CANDIDATE = recyclerViewItem_list.get(selected).getCname();
-                    Toast.makeText(context, recyclerViewItem_list.get(selected).getPname() + "\n" + recyclerViewItem_list.get(selected).getCname(), Toast.LENGTH_SHORT).show();
-                    AlertDialog dialog = builder.create();
-                    dialog.setCanceledOnTouchOutside(false);
-                    dialog.setCancelable(false);
-                    dialog.show();
-                } else
-                    Toast.makeText(getApplicationContext(), "Please select your candidate !", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-    }
-
-    @Override
-    public void finish() {
-        super.finish();
-    }
-
-    public void showList(ArrayList<PublicCandidate> publicCandidates) {
+        final ArrayList<PublicCandidate> publicCandidates=(ArrayList<PublicCandidate>)getIntent().getSerializableExtra("list");
         int len = publicCandidates.size();
 
         recyclerViewItem_list = new ArrayList<>();
@@ -166,5 +112,67 @@ public class VotingPage extends AppCompatActivity {
             }
         });
 
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //VALUES TO WORK WITH->
+                if (selected >= 0) {
+                    done.setEnabled(false);
+                    String PARTY = recyclerViewItem_list.get(selected).getPname();
+                    String CANDIDATE = recyclerViewItem_list.get(selected).getCname();
+                    int cadidateId=publicCandidates.get(selected).getId();
+                    AlertDialog dialog = builder.create();
+                    dialog.setCanceledOnTouchOutside(false);
+                    dialog.setCancelable(false);
+                    dialog.show();
+                } else
+                    Toast.makeText(getApplicationContext(), "Please select your candidate !", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this, themeId).setTitle("Confirm Log Out")
+                .setMessage("\nYou cannot go back ! Your vote will be registered as 'NOTA'.\n\nAre you sure you want to log out ?\n")
+                .setPositiveButton("Yes, Logout !", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        logout();
+                    }
+                })
+                .setNegativeButton("No !", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.show();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+    }
+
+    void logout(){
+        super.onBackPressed();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
     }
 }

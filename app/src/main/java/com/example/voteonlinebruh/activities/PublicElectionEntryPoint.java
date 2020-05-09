@@ -23,6 +23,7 @@ public class PublicElectionEntryPoint extends AppCompatActivity {
 
         //SELECTED OPTION IS FOUND HERE
         String ELECTION_NAME = getIntent().getStringExtra("NAME");
+        final Bundle bundle = getIntent().getExtras();
 
         Toolbar toolbar = findViewById(R.id.toolbarpub);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
@@ -43,7 +44,8 @@ public class PublicElectionEntryPoint extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 b.setEnabled(false);
-                Intent intent = new Intent(getApplicationContext(), LoginPage.class);
+                Intent intent = new Intent(getApplicationContext(), VotingInstructions.class);
+                intent.putExtra("bundle",bundle);
                 startActivity(intent);
 
             }

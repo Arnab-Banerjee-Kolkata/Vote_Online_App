@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.voteonlinebruh.R;
+import com.example.voteonlinebruh.utility.CaseConverter;
 
 import java.util.ArrayList;
 
@@ -23,6 +24,12 @@ public class ConstRes extends Fragment {
     private ArrayList cons_name, cand_name, par_name, votes;
     private String state_name;
     private int rows;
+
+    public static ConstRes newInstance(Bundle args){
+        ConstRes constRes=new ConstRes();
+        constRes.setArguments(args);
+        return constRes;
+    }
 
     @Override
     public void setArguments(@Nullable Bundle args) {
@@ -63,7 +70,6 @@ public class ConstRes extends Fragment {
                 can.setText((String) cand_name.get(position));
                 par.setText((String) par_name.get(position));
                 vot.setText("Votes : " + (String) votes.get(position));
-                Log.d("came", "here");
                 return v;
             }
         }

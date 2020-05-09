@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.models.ResultListItem;
+import com.example.voteonlinebruh.utility.CaseConverter;
 
 import java.util.ArrayList;
 
@@ -38,7 +39,7 @@ public class ListViewForResultListAdapter extends ArrayAdapter<ResultListItem> {
         name = row.findViewById(R.id.textView16);
         status = row.findViewById(R.id.textView17);
         name.setText(list.get(position).getName());
-        type.setText(list.get(position).getType());
+        type.setText(new CaseConverter().toCamelCase(list.get(position).getType()));
         int status_code = list.get(position).getStatus();
         switch (status_code) {
             case 2:
