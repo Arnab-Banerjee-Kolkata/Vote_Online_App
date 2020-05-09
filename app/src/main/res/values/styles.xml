@@ -14,8 +14,8 @@
 
     <style name="AppTheme.Light" parent="AppTheme">
 
-        <item name="android:navigationBarColor">#868686</item>
-        <item name="android:statusBarColor">#868686</item>
+        <item name="android:navigationBarColor">#7E7E7E</item>
+        <item name="android:statusBarColor">#7084AA</item>
         <item name="android:textColor">@android:color/black</item>
         <item name="colorSecondary">@color/lightBg</item>
         <item name="android:textColorPrimary">@android:color/black</item>
