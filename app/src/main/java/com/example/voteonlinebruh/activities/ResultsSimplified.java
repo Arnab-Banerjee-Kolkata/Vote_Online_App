@@ -34,26 +34,33 @@ import java.util.ArrayList;
 
 public class ResultsSimplified extends AppCompatActivity {
 
+    private PieChart chart;
+    private Toolbar toolbar;
+    private Button button;
+    private PieDataSet dataSet;
+    private LayoutInflater layoutInflater;
+    private ArrayList<PartywiseResultList> resultlist;
+    private TableLayout tableLayout;
+    int themeId = MainActivity.TM.getThemeId();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int themeId = MainActivity.TM.getThemeId();
         setTheme(themeId);
         setContentView(R.layout.activity_results_simplified);
-
-        Toolbar toolbar = findViewById(R.id.toolbarResSim);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        toolbar = findViewById(R.id.toolbarResSim);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
-        Button button = findViewById(R.id.detailBut);
+        button = findViewById(R.id.detailBut);
         final Intent intent = getIntent();
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                button.setEnabled(false);
                 ServerCall serverCall = new ServerCall();
                 serverCall.getStatelist(intent.getIntExtra("electionId", 0), intent.getStringExtra("type"), getApplicationContext());
                 Intent intent = new Intent(getBaseContext(), WaitScreen.class);
@@ -73,9 +80,9 @@ public class ResultsSimplified extends AppCompatActivity {
                 indicator.setImageResource(R.drawable.complete);
                 break;
         }
-        final ArrayList<PartywiseResultList> resultlist = (ArrayList<PartywiseResultList>) intent.getSerializableExtra("list");
+        resultlist = (ArrayList<PartywiseResultList>) intent.getSerializableExtra("list");
 
-        PieChart chart = findViewById(R.id.chartoverall);
+        chart = findViewById(R.id.chartoverall);
         chart.setBackgroundColor(Color.TRANSPARENT);
         chart.setUsePercentValues(false);
         chart.getDescription().setEnabled(false);
@@ -93,7 +100,7 @@ public class ResultsSimplified extends AppCompatActivity {
         for (int i = 0; i < resultlist.size(); i++) {
             values.add(new PieEntry(resultlist.get(i).getSeatsWon(), resultlist.get(i).getPartyname()));
         }
-        PieDataSet dataSet = new PieDataSet(values, "");
+        dataSet = new PieDataSet(values, "");
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(6f);
         dataSet.setColors(ColorTemplate.VORDIPLOM_COLORS);
@@ -122,20 +129,21 @@ public class ResultsSimplified extends AppCompatActivity {
         Legend leg = chart.getLegend();
         leg.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
         LegendEntry[] legend = leg.getEntries();
-
-        LayoutInflater layoutInflater = (LayoutInflater) this.getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        TableLayout tableLayout = findViewById(R.id.tableoverall);
+        layoutInflater = (LayoutInflater) this.getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        tableLayout = findViewById(R.id.tableoverall);
         if (themeId == R.style.AppTheme_Light) {
             dataSet.setValueLineColor(Color.BLACK);
             chart.setCenterTextColor(Color.BLACK);
             data.setValueTextColor(Color.BLACK);
             leg.setTextColor(Color.BLACK);
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
             tableLayout.setBackgroundResource(android.R.drawable.dialog_holo_light_frame);
         } else {
             dataSet.setValueLineColor(Color.WHITE);
             chart.setCenterTextColor(Color.WHITE);
             data.setValueTextColor(Color.WHITE);
             leg.setTextColor(Color.WHITE);
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
             tableLayout.setBackgroundResource(android.R.drawable.dialog_holo_dark_frame);
         }
         for (int i = 0; i < resultlist.size(); i++) {
@@ -147,7 +155,7 @@ public class ResultsSimplified extends AppCompatActivity {
             TextView names = view.findViewById(R.id.partynum),
                     seats = view.findViewById(R.id.seatnum);
             ImageView syms = view.findViewById(R.id.imnum);
-            String resUrl =resultlist.get(i).getPartySymbol();
+            String resUrl = resultlist.get(i).getPartySymbol();
             names.setText(resultlist.get(i).getPartyname());
             Glide
                     .with(this)
@@ -159,5 +167,11 @@ public class ResultsSimplified extends AppCompatActivity {
             color.setBackgroundColor(legend[i].formColor);
             tableLayout.addView(row);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        button.setEnabled(true);
+        super.onResume();
     }
 }

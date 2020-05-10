@@ -76,7 +76,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull itemViewHolder itemViewHolder, int i) {
         RecyclerViewItem currentRecyclerViewItem = recyclerViewItemArrayList.get(i);
-        String resUrl = context.getString(R.string.web_host)+'/'+ currentRecyclerViewItem.getImgUrl();
+        String resUrl = currentRecyclerViewItem.getImgUrl();
         Glide
                 .with(itemViewHolder.imageView.getContext())
                 .load(resUrl)

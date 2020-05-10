@@ -21,15 +21,24 @@ import java.util.concurrent.TimeUnit;
 
 public class LandingPage extends AppCompatActivity {
     private Handler handler = new Handler();
-    CountDownTimer countDownTimer;
+    private CountDownTimer countDownTimer;
+    private Toolbar toolbar;
+    private ImageView clockmin, clockhour;
+    private Animation rotatemin, rotatehour;
+    private DateFormat dateFormat;
+    private String time;
+    private int themeId = MainActivity.TM.getThemeId();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(MainActivity.TM.getThemeId());
+        setTheme(themeId);
         setContentView(R.layout.activity_landing_page);
-        Toolbar toolbar = findViewById(R.id.timertool);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        toolbar = findViewById(R.id.timertool);
+        if (themeId == R.style.AppTheme_Light)
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        else
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -39,12 +48,11 @@ public class LandingPage extends AppCompatActivity {
 
         //ANIMATION CODES
 
-        final ImageView clockmin, clockhour;
         clockmin = findViewById(R.id.clockmin);
         clockhour = findViewById(R.id.clockhour);
-        final Animation rotatemin = AnimationUtils.loadAnimation(this, R.anim.rotate);
+        rotatemin = AnimationUtils.loadAnimation(this, R.anim.rotate);
         rotatemin.setDuration(2000);
-        final Animation rotatehour = AnimationUtils.loadAnimation(this, R.anim.rotate);
+        rotatehour = AnimationUtils.loadAnimation(this, R.anim.rotate);
         rotatehour.setDuration(10000);
         class myRunnable implements Runnable {
             @Override
@@ -76,12 +84,12 @@ public class LandingPage extends AppCompatActivity {
         myRunnable thread = new myRunnable();
         new Thread(thread).start();
 
-        String time = getIntent().getStringExtra("TIME");
+        time = getIntent().getStringExtra("TIME");
 
 
         //TIMER CODE
 
-        final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = null;
         try {
             date = dateFormat.parse(time);

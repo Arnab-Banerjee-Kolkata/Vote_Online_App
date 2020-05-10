@@ -11,21 +11,27 @@ import com.example.voteonlinebruh.R;
 
 public class PrivateElection extends AppCompatActivity {
 
+    private ImageView imageView1;
+    private Toolbar toolbar;
+    private int themeId = MainActivity.TM.getThemeId();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(MainActivity.TM.getThemeId());
+        setTheme(themeId);
         setContentView(R.layout.activity_private_election);
-
-        Toolbar toolbar = findViewById(R.id.toolbarpriv);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        toolbar = findViewById(R.id.toolbarpriv);
+        if (themeId == R.style.AppTheme_Light)
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        else
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
-        ImageView imageView1 = findViewById(R.id.privBg);
+        imageView1 = findViewById(R.id.privBg);
         int resid = R.drawable.vote2hands;
         Glide
                 .with(this)

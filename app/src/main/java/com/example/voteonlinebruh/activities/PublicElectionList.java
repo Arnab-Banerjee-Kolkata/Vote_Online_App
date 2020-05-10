@@ -20,42 +20,45 @@ import java.util.ArrayList;
 
 public class PublicElectionList extends AppCompatActivity {
 
-    ListView list;
-    Context context;
+    private ListView list;
+    private Toolbar toolbar;
+    private Context context;
+    private ImageView imageView1, imageView2;
+    private ArrayList<ElectionListItem> electionlist;
+    private ListViewForElectionListAdapter arrayAdapter;
+    int themeId = MainActivity.TM.getThemeId();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(MainActivity.TM.getThemeId());
+        setTheme(themeId);
         setContentView(R.layout.activity_public_list);
-
-        final int x = MainActivity.TM.getThemeId();
-
         context = this;
-        Toolbar toolbar = findViewById(R.id.toolbarlist);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        toolbar = findViewById(R.id.toolbarlist);
+        if (themeId == R.style.AppTheme_Light)
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        else
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
-        ImageView imageView1 = findViewById(R.id.listbg1);
+        imageView1 = findViewById(R.id.listbg1);
         int resid = R.drawable.wait_bg_left;
         Glide
                 .with(this)
                 .load(resid).into(imageView1);
-        ImageView imageView2 = findViewById(R.id.listbg2);
+        imageView2 = findViewById(R.id.listbg2);
         resid = R.drawable.wait_bg_right;
         Glide
                 .with(this)
                 .load(resid).into(imageView2);
         Intent intent = getIntent();
-        final ArrayList<ElectionListItem> electionlist = (ArrayList<ElectionListItem>) intent.getSerializableExtra("list");
-
-
+        electionlist = (ArrayList<ElectionListItem>) intent.getSerializableExtra("list");
         list = findViewById(R.id.list);
-        final ListViewForElectionListAdapter arrayAdapter = new ListViewForElectionListAdapter(electionlist, this.getBaseContext());
+        arrayAdapter = new ListViewForElectionListAdapter(electionlist, this.getBaseContext());
         list.setAdapter(arrayAdapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -68,8 +71,8 @@ public class PublicElectionList extends AppCompatActivity {
                         list.setEnabled(false);
                         Intent intent = new Intent(getApplicationContext(), PublicElectionEntryPoint.class);
                         intent.putExtra("NAME", arrayAdapter.getItem(position).getName());
-                        intent.putExtra("electionId",arrayAdapter.getItem(position).getElectionId());
-                        intent.putExtra("electionType",arrayAdapter.getItem(position).getType());
+                        intent.putExtra("electionId", arrayAdapter.getItem(position).getElectionId());
+                        intent.putExtra("electionType", arrayAdapter.getItem(position).getType());
                         startActivity(intent);
                         break;
                     case 2:

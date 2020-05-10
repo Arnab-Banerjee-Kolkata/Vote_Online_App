@@ -97,12 +97,13 @@ public class ServerCall {
 
                             for (int i = 0; i < len2; i++) {
                                 JSONObject elections = array2.getJSONObject(i);
-                                candidates.add(new PublicCandidate(elections.getInt("id"),
+                                candidates.add(new PublicCandidate(elections.getString("id"),
                                         elections.getString("name"),
                                         elections.getString("party"),
-                                        elections.getString("img")));
+                                        elections.getString("img"),
+                                        elections.getString("symbol")));
                             }
-                            candidates.add(new PublicCandidate(0, "NONE OF THE ABOVE", "NOTA", ""));
+                            candidates.add(new PublicCandidate("NOTA", "NONE OF THE ABOVE", "NOTA", "",""));
                             final Intent intent = new Intent(mContext, VotingPage.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.putExtra("list", candidates);

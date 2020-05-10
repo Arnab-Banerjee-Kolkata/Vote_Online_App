@@ -16,7 +16,11 @@ import com.example.voteonlinebruh.R;
 
 public class WaitScreen extends AppCompatActivity {
     private Handler dotHandler = new Handler();
+    private ImageView left, right, imageView, imageView1;
+    private TextView label;
+    private Animation translate_up, translate_down, hands, handsback, mikeback, mike;
     private boolean threadStop;
+    private int resid;
     public static boolean terminate = false;
 
     @Override
@@ -26,13 +30,11 @@ public class WaitScreen extends AppCompatActivity {
         setContentView(R.layout.activity_wait_screen);
         Intent intent = getIntent();
         String text = intent.getStringExtra("LABEL");
-        TextView label = findViewById(R.id.label);
+        label = findViewById(R.id.label);
         label.setText(text);
-        final ImageView left, right;
         left = findViewById(R.id.bg_left);
         right = findViewById(R.id.bg_right);
-
-        int resid = R.drawable.wait_bg_left;
+        resid = R.drawable.wait_bg_left;
         Glide
                 .with(this)
                 .load(resid).into(left);
@@ -41,8 +43,8 @@ public class WaitScreen extends AppCompatActivity {
                 .with(this)
                 .load(resid).into(right);
 
-        final ImageView imageView = findViewById(R.id.votehand);
-        final ImageView imageView1 = findViewById(R.id.votemike);
+        imageView = findViewById(R.id.votehand);
+        imageView1 = findViewById(R.id.votemike);
 
         resid = R.drawable.votehand;
         Glide
@@ -53,13 +55,12 @@ public class WaitScreen extends AppCompatActivity {
                 .with(this)
                 .load(resid).into(imageView1);
 
-        final Animation translate_up = AnimationUtils.loadAnimation(this, R.anim.translate_up);
-        final Animation translate_down = AnimationUtils.loadAnimation(this, R.anim.translate_down);
-        final Animation hands = AnimationUtils.loadAnimation(this, R.anim.entry_hands);
-        final Animation handsback = AnimationUtils.loadAnimation(this, R.anim.entry_hands_retract);
-        final Animation mike = AnimationUtils.loadAnimation(this, R.anim.entry_mike);
-        final Animation mikeback = AnimationUtils.loadAnimation(this, R.anim.entry_mike_retract);
-
+        translate_up = AnimationUtils.loadAnimation(this, R.anim.translate_up);
+        translate_down = AnimationUtils.loadAnimation(this, R.anim.translate_down);
+        hands = AnimationUtils.loadAnimation(this, R.anim.entry_hands);
+        handsback = AnimationUtils.loadAnimation(this, R.anim.entry_hands_retract);
+        mike = AnimationUtils.loadAnimation(this, R.anim.entry_mike);
+        mikeback = AnimationUtils.loadAnimation(this, R.anim.entry_mike_retract);
         hands.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {

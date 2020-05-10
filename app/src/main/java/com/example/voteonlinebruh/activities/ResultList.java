@@ -18,16 +18,23 @@ import java.util.ArrayList;
 
 public class ResultList extends AppCompatActivity {
 
-    ListView listView;
-    Context context;
+    private ListView listView;
+    private Context context;
+    private Toolbar toolbar;
+    private ArrayList<ResultListItem> resultlist;
+    private ListViewForResultListAdapter arrayAdapter;
+    private int themeId = MainActivity.TM.getThemeId();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(MainActivity.TM.getThemeId());
+        setTheme(themeId);
         setContentView(R.layout.activity_election_result);
-        Toolbar toolbar = findViewById(R.id.toolbarres);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        toolbar = findViewById(R.id.toolbarres);
+        if (themeId == R.style.AppTheme_Light)
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        else
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -35,13 +42,10 @@ public class ResultList extends AppCompatActivity {
             }
         });
         context = this;
-
         Intent intent = getIntent();
-        final ArrayList<ResultListItem> resultlist = (ArrayList<ResultListItem>) intent.getSerializableExtra("list");
-
-
+        resultlist = (ArrayList<ResultListItem>) intent.getSerializableExtra("list");
         listView = findViewById(R.id.list2);
-        final ListViewForResultListAdapter arrayAdapter = new ListViewForResultListAdapter(resultlist, this.getBaseContext());
+        arrayAdapter = new ListViewForResultListAdapter(resultlist, this.getBaseContext());
         listView.setAdapter(arrayAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

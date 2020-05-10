@@ -1,10 +1,9 @@
 package com.example.voteonlinebruh.activities;
 
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,57 +25,48 @@ import com.example.voteonlinebruh.models.PublicCandidate;
 import java.util.ArrayList;
 
 public class VotingPage extends AppCompatActivity {
-    ArrayList<RecyclerViewItem> recyclerViewItem_list;
-    int selected = -1;
-
-    Button done;
-
-    String electionId, electionName, aadhaarNo, boothId;
-    Context mContext, context = this;
-    int themeId;
+    private ArrayList<RecyclerViewItem> recyclerViewItem_list;
+    private int selected = -1;
+    private Button done;
+    private Context mContext;
+    private ArrayList<PublicCandidate> publicCandidates;
+    private RecyclerView recyclerView;
+    private RecyclerViewAdapter adapter;
+    private LinearLayoutManager layoutManager;
+    private int themeId = MainActivity.TM.getThemeId(), themeId2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(MainActivity.TM.getThemeId());
-        if (MainActivity.TM.getThemeId() == R.style.AppTheme_Light)
-            themeId = R.style.ConfirmTheme_Light;
+        setTheme(themeId);
+        if (themeId == R.style.AppTheme_Light)
+            themeId2 = R.style.ConfirmTheme_Light;
         else
-            themeId = R.style.ConfirmTheme_Dark;
+            themeId2 = R.style.ConfirmTheme_Dark;
         setContentView(R.layout.activity_voting_page);
-
         mContext = getApplicationContext();
-
-
-        SharedPreferences pref1 = getSharedPreferences("VoterDetails", MODE_PRIVATE);
-        aadhaarNo = pref1.getString("aadhaarNo", "");
-        boothId = pref1.getString("boothId", "");
-
-        SharedPreferences pref2 = getSharedPreferences("ElectionDetails", MODE_PRIVATE);
-        electionId = pref2.getString("electionId", "");
-        electionName = pref2.getString("electionName", "");
-
         //dialogbox
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this, themeId).setTitle("Confirm Submission\n\n")
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this, themeId2).setTitle("Confirm Submission\n\n")
                 .setMessage("\nPlease confirm your vote for your selected candidate. Your vote will be registered on confirmation.\n")
                 .setPositiveButton("Yes, I Confirm !", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ServerCall serverCall=new ServerCall();
+                        ServerCall serverCall = new ServerCall();
                         //serverCall.storeVote()
+                        Intent intent=new Intent(getApplicationContext(),Thanks.class);
+                        startActivity(intent);
+                        VotingPage.this.finish();
                     }
                 })
                 .setNegativeButton("No, I Want To Change !", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        done.setEnabled(true);
                         dialog.dismiss();
                     }
                 });
-
-        //DUMMY CHECKING CODE
-
         done = findViewById(R.id.donebutton);
-        final ArrayList<PublicCandidate> publicCandidates=(ArrayList<PublicCandidate>)getIntent().getSerializableExtra("list");
+        publicCandidates = (ArrayList<PublicCandidate>) getIntent().getSerializableExtra("list");
         int len = publicCandidates.size();
 
         recyclerViewItem_list = new ArrayList<>();
@@ -84,17 +74,12 @@ public class VotingPage extends AppCompatActivity {
         for (int i = 0; i < len; i++) {
             recyclerViewItem_list.add(new RecyclerViewItem(publicCandidates.get(i).getSymbol(), publicCandidates.get(i).getPartyName(), publicCandidates.get(i).getName(), R.drawable.bulboff));
         }
-
-        final RecyclerView recyclerView = findViewById(R.id.rec);
+        recyclerView = findViewById(R.id.rec);
         recyclerView.setHasFixedSize(true);
-        final LinearLayoutManager layoutManager;
         layoutManager = new LinearLayoutManager(this);
-        final RecyclerViewAdapter adapter = new RecyclerViewAdapter(recyclerViewItem_list, getApplicationContext());
+        adapter = new RecyclerViewAdapter(recyclerViewItem_list, getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-
-        //BULB CHANGE CODE
-
         adapter.setOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
@@ -115,13 +100,11 @@ public class VotingPage extends AppCompatActivity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                //VALUES TO WORK WITH->
                 if (selected >= 0) {
                     done.setEnabled(false);
                     String PARTY = recyclerViewItem_list.get(selected).getPname();
                     String CANDIDATE = recyclerViewItem_list.get(selected).getCname();
-                    int cadidateId=publicCandidates.get(selected).getId();
+                    String cadidateId = publicCandidates.get(selected).getId();
                     AlertDialog dialog = builder.create();
                     dialog.setCanceledOnTouchOutside(false);
                     dialog.setCancelable(false);
@@ -167,7 +150,7 @@ public class VotingPage extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
 
-    void logout(){
+    void logout() {
         super.onBackPressed();
     }
 

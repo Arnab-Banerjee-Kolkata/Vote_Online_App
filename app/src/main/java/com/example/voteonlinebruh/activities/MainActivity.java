@@ -9,7 +9,6 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.apiCalls.ServerCall;
@@ -19,8 +18,10 @@ public class MainActivity extends AppCompatActivity {
 
     private static boolean scheduledRestart = false;
     public static ThemeManager TM = new ThemeManager();
-
-    CardView pub, pri, man, res;
+    private Toolbar toolbar;
+    private ImageButton button;
+    private CollapsingToolbarLayout collapsingToolbarLayout;
+    private CardView pub, pri, man, res;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,16 +45,15 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
-        CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsingToolbarLayout);
-
-        final ImageButton button = findViewById(R.id.themeToggle);
+        collapsingToolbarLayout = findViewById(R.id.collapsingToolbarLayout);
+        button = findViewById(R.id.themeToggle);
         if (TM.getThemeId() == R.style.AppTheme_Light) {
             button.setImageDrawable(getDrawable(R.drawable.ic_moon_black_24dp));
             toolbar.setNavigationIcon(R.drawable.ic_close_black_24dp);

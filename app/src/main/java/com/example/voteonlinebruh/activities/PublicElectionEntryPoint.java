@@ -13,20 +13,26 @@ import com.example.voteonlinebruh.R;
 
 public class PublicElectionEntryPoint extends AppCompatActivity {
 
-    Button b;
+    private Button b;
+    private Toolbar toolbar;
+    private ImageView imageView1;
+    private int themeId = MainActivity.TM.getThemeId();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(MainActivity.TM.getThemeId());
+        setTheme(themeId);
         setContentView(R.layout.activity_public_election);
 
         //SELECTED OPTION IS FOUND HERE
         String ELECTION_NAME = getIntent().getStringExtra("NAME");
         final Bundle bundle = getIntent().getExtras();
 
-        Toolbar toolbar = findViewById(R.id.toolbarpub);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        toolbar = findViewById(R.id.toolbarpub);
+        if (themeId == R.style.AppTheme_Light)
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        else
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -34,7 +40,7 @@ public class PublicElectionEntryPoint extends AppCompatActivity {
             }
         });
         toolbar.setTitle(ELECTION_NAME);
-        ImageView imageView1 = findViewById(R.id.homeBg);
+        imageView1 = findViewById(R.id.homeBg);
         int resid = R.drawable.homebg;
         Glide
                 .with(this)
@@ -45,7 +51,7 @@ public class PublicElectionEntryPoint extends AppCompatActivity {
             public void onClick(View v) {
                 b.setEnabled(false);
                 Intent intent = new Intent(getApplicationContext(), VotingInstructions.class);
-                intent.putExtra("bundle",bundle);
+                intent.putExtra("bundle", bundle);
                 startActivity(intent);
 
             }

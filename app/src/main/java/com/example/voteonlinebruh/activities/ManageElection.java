@@ -16,16 +16,26 @@ import android.widget.Toast;
 import com.example.voteonlinebruh.R;
 
 public class ManageElection extends AppCompatActivity {
-    Handler handler = new Handler();
+
+    private Handler handler = new Handler();
+    private Toolbar toolbar;
+    private ConstraintLayout login, register;
+    private Animation fadein, fadeout, slideup, slidedown;
+    private TextView taptoreg, taptolog;
+    private Button loginmanage, registermanage;
+    private EditText userid, password, name, phone, email, pass1, pass2;
+    private int themeId = MainActivity.TM.getThemeId();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(MainActivity.TM.getThemeId());
+        setTheme(themeId);
         setContentView(R.layout.activity_manage_election);
-
-        Toolbar toolbar = findViewById(R.id.toolbarman);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        toolbar = findViewById(R.id.toolbarman);
+        if (themeId == R.style.AppTheme_Light)
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        else
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -35,17 +45,17 @@ public class ManageElection extends AppCompatActivity {
 
         //ON TAP ANIMATIONS
 
-        final ConstraintLayout login = findViewById(R.id.loginpart),
-                register = findViewById(R.id.registerpart);
-        final Animation fadein = AnimationUtils.loadAnimation(this, R.anim.fade_in),
-                fadeout = AnimationUtils.loadAnimation(this, R.anim.fade_out),
-                slideup = AnimationUtils.loadAnimation(this, R.anim.slideup),
-                slidedown = AnimationUtils.loadAnimation(this, R.anim.slidedown);
+        login = findViewById(R.id.loginpart);
+        register = findViewById(R.id.registerpart);
+        fadein = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+        fadeout = AnimationUtils.loadAnimation(this, R.anim.fade_out);
+        slideup = AnimationUtils.loadAnimation(this, R.anim.slideup);
+        slidedown = AnimationUtils.loadAnimation(this, R.anim.slidedown);
         fadein.setDuration(750);
         fadeout.setDuration(500);
 
-        TextView taptoreg = findViewById(R.id.textView10),
-                taptolog = findViewById(R.id.textView11);
+        taptoreg = findViewById(R.id.textView10);
+        taptolog = findViewById(R.id.textView11);
 
         taptoreg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,13 +106,13 @@ public class ManageElection extends AppCompatActivity {
         //ANIMATION CODE ENDS
 
 
-        Button loginmanage = findViewById(R.id.loginmanage),
-                registermanage = findViewById(R.id.registermanage);
+        loginmanage = findViewById(R.id.loginmanage);
+        registermanage = findViewById(R.id.registermanage);
 
         //LOGIN TO ACCOUNT
 
-        final EditText userid = findViewById(R.id.userid),
-                password = findViewById(R.id.pass);
+        userid = findViewById(R.id.userid);
+        password = findViewById(R.id.pass);
 
         loginmanage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,11 +134,11 @@ public class ManageElection extends AppCompatActivity {
 
         //REGISTER FOR ACCOUNT
 
-        final EditText name = findViewById(R.id.user_name),
-                phone = findViewById(R.id.user_phone),
-                email = findViewById(R.id.user_email),
-                pass1 = findViewById(R.id.password1),
-                pass2 = findViewById(R.id.password2);
+        name = findViewById(R.id.user_name);
+        phone = findViewById(R.id.user_phone);
+        email = findViewById(R.id.user_email);
+        pass1 = findViewById(R.id.password1);
+        pass2 = findViewById(R.id.password2);
 
         registermanage.setOnClickListener(new View.OnClickListener() {
             @Override

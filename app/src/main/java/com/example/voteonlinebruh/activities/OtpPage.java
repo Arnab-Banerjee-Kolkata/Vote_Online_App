@@ -1,12 +1,10 @@
 package com.example.voteonlinebruh.activities;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -22,32 +20,43 @@ import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.apiCalls.ServerCall;
 
 public class OtpPage extends AppCompatActivity {
-    Context mContext;
-    Button login;
-
-    int themeId;
+    private Context mContext;
+    private Button login;
+    private TextView disclaimer;
+    private ImageView imageView;
+    private EditText ets[], boothid;
+    private Toolbar toolbar;
+    private int themeId = MainActivity.TM.getThemeId(), resid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        themeId=MainActivity.TM.getThemeId();
         setTheme(themeId);
         setContentView(R.layout.activity_otp_page);
-        TextView disclaimer = findViewById(R.id.textView4);
+        disclaimer = findViewById(R.id.textView4);
+        toolbar = findViewById(R.id.toolbarotp);
         if (themeId == R.style.AppTheme_Light) {
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
             disclaimer.setBackgroundResource(R.drawable.spinnerbglight);
         } else {
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
             disclaimer.setBackgroundResource(R.drawable.spinnerbgdark);
         }
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         mContext = getApplicationContext();
-        ImageView imageView = findViewById(R.id.otpbg);
-        int resid = R.drawable.log_bot;
+        imageView = findViewById(R.id.otpbg);
+        resid = R.drawable.log_bot;
         Glide
                 .with(this)
                 .load(resid).into(imageView);
         //ET CODE
 
-        final EditText[] ets = new EditText[4];
+        ets = new EditText[4];
         ets[0] = findViewById(R.id.otp1);
         ets[0].setTransformationMethod(null);
         ets[1] = findViewById(R.id.otp2);
@@ -57,7 +66,7 @@ public class OtpPage extends AppCompatActivity {
         ets[3] = findViewById(R.id.otp4);
         ets[3].setTransformationMethod(null);
 
-        final EditText boothid = findViewById(R.id.boothid);
+        boothid = findViewById(R.id.boothid);
 
         class textFocus implements TextWatcher {
             private View view;
@@ -160,6 +169,7 @@ public class OtpPage extends AppCompatActivity {
                     intent.putExtra("LABEL", "Authenticating");
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    OtpPage.this.finish();
 
                 } catch (Exception e) {
                     Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -173,6 +183,13 @@ public class OtpPage extends AppCompatActivity {
         login.setEnabled(true);
         super.onResume();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.prev_act_from_left_to_right,R.anim.curr_act_go_to_right);
+    }
+
     @Override
     public void finish() {
         super.finish();

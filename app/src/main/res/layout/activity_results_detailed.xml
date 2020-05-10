@@ -88,6 +88,7 @@
         android:gravity="center"
         app:layout_constraintVertical_bias=".6"
         android:textSize="18dp"
+        android:textStyle="normal"
         android:text="Results not yet declared for selected state !"
         android:padding="30dp"/>
 

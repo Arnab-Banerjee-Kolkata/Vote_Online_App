@@ -21,21 +21,20 @@ import com.example.voteonlinebruh.R;
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
 public class Splash extends AppCompatActivity {
+
     private static final String SET_COOKIE_KEY = "Set-Cookie";
     private static final String COOKIE_KEY = "Cookie";
     private static final String SESSION_COOKIE = "sessionid";
-
     private static Splash _instance;
     private RequestQueue _requestQueue;
     private SharedPreferences _preferences;
-
-    Handler handler = new Handler();
-    Context mContext;
-    RelativeLayout waitRel;
-    WebView webView;
-    String url = "";
-    String cookie = "";
-    CookieManager cookieManager;
+    private Handler handler = new Handler();
+    private Context mContext;
+    private RelativeLayout waitRel;
+    private WebView webView;
+    private String url = "";
+    private String cookie = "";
+    private CookieManager cookieManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

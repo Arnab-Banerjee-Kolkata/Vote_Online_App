@@ -19,20 +19,22 @@ public class Demo extends AppCompatActivity {
 
     private Handler handler = new Handler();
     private boolean threadstop = false;
+    private ImageView imageView, shadowcut, shadowbot;
+    private Animation fadein, fadeout, scale_slow, scale_fast;
+    private View shadowfull, party, cand, sym, indi, tap1, tap2, tap3, tap4;
+    private TextView text;
+    private ImageButton cl;
+    private int resid1, resid2, resid3;
 
-    ImageView imageView, shadowcut, shadowbot;
-    Animation fadein, fadeout, scale_slow, scale_fast;
-    View shadowfull, party, cand, sym, indi, tap1, tap2, tap3, tap4;
-    TextView text;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_demo);
         setFinishOnTouchOutside(false);
         imageView = findViewById(R.id.screen);
-        final int resid1 = R.drawable.vote_demo_1;
-        final int resid2 = R.drawable.vote_demo_2;
-        final int resid3 = R.drawable.vote_demo_3;
+        resid1 = R.drawable.vote_demo_1;
+        resid2 = R.drawable.vote_demo_2;
+        resid3 = R.drawable.vote_demo_3;
         final Context context = getApplicationContext();
 
         class optimize implements Runnable {
@@ -328,7 +330,7 @@ public class Demo extends AppCompatActivity {
         myRunnable thread = new myRunnable();
         new Thread(thread).start();
 
-        ImageButton cl = findViewById(R.id.closediag);
+        cl = findViewById(R.id.closediag);
         cl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
