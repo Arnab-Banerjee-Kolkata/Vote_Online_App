@@ -22,7 +22,7 @@ public class ListViewForResultListAdapter extends ArrayAdapter<ResultListItem> {
     Context context;
 
     public ListViewForResultListAdapter(ArrayList<ResultListItem> list, Context context) {
-        super(context, R.layout.res_list_card, list);
+        super(context, R.layout.election_card, list);
         this.list = list;
         this.context = context;
     }
@@ -31,13 +31,13 @@ public class ListViewForResultListAdapter extends ArrayAdapter<ResultListItem> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        ConstraintLayout row = (ConstraintLayout) layoutInflater.inflate(R.layout.res_list_card, parent, false);
+        ConstraintLayout row = (ConstraintLayout) layoutInflater.inflate(R.layout.election_card, parent, false);
         TextView type, name, status;
         ImageView indicator;
-        indicator = row.findViewById(R.id.imageView5);
+        indicator = row.findViewById(R.id.imageView3);
         type = row.findViewById(R.id.electionType);
-        name = row.findViewById(R.id.textView16);
-        status = row.findViewById(R.id.textView17);
+        name = row.findViewById(R.id.electionName);
+        status = row.findViewById(R.id.electionYear);
         name.setText(list.get(position).getName());
         type.setText(new CaseConverter().toCamelCase(list.get(position).getType()));
         int status_code = list.get(position).getStatus();

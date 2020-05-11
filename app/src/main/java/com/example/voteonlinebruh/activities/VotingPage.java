@@ -45,6 +45,7 @@ public class VotingPage extends AppCompatActivity {
             themeId2 = R.style.ConfirmTheme_Dark;
         setContentView(R.layout.activity_voting_page);
         mContext = getApplicationContext();
+        final String boothId = getIntent().getStringExtra("boothId");
         //dialogbox
         final AlertDialog.Builder builder = new AlertDialog.Builder(this, themeId2).setTitle("Confirm Submission\n\n")
                 .setMessage("\nPlease confirm your vote for your selected candidate. Your vote will be registered on confirmation.\n")
@@ -52,8 +53,10 @@ public class VotingPage extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         ServerCall serverCall = new ServerCall();
-                        //serverCall.storeVote()
-                        Intent intent=new Intent(getApplicationContext(),Thanks.class);
+                        String candidateId = publicCandidates.get(selected).getId();
+                        serverCall.storeVote(boothId, candidateId, mContext);
+                        Intent intent = new Intent(mContext, Thanks.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                         VotingPage.this.finish();
                     }
@@ -102,9 +105,6 @@ public class VotingPage extends AppCompatActivity {
             public void onClick(View v) {
                 if (selected >= 0) {
                     done.setEnabled(false);
-                    String PARTY = recyclerViewItem_list.get(selected).getPname();
-                    String CANDIDATE = recyclerViewItem_list.get(selected).getCname();
-                    String cadidateId = publicCandidates.get(selected).getId();
                     AlertDialog dialog = builder.create();
                     dialog.setCanceledOnTouchOutside(false);
                     dialog.setCancelable(false);

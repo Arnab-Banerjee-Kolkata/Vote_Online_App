@@ -35,10 +35,10 @@ public class ListViewForElectionListAdapter extends ArrayAdapter<ElectionListIte
         TextView type, name, year, status;
         ImageView indicator;
         indicator = row.findViewById(R.id.imageView3);
-        type = row.findViewById(R.id.electionType2);
+        type = row.findViewById(R.id.electionType);
         name = row.findViewById(R.id.electionName);
-        year = row.findViewById(R.id.electionYear2);
-        status = row.findViewById(R.id.textView14);
+        year = row.findViewById(R.id.electionYear);
+        status = row.findViewById(R.id.electionStatus);
         type.setText(new CaseConverter().toCamelCase(list.get(position).getType()));
         name.setText(list.get(position).getName());
         year.setText(Integer.toString(list.get(position).getYear()));

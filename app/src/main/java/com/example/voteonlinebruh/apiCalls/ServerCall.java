@@ -16,6 +16,7 @@ import com.example.voteonlinebruh.activities.OtpPage;
 import com.example.voteonlinebruh.activities.PublicElectionList;
 import com.example.voteonlinebruh.activities.ResultsDetailed;
 import com.example.voteonlinebruh.activities.ResultsSimplified;
+import com.example.voteonlinebruh.activities.Thanks;
 import com.example.voteonlinebruh.activities.VotingPage;
 import com.example.voteonlinebruh.activities.WaitScreen;
 import com.example.voteonlinebruh.models.ConstituencyWiseResultList;
@@ -103,10 +104,11 @@ public class ServerCall {
                                         elections.getString("img"),
                                         elections.getString("symbol")));
                             }
-                            candidates.add(new PublicCandidate("NOTA", "NONE OF THE ABOVE", "NOTA", "",""));
+                            candidates.add(new PublicCandidate("NOTA", "NONE OF THE ABOVE", "NOTA", "", "https://www.atheer.om/en/wp-content/uploads/sites/2/2017/12/12122017_044525_0-8.jpg"));
                             final Intent intent = new Intent(mContext, VotingPage.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.putExtra("list", candidates);
+                            intent.putExtra("boothId", boothId);
                             myRunnable thread = new myRunnable(intent, mContext);
                             new Thread(thread).start();
                             otpPage.finish();
@@ -236,6 +238,7 @@ public class ServerCall {
                             JSONObject elections = array.getJSONObject(i);
                             resultlist.add(new ResultListItem(elections.getInt("electionId"),
                                     elections.getInt("status"),
+                                    elections.getInt("year"),
                                     elections.getString("type"),
                                     elections.getString("name")));
                         }
@@ -379,7 +382,7 @@ public class ServerCall {
                         else if (!validType)
                             Toast.makeText(mContext, "Invalid election type !", Toast.LENGTH_SHORT).show();
                         else if (!validElection)
-                            resultsDetailed.release(null, null, false);
+                            resultsDetailed.release(null, null, 0, 0, false);
                     } else {
                         int status = jsonResponse.getInt("status");
                         int totalSeats = jsonResponse.getInt("totalSeats");
@@ -391,7 +394,7 @@ public class ServerCall {
                                     elections.getInt("seatsWon"),
                                     elections.getString("partySymbol")));
                         }
-                        getConstituencyResult(type, electionId, stateCode, mContext, resultsDetailed, partyresultlist);
+                        getConstituencyResult(type, electionId, stateCode, mContext, resultsDetailed, partyresultlist, totalSeats);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -422,7 +425,7 @@ public class ServerCall {
         queue.add(postShowOptions);
     }
 
-    public void getConstituencyResult(final String type, final int electionId, final String stateCode, final Context mContext, final ResultsDetailed resultsDetailed, final ArrayList<PartywiseResultList> list) {
+    public void getConstituencyResult(final String type, final int electionId, final String stateCode, final Context mContext, final ResultsDetailed resultsDetailed, final ArrayList<PartywiseResultList> list, final int totalSeats) {
 
         final ArrayList<ConstituencyWiseResultList> constresultlist = new ArrayList<ConstituencyWiseResultList>();
 
@@ -447,7 +450,7 @@ public class ServerCall {
                         else if (!validType)
                             Toast.makeText(mContext, "Invalid election type !", Toast.LENGTH_SHORT).show();
                         else if (!validElection)
-                            resultsDetailed.release(null, null, false);
+                            resultsDetailed.release(null, null, 0, 0, false);
                     } else {
                         int status = jsonResponse.getInt("status");
                         JSONArray array = jsonResponse.getJSONArray("results");
@@ -461,7 +464,7 @@ public class ServerCall {
                                     elections.getString("partySymbol"),
                                     elections.getInt("voteCount")));
                         }
-                        resultsDetailed.release(list, constresultlist, true);
+                        resultsDetailed.release(list, constresultlist, status, totalSeats, true);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -549,6 +552,54 @@ public class ServerCall {
         Map<String, String> params = new HashMap<>();
         params.put("postAuthKey", mContext.getString(R.string.post_auth_key));
 
+        PostRequest postShowOptions = new PostRequest(mContext, url, params, listener, errorListener);
+        RequestQueue queue = Volley.newRequestQueue(mContext);
+        queue.add(postShowOptions);
+    }
+
+    public void storeVote(final String boothId, final String candidateId, final Context mContext) {
+
+        Response.Listener<String> listener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                JSONObject jsonResponse = null;
+
+                try {
+                    jsonResponse = new JSONObject(response);
+                    boolean success = jsonResponse.getBoolean("success");
+                    if (success) {
+                        Thanks.success = true;
+                        Thanks.threadStop = true;
+                    } else {
+                        boolean validAuth = jsonResponse.getBoolean("validAuth");
+                        boolean validBooth = jsonResponse.getBoolean("validBooth");
+                        boolean validIntegrity = jsonResponse.getBoolean("validIntegrity");
+                        boolean validApproval = jsonResponse.getBoolean("validApproval");
+                        boolean validGarbage = jsonResponse.getBoolean("validGarbage");
+                        boolean deleteApproval = jsonResponse.getBoolean("deleteApproval");
+                        Thanks.success = false;
+                        Thanks.threadStop = true;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Log.d("response error", response);
+                    //Toast.makeText(mContext, response, Toast.LENGTH_LONG).show();
+                }
+            }
+        };
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(mContext, "Error Occured", Toast.LENGTH_LONG).show();
+            }
+        };
+        String url = mContext.getString(R.string.web_host) + "/StoreVote.php";
+        Map<String, String> params = new HashMap<>();
+        params.put("postAuthKey", mContext.getString(R.string.post_auth_key));
+        params.put("boothId", boothId);
+        params.put("enVote", candidateId);
         PostRequest postShowOptions = new PostRequest(mContext, url, params, listener, errorListener);
         RequestQueue queue = Volley.newRequestQueue(mContext);
         queue.add(postShowOptions);

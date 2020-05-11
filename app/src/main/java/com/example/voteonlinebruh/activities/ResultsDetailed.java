@@ -95,8 +95,8 @@ public class ResultsDetailed extends FragmentActivity {
         });
     }
 
-    public void release(ArrayList<PartywiseResultList> partyresultlist, ArrayList<ConstituencyWiseResultList> constresultlist, boolean status) {
-        if (!status) {
+    public void release(ArrayList<PartywiseResultList> partyresultlist, ArrayList<ConstituencyWiseResultList> constresultlist, int status, int totalSeats, boolean requestStatus) {
+        if (!requestStatus) {
             message.setVisibility(View.VISIBLE);
             viewPager.removeAllViews();
             viewPager.setVisibility(View.GONE);
@@ -128,6 +128,7 @@ public class ResultsDetailed extends FragmentActivity {
             args.putStringArrayList("SEATS", seat);
             args.putIntegerArrayList("SYMS", sym);
             args.putInt("ROWS", partyresultlist.size());
+            args.putInt("totalSeats", totalSeats);
             args2.putStringArrayList("CON_NAME", con_name);
             args2.putStringArrayList("CAND_NAME", can_name);
             args2.putStringArrayList("PAR_NAME", p_name);

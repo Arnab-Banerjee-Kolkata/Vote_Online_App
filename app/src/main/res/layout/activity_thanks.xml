@@ -7,31 +7,65 @@
     tools:context=".activities.Thanks">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/toolbarEnd"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="Thanks"
+        app:title="Please wait.."
         app:titleTextAppearance="@style/azo" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/textMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="20dp"
-        android:text="Your vote has been successfully registered. Thank you for being a responsible citizen."
+        android:text="Please wait while you vote is being registered.\n\nDo not close this window!"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintVertical_bias="0.3" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbarEnd"
+        app:layout_constraintVertical_bias="0.3"
+        tools:layout_editor_absoluteX="0dp" />
 
     <ImageView
         android:id="@+id/voted"
-        android:layout_margin="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="30dp"
         android:scaleType="fitCenter"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/textMessage" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@android:style/Widget.Holo.ProgressBar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarEnd"
+        app:layout_constraintVertical_bias="0.6" />
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/checkContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@android:color/holo_green_dark"
+        android:visibility="gone"
+        app:cardCornerRadius="50dp"
+        app:layout_constraintVertical_bias="0.6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarEnd">
+
+        <ImageView
+            android:id="@+id/checkView"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/animated_vector_check" />
+    </android.support.v7.widget.CardView>
+
 
 </android.support.constraint.ConstraintLayout>

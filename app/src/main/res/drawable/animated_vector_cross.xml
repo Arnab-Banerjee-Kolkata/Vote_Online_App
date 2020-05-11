@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:drawable="@drawable/vector_path_cross">
+    <target android:name="cross_path">
+        <aapt:attr name="android:animation">
+            <set
+                android:interpolator="@android:anim/accelerate_interpolator"
+                android:ordering="sequentially"
+                android:shareInterpolator="false">
+                <!-- First animation, the first stroke from top left to bottom right \ -->
+                <objectAnimator
+                    android:duration="@android:integer/config_mediumAnimTime"
+                    android:propertyName="pathData"
+                    android:valueFrom="M6,6 l0,0 M16,6 l0,0"
+                    android:valueTo="M6,6 l10,10 M16,6 l0,0"
+                    android:valueType="pathType" />
+
+                <!-- Second animation, the second strok from top right to bottom left / -->
+                <objectAnimator
+                    android:duration="@android:integer/config_mediumAnimTime"
+                    android:propertyName="pathData"
+                    android:valueFrom="M6,6 l10,10 M16,6 l0,0"
+                    android:valueTo="M6,6 l10,10 M16,6 l-10,10"
+                    android:valueType="pathType" />
+            </set>
+        </aapt:attr>
+    </target>
+
+</animated-vector>

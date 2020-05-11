@@ -31,7 +31,7 @@ import java.util.ArrayList;
 public class OverallRes extends Fragment {
 
     private ArrayList name, sym, seat;
-    private int rows;
+    private int rows, totalSeats;
 
     public static OverallRes newInstance(Bundle args){
         OverallRes overallRes=new OverallRes();
@@ -46,6 +46,7 @@ public class OverallRes extends Fragment {
         this.sym = args.getIntegerArrayList("SYMS");
         this.seat = args.getStringArrayList("SEATS");
         this.rows = args.getInt("ROWS");
+        this.totalSeats = args.getInt("totalSeats");
     }
 
     @Override
@@ -89,7 +90,7 @@ public class OverallRes extends Fragment {
         });
         chart.invalidate();
         chart.setData(data);
-        chart.setCenterText((int) data.getYValueSum() + "/" + (int) data.getYValueSum());
+        chart.setCenterText((int) data.getYValueSum() + "/" + totalSeats);
         chart.setCenterTextTypeface(ResourcesCompat.getFont(chart.getContext(), R.font.azo));
         chart.setCenterTextSize(15f);
         chart.setCenterTextOffset(0, -10);

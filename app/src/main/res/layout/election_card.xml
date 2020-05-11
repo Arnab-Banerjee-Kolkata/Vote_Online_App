@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/electionType2"
+        android:id="@+id/electionType"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:padding="5dp"
@@ -27,11 +27,11 @@
         android:textSize="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/electionYear2"
+        app:layout_constraintEnd_toStartOf="@id/electionYear"
         app:layout_constraintTop_toBottomOf="@id/electionName"/>
 
     <TextView
-        android:id="@+id/electionYear2"
+        android:id="@+id/electionYear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
@@ -41,7 +41,7 @@
         android:fontFamily="@font/azo"
         android:textSize="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/electionType2"
+        app:layout_constraintStart_toEndOf="@id/electionType"
         app:layout_constraintEnd_toStartOf="@id/imageView3"
         app:layout_constraintTop_toBottomOf="@id/electionName"/>
 
@@ -51,11 +51,11 @@
         android:layout_height="20dp"
         android:src="@mipmap/ic_launcher"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/textView14"
+        app:layout_constraintEnd_toStartOf="@+id/electionStatus"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView14"
+        android:id="@+id/electionStatus"
         android:layout_width="70dp"
         android:layout_height="wrap_content"
         android:text="Status"
