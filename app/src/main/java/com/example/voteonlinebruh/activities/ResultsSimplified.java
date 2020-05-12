@@ -90,7 +90,7 @@ public class ResultsSimplified extends AppCompatActivity {
         chart.setDrawHoleEnabled(true);
         chart.setRotationEnabled(false);
         chart.setHoleColor(Color.TRANSPARENT);
-        chart.setTransparentCircleAlpha(000);
+        chart.setTransparentCircleAlpha(0);
         chart.setHoleRadius(45f);
         chart.setMaxAngle(360f); // FULL CHART
         chart.setRotationAngle(180f);
@@ -123,7 +123,7 @@ public class ResultsSimplified extends AppCompatActivity {
         chart.setData(data);
         chart.setCenterText((int) data.getYValueSum() + "/" + totalSeats);
         chart.setCenterTextTypeface(ResourcesCompat.getFont(chart.getContext(), R.font.azo));
-        chart.setCenterTextSize(20f);
+        chart.setCenterTextSize(15f);
         chart.getLegend().setEnabled(true);
         chart.setExtraOffsets(0.f, 5.f, 0.f, 5.f);
         Legend leg = chart.getLegend();

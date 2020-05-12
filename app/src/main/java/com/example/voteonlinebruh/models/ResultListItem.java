@@ -32,4 +32,8 @@ public class ResultListItem implements Serializable {
     public int getStatus() {
         return status;
     }
+
+    public int getYear() {
+        return year;
+    }
 }

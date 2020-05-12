@@ -382,7 +382,7 @@ public class ServerCall {
                         else if (!validType)
                             Toast.makeText(mContext, "Invalid election type !", Toast.LENGTH_SHORT).show();
                         else if (!validElection)
-                            resultsDetailed.release(null, null, 0, 0, false);
+                            resultsDetailed.release(null, null, 0, 0, "",false);
                     } else {
                         int status = jsonResponse.getInt("status");
                         int totalSeats = jsonResponse.getInt("totalSeats");
@@ -450,7 +450,7 @@ public class ServerCall {
                         else if (!validType)
                             Toast.makeText(mContext, "Invalid election type !", Toast.LENGTH_SHORT).show();
                         else if (!validElection)
-                            resultsDetailed.release(null, null, 0, 0, false);
+                            resultsDetailed.release(null, null, 0, 0, "",false);
                     } else {
                         int status = jsonResponse.getInt("status");
                         JSONArray array = jsonResponse.getJSONArray("results");
@@ -464,7 +464,7 @@ public class ServerCall {
                                     elections.getString("partySymbol"),
                                     elections.getInt("voteCount")));
                         }
-                        resultsDetailed.release(list, constresultlist, status, totalSeats, true);
+                        resultsDetailed.release(list, constresultlist, status, totalSeats,type, true);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

@@ -16,9 +16,10 @@
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/chart"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"/>
+                android:layout_height="250dp"/>
 
             <TextView
+                android:id="@+id/textView23"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="170dp"
@@ -31,9 +32,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:stretchColumns="1"
-                android:layout_marginTop="200dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
+                android:layout_below="@id/textView23"
+                android:layout_margin="5dp"
                 android:gravity="center">
 
                 <TableRow

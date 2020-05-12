@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.activities.MainActivity;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LegendEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
@@ -32,9 +33,18 @@ public class OverallRes extends Fragment {
 
     private ArrayList name, sym, seat;
     private int rows, totalSeats;
+    private String type;
+    private PieChart chart;
+    private ArrayList<PieEntry> values;
+    private Legend leg;
+    private PieDataSet dataSet;
+    private PieData data;
+    private View v;
+    private TableLayout tableLayout;
+    private TextView textView;
 
-    public static OverallRes newInstance(Bundle args){
-        OverallRes overallRes=new OverallRes();
+    public static OverallRes newInstance(Bundle args) {
+        OverallRes overallRes = new OverallRes();
         overallRes.setArguments(args);
         return overallRes;
     }
@@ -46,16 +56,18 @@ public class OverallRes extends Fragment {
         this.sym = args.getIntegerArrayList("SYMS");
         this.seat = args.getStringArrayList("SEATS");
         this.rows = args.getInt("ROWS");
+        this.type = args.getString("type");
         this.totalSeats = args.getInt("totalSeats");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_overall_res, container, false);
+        v = inflater.inflate(R.layout.fragment_overall_res, container, false);
+        textView = v.findViewById(R.id.textView23);
         int themeId = MainActivity.TM.getThemeId();
         //CHART CODE
-        PieChart chart = v.findViewById(R.id.chart);
+        chart = v.findViewById(R.id.chart);
         chart.setBackgroundColor(Color.TRANSPARENT);
         chart.setUsePercentValues(false);
         chart.getDescription().setEnabled(false);
@@ -63,25 +75,22 @@ public class OverallRes extends Fragment {
         chart.setDrawHoleEnabled(true);
         chart.setRotationEnabled(false);
         chart.setHoleColor(Color.TRANSPARENT);
-        chart.setTransparentCircleAlpha(000);
-        chart.setHoleRadius(40f);
-        chart.setMaxAngle(180f); // HALF CHART
+        chart.setTransparentCircleAlpha(0);
         chart.setRotationAngle(180f);
         chart.setDrawEntryLabels(false);
         chart.setUsePercentValues(false);
-        ArrayList<PieEntry> values = new ArrayList<>();
+        values = new ArrayList<>();
         for (int i = 0; i < rows; i++) {
             values.add(new PieEntry(Float.parseFloat((String) seat.get(i)), (String) name.get(i)));
         }
-        PieDataSet dataSet = new PieDataSet(values, "Election Results");
+        dataSet = new PieDataSet(values, "Election Results");
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(6f);
         dataSet.setColors(ColorTemplate.VORDIPLOM_COLORS);
-        PieData data = new PieData(dataSet);
+        data = new PieData(dataSet);
         chart.animateY(1000);
         data.setValueTextSize(15f);
         data.setValueTypeface(ResourcesCompat.getFont(chart.getContext(), R.font.azo));
-        data.setValueTextColor(Color.BLACK);
         data.setValueFormatter(new IValueFormatter() {
             @Override
             public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
@@ -93,12 +102,39 @@ public class OverallRes extends Fragment {
         chart.setCenterText((int) data.getYValueSum() + "/" + totalSeats);
         chart.setCenterTextTypeface(ResourcesCompat.getFont(chart.getContext(), R.font.azo));
         chart.setCenterTextSize(15f);
-        chart.setCenterTextOffset(0, -10);
-        chart.getLegend().setEnabled(false);
+        leg = chart.getLegend();
+        leg.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+        if (type.equalsIgnoreCase("VIDHAN SABHA")) {
+            textView.setPadding(0, 275, 0, 0);
+            chart.setHoleRadius(45f);
+            chart.setMaxAngle(360f);
+            dataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+            dataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+            dataSet.setValueLinePart1OffsetPercentage(100f);
+            dataSet.setValueLinePart1Length(0.6f);
+            dataSet.setValueLinePart2Length(0.6f);
+            chart.setExtraOffsets(0.f, 5.f, 0.f, 5.f);
+            if (themeId == R.style.AppTheme_Light) {
+                dataSet.setValueLineColor(Color.BLACK);
+                chart.setCenterTextColor(Color.BLACK);
+                data.setValueTextColor(Color.BLACK);
+            } else {
+                dataSet.setValueLineColor(Color.WHITE);
+                chart.setCenterTextColor(Color.WHITE);
+                data.setValueTextColor(Color.WHITE);
+            }
+        } else {
+            leg.setVerticalAlignment(Legend.LegendVerticalAlignment.CENTER);
+            leg.setYOffset(40);
+            chart.setHoleRadius(40f);
+            chart.setMaxAngle(180f);
+            data.setValueTextColor(Color.BLACK);
+            chart.setCenterTextOffset(0, -10);
+        }
         LegendEntry[] legend = chart.getLegend().getEntries();
 
         //TABLE CODE
-        TableLayout tableLayout = v.findViewById(R.id.table);
+        tableLayout = v.findViewById(R.id.table);
         for (int i = 0; i < rows; i++) {
             View view = inflater.inflate(R.layout.row, container, false);
             TableRow row = view.findViewById(R.id.rowwwww);
@@ -119,10 +155,10 @@ public class OverallRes extends Fragment {
             tableLayout.addView(row);
         }
         if (themeId == R.style.AppTheme_Light) {
-            chart.setCenterTextColor(Color.BLACK);
+            leg.setTextColor(Color.BLACK);
             tableLayout.setBackgroundResource(android.R.drawable.dialog_holo_light_frame);
         } else {
-            chart.setCenterTextColor(Color.WHITE);
+            leg.setTextColor(Color.WHITE);
             tableLayout.setBackgroundResource(android.R.drawable.dialog_holo_dark_frame);
         }
         return v;

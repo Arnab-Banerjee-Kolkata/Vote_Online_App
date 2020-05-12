@@ -24,9 +24,10 @@ public class ConstRes extends Fragment {
     private ArrayList cons_name, cand_name, par_name, votes;
     private String state_name;
     private int rows;
+    private ListView listView;
 
-    public static ConstRes newInstance(Bundle args){
-        ConstRes constRes=new ConstRes();
+    public static ConstRes newInstance(Bundle args) {
+        ConstRes constRes = new ConstRes();
         constRes.setArguments(args);
         return constRes;
     }
@@ -46,7 +47,7 @@ public class ConstRes extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_const_res, container, false);
-        ListView listView = view.findViewById(R.id.list3);
+        listView = view.findViewById(R.id.list3);
         class MyAdapter extends ArrayAdapter<ArrayList> {
             ArrayList list;
             Context context;

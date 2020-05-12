@@ -52,11 +52,19 @@ public class ResultList extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 listView.setEnabled(false);
                 ServerCall serverCall = new ServerCall();
-                serverCall.getOverallResult(resultlist.get(position).getType(), resultlist.get(position).getElectionId(), getApplicationContext());
-                Intent intent = new Intent(getBaseContext(), WaitScreen.class);
-                intent.putExtra("LABEL", "Hold on");
-                startActivity(intent);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                String type = resultlist.get(position).getType();
+                if (type.equalsIgnoreCase("VIDHAN SABHA")) {
+                    Intent intent = new Intent(getBaseContext(), ResultsDetailed.class);
+                    intent.putExtra("electionId", resultlist.get(position).getElectionId());
+                    intent.putExtra("type", type);
+                    startActivity(intent);
+                } else {
+                    serverCall.getOverallResult(type, resultlist.get(position).getElectionId(), getApplicationContext());
+                    Intent intent = new Intent(getBaseContext(), WaitScreen.class);
+                    intent.putExtra("LABEL", "Hold on");
+                    startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                }
             }
         });
     }

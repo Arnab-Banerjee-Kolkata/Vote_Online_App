@@ -32,13 +32,15 @@ public class ListViewForResultListAdapter extends ArrayAdapter<ResultListItem> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ConstraintLayout row = (ConstraintLayout) layoutInflater.inflate(R.layout.election_card, parent, false);
-        TextView type, name, status;
+        TextView type, name, status,year;
         ImageView indicator;
         indicator = row.findViewById(R.id.imageView3);
         type = row.findViewById(R.id.electionType);
         name = row.findViewById(R.id.electionName);
-        status = row.findViewById(R.id.electionYear);
+        year=row.findViewById(R.id.electionYear);
+        status = row.findViewById(R.id.electionStatus);
         name.setText(list.get(position).getName());
+        year.setText(Integer.toString(list.get(position).getYear()));
         type.setText(new CaseConverter().toCamelCase(list.get(position).getType()));
         int status_code = list.get(position).getStatus();
         switch (status_code) {

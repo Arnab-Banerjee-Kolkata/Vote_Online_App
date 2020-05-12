@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ResultsDetailed extends FragmentActivity {
-    private RelativeLayout rel;
+    private RelativeLayout rel, container;
     private TabLayout tabLayout;
     private Toolbar toolbar;
     private String stateName;
@@ -55,9 +55,9 @@ public class ResultsDetailed extends FragmentActivity {
         message = findViewById(R.id.errorMessage);
         tabLayout = findViewById(R.id.tab);
         rel = findViewById(R.id.waitRel2);
+        container = findViewById(R.id.spinnerContainer);
         Intent intent = getIntent();
         final int electionId = intent.getIntExtra("electionId", 0);
-        final ArrayList<StateListItem> list = (ArrayList<StateListItem>) intent.getSerializableExtra("list");
         final String type = intent.getStringExtra("type");
         spinner = findViewById(R.id.spinner);
         if (themeid == R.style.AppTheme_Light) {
@@ -69,33 +69,46 @@ public class ResultsDetailed extends FragmentActivity {
             spinner.setPopupBackgroundResource(R.drawable.spinnerbgdark);
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         }
-        String[] states = new String[list.size()];
-        for (int i = 0; i < list.size(); i++)
-            states[i] = list.get(i).getStateName();
-        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, states);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(arrayAdapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                rel.setVisibility(View.VISIBLE);
-                screenControl.makeScreenUnresponsive(ResultsDetailed.this.getWindow());
-                stateName = list.get(position).getStateName();
-                ServerCall serverCall = new ServerCall();
-                serverCall.getOverallResult(type, electionId,
-                        list.get(position).getStateCode(),
-                        getApplicationContext(),
-                        ResultsDetailed.this);
-            }
+        if (type.equalsIgnoreCase("VIDHAN SABHA")) {
+            container.setVisibility(View.GONE);
+            viewPager.setPadding(0, 20, 0, 0);
+            rel.setVisibility(View.VISIBLE);
+            screenControl.makeScreenUnresponsive(ResultsDetailed.this.getWindow());
+            ServerCall serverCall = new ServerCall();
+            serverCall.getOverallResult(type, electionId,
+                    "",
+                    getApplicationContext(),
+                    ResultsDetailed.this);
+        } else {
+            final ArrayList<StateListItem> list = (ArrayList<StateListItem>) intent.getSerializableExtra("list");
+            String[] states = new String[list.size()];
+            for (int i = 0; i < list.size(); i++)
+                states[i] = list.get(i).getStateName();
+            arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, states);
+            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(arrayAdapter);
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    rel.setVisibility(View.VISIBLE);
+                    screenControl.makeScreenUnresponsive(ResultsDetailed.this.getWindow());
+                    stateName = list.get(position).getStateName();
+                    ServerCall serverCall = new ServerCall();
+                    serverCall.getOverallResult(type, electionId,
+                            list.get(position).getStateCode(),
+                            getApplicationContext(),
+                            ResultsDetailed.this);
+                }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
+                }
+            });
+        }
     }
 
-    public void release(ArrayList<PartywiseResultList> partyresultlist, ArrayList<ConstituencyWiseResultList> constresultlist, int status, int totalSeats, boolean requestStatus) {
+    public void release(ArrayList<PartywiseResultList> partyresultlist, ArrayList<ConstituencyWiseResultList> constresultlist, int status, int totalSeats, String type, boolean requestStatus) {
         if (!requestStatus) {
             message.setVisibility(View.VISIBLE);
             viewPager.removeAllViews();
@@ -129,6 +142,7 @@ public class ResultsDetailed extends FragmentActivity {
             args.putIntegerArrayList("SYMS", sym);
             args.putInt("ROWS", partyresultlist.size());
             args.putInt("totalSeats", totalSeats);
+            args.putString("type",type);
             args2.putStringArrayList("CON_NAME", con_name);
             args2.putStringArrayList("CAND_NAME", can_name);
             args2.putStringArrayList("PAR_NAME", p_name);
