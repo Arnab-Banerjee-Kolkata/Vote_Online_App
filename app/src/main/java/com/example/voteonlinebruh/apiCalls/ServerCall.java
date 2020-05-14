@@ -2,7 +2,6 @@ package com.example.voteonlinebruh.apiCalls;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -33,6 +32,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ServerCall {
     class myRunnable implements Runnable {
@@ -382,7 +382,7 @@ public class ServerCall {
                         else if (!validType)
                             Toast.makeText(mContext, "Invalid election type !", Toast.LENGTH_SHORT).show();
                         else if (!validElection)
-                            resultsDetailed.release(null, null, 0, 0, "",false);
+                            resultsDetailed.release(null, null, 0, 0, "", false);
                     } else {
                         int status = jsonResponse.getInt("status");
                         int totalSeats = jsonResponse.getInt("totalSeats");
@@ -400,6 +400,7 @@ public class ServerCall {
                     e.printStackTrace();
                     Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
                     Log.d("response error", response);
+                    resultsDetailed.release(null, null, 0, 0, "", false);
                     //Toast.makeText(mContext, response, Toast.LENGTH_LONG).show();
                 }
             }
@@ -408,7 +409,9 @@ public class ServerCall {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
                 Toast.makeText(mContext, "Error Occured", Toast.LENGTH_LONG).show();
+                resultsDetailed.release(null, null, 0, 0, "", false);
             }
         };
 
@@ -425,7 +428,7 @@ public class ServerCall {
         queue.add(postShowOptions);
     }
 
-    public void getConstituencyResult(final String type, final int electionId, final String stateCode, final Context mContext, final ResultsDetailed resultsDetailed, final ArrayList<PartywiseResultList> list, final int totalSeats) {
+    private void getConstituencyResult(final String type, final int electionId, final String stateCode, final Context mContext, final ResultsDetailed resultsDetailed, final ArrayList<PartywiseResultList> list, final int totalSeats) {
 
         final ArrayList<ConstituencyWiseResultList> constresultlist = new ArrayList<ConstituencyWiseResultList>();
 
@@ -450,7 +453,7 @@ public class ServerCall {
                         else if (!validType)
                             Toast.makeText(mContext, "Invalid election type !", Toast.LENGTH_SHORT).show();
                         else if (!validElection)
-                            resultsDetailed.release(null, null, 0, 0, "",false);
+                            resultsDetailed.release(null, null, 0, 0, "", false);
                     } else {
                         int status = jsonResponse.getInt("status");
                         JSONArray array = jsonResponse.getJSONArray("results");
@@ -464,12 +467,13 @@ public class ServerCall {
                                     elections.getString("partySymbol"),
                                     elections.getInt("voteCount")));
                         }
-                        resultsDetailed.release(list, constresultlist, status, totalSeats,type, true);
+                        resultsDetailed.release(list, constresultlist, status, totalSeats, type, true);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
                     Log.d("response error", response);
+                    resultsDetailed.release(null, null, 0, 0, "", false);
                     //Toast.makeText(mContext, response, Toast.LENGTH_LONG).show();
                 }
             }
@@ -478,7 +482,9 @@ public class ServerCall {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
                 Toast.makeText(mContext, "Error Occured", Toast.LENGTH_LONG).show();
+                resultsDetailed.release(null, null, 0, 0, "", false);
             }
         };
 
@@ -557,7 +563,72 @@ public class ServerCall {
         queue.add(postShowOptions);
     }
 
+    private static boolean keyFound;
+    private static String setNo;
+    private static HashMap<String, String> keySet;
+
     public void storeVote(final String boothId, final String candidateId, final Context mContext) {
+        if (!keyFound) {
+            Thanks.success = false;
+            Thanks.threadStop = true;
+        } else {
+            StringBuilder enVote = new StringBuilder(Objects.requireNonNull(keySet.get(setNo)));
+            for (int i = 0; i < candidateId.length(); i++)
+                enVote.append(keySet.get(Character.toString(candidateId.charAt(i))));
+            Response.Listener<String> listener = new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+
+                    JSONObject jsonResponse = null;
+
+                    try {
+                        jsonResponse = new JSONObject(response);
+                        boolean success = jsonResponse.getBoolean("success");
+                        if (success) {
+                            Thanks.success = true;
+                            Thanks.threadStop = true;
+                        } else {
+                            boolean validAuth = jsonResponse.getBoolean("validAuth");
+                            boolean validBooth = jsonResponse.getBoolean("validBooth");
+                            boolean validIntegrity = jsonResponse.getBoolean("validIntegrity");
+                            boolean validApproval = jsonResponse.getBoolean("validApproval");
+                            boolean validGarbage = jsonResponse.getBoolean("validGarbage");
+                            boolean deleteApproval = jsonResponse.getBoolean("deleteApproval");
+                            Log.d("response", response);
+                            Thanks.success = false;
+                            Thanks.threadStop = true;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Thanks.success = false;
+                        Thanks.threadStop = true;
+                        Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
+                        Log.d("response error", response);
+                        //Toast.makeText(mContext, response, Toast.LENGTH_LONG).show();
+                    }
+                }
+            };
+            Response.ErrorListener errorListener = new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Thanks.success = false;
+                    Thanks.threadStop = true;
+                    Toast.makeText(mContext, "Error Occured", Toast.LENGTH_LONG).show();
+                }
+            };
+            String url = mContext.getString(R.string.web_host) + "/StoreVote.php";
+            Map<String, String> params = new HashMap<>();
+            params.put("postAuthKey", mContext.getString(R.string.post_auth_key));
+            params.put("boothId", boothId);
+            params.put("enVote", enVote.toString());
+            PostRequest postShowOptions = new PostRequest(mContext, url, params, listener, errorListener);
+            RequestQueue queue = Volley.newRequestQueue(mContext);
+            queue.add(postShowOptions);
+        }
+    }
+
+    public void getRandomKey(final String boothId, final Context mContext, final VotingPage votingPage) {
+        keyFound = false;
 
         Response.Listener<String> listener = new Response.Listener<String>() {
             @Override
@@ -568,24 +639,33 @@ public class ServerCall {
                 try {
                     jsonResponse = new JSONObject(response);
                     boolean success = jsonResponse.getBoolean("success");
-                    if (success) {
-                        Thanks.success = true;
-                        Thanks.threadStop = true;
+                    boolean valid = jsonResponse.getBoolean("validAuth");
+                    boolean validBooth = jsonResponse.getBoolean("validBooth");
+                    if (!success | !valid) {
+                        if (!validBooth)
+                            Toast.makeText(mContext, "Invalid booth ID !", Toast.LENGTH_SHORT).show();
                     } else {
-                        boolean validAuth = jsonResponse.getBoolean("validAuth");
-                        boolean validBooth = jsonResponse.getBoolean("validBooth");
-                        boolean validIntegrity = jsonResponse.getBoolean("validIntegrity");
-                        boolean validApproval = jsonResponse.getBoolean("validApproval");
-                        boolean validGarbage = jsonResponse.getBoolean("validGarbage");
-                        boolean deleteApproval = jsonResponse.getBoolean("deleteApproval");
-                        Thanks.success = false;
-                        Thanks.threadStop = true;
+                        setNo = jsonResponse.getString("setNo");
+                        keySet = new HashMap<>();
+                        JSONObject array = jsonResponse.getJSONObject("keySet");
+                        for (int i = 0; i < 36; i++) {
+                            if (i < 26) {
+                                String key = "" + (char) (65 + i);
+                                keySet.put(key, array.getString(key));
+                            } else {
+                                String key = "" + (char) (22 + i);
+                                keySet.put(key, array.getString(key));
+                            }
+                        }
+                        keyFound = true;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
                     Log.d("response error", response);
                     //Toast.makeText(mContext, response, Toast.LENGTH_LONG).show();
+                } finally {
+                    votingPage.release();
                 }
             }
         };
@@ -595,11 +675,10 @@ public class ServerCall {
                 Toast.makeText(mContext, "Error Occured", Toast.LENGTH_LONG).show();
             }
         };
-        String url = mContext.getString(R.string.web_host) + "/StoreVote.php";
+        String url = mContext.getString(R.string.web_host) + "/GetRandomKey.php";
         Map<String, String> params = new HashMap<>();
         params.put("postAuthKey", mContext.getString(R.string.post_auth_key));
         params.put("boothId", boothId);
-        params.put("enVote", candidateId);
         PostRequest postShowOptions = new PostRequest(mContext, url, params, listener, errorListener);
         RequestQueue queue = Volley.newRequestQueue(mContext);
         queue.add(postShowOptions);

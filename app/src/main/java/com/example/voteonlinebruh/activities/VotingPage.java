@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.voteonlinebruh.R;
@@ -21,6 +22,7 @@ import com.example.voteonlinebruh.apiCalls.ServerCall;
 import com.example.voteonlinebruh.adapters.RecyclerViewAdapter;
 import com.example.voteonlinebruh.models.RecyclerViewItem;
 import com.example.voteonlinebruh.models.PublicCandidate;
+import com.example.voteonlinebruh.utility.ScreenControl;
 
 import java.util.ArrayList;
 
@@ -33,6 +35,8 @@ public class VotingPage extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerViewAdapter adapter;
     private LinearLayoutManager layoutManager;
+    private ScreenControl screenControl= new ScreenControl();
+    private RelativeLayout waitrel;
     private int themeId = MainActivity.TM.getThemeId(), themeId2;
 
     @Override
@@ -45,7 +49,11 @@ public class VotingPage extends AppCompatActivity {
             themeId2 = R.style.ConfirmTheme_Dark;
         setContentView(R.layout.activity_voting_page);
         mContext = getApplicationContext();
+        waitrel=findViewById(R.id.waitRel3);
         final String boothId = getIntent().getStringExtra("boothId");
+        new ServerCall().getRandomKey(boothId, mContext, VotingPage.this);
+        waitrel.setVisibility(View.VISIBLE);
+        screenControl.makeScreenUnresponsive(VotingPage.this.getWindow());
         //dialogbox
         final AlertDialog.Builder builder = new AlertDialog.Builder(this, themeId2).setTitle("Confirm Submission\n\n")
                 .setMessage("\nPlease confirm your vote for your selected candidate. Your vote will be registered on confirmation.\n")
@@ -114,6 +122,11 @@ public class VotingPage extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void release(){
+        waitrel.setVisibility(View.GONE);
+        screenControl.makeWindowResponsive(VotingPage.this.getWindow());
     }
 
     @Override
