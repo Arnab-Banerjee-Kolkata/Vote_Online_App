@@ -158,8 +158,10 @@ public class OtpPage extends AppCompatActivity {
                     if (boothid.getText().toString().isEmpty()) {
                         throw new Exception("Please enter the booth ID !");
                     }
-
                     String boothId = boothid.getText().toString();
+                    if (!validBooth(boothId)) {
+                        throw new Exception("Invalid Booth ID");
+                    }
                     login.setEnabled(false);
                     String OTP = otp;
                     ServerCall serverCall = new ServerCall();
@@ -178,6 +180,19 @@ public class OtpPage extends AppCompatActivity {
         });
     }
 
+    private boolean validBooth(String s) {
+        char c;
+        boolean retval = true;
+        for (int i = 0; i < s.length(); i++) {
+            c = s.charAt(i);
+            if (!Character.isDigit(c) && !Character.isLetter(c)) {
+                retval = false;
+                break;
+            }
+        }
+        return retval;
+    }
+
     @Override
     protected void onResume() {
         login.setEnabled(true);
@@ -187,7 +202,7 @@ public class OtpPage extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(R.anim.prev_act_from_left_to_right,R.anim.curr_act_go_to_right);
+        overridePendingTransition(R.anim.prev_act_from_left_to_right, R.anim.curr_act_go_to_right);
     }
 
     @Override

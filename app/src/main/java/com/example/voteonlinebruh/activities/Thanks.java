@@ -38,8 +38,8 @@ public class Thanks extends AppCompatActivity {
         cardView = findViewById(R.id.checkContainer);
         progressBar = findViewById(R.id.progressBar);
         textView = findViewById(R.id.textMessage);
-        toolbar=findViewById(R.id.toolbarEnd);
-        if(themeId==R.style.AppTheme_Light)
+        toolbar = findViewById(R.id.toolbarEnd);
+        if (themeId == R.style.AppTheme_Light)
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
         else
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);

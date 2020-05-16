@@ -26,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textStyle="italic"
-        android:text="An OTP was sent to your registered phone number. Please show it to the polling officer present in the polling station."
+        android:text="Once your identity is verified an OTP will be sent to your registered phone number. Please show it to the polling officer present in the polling booth."
         android:padding="10dp"
         android:layout_margin="5dp"
         android:layout_marginTop="10dp"

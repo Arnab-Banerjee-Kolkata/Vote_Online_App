@@ -584,7 +584,7 @@ public class ServerCall {
                     JSONObject jsonResponse = null;
 
                     try {
-                        Log.d("response",response);
+                        Log.d("response", response);
                         jsonResponse = new JSONObject(response);
                         boolean success = jsonResponse.getBoolean("success");
                         if (success) {
