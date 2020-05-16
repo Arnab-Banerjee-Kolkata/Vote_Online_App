@@ -2,10 +2,10 @@ package com.example.voteonlinebruh.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
@@ -21,8 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ImageButton button;
     private CollapsingToolbarLayout collapsingToolbarLayout;
-    private CardView pri, man;
-    androidx.cardview.widget.CardView pub, res;
+    private ConstraintLayout pri, man, pub, res;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
