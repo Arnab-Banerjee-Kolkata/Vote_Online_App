@@ -43,6 +43,12 @@ public class Thanks extends AppCompatActivity {
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
         else
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         int resid = R.drawable.voted;
         final Animation scale = AnimationUtils.loadAnimation(this, R.anim.scaleslow),
                 fadein = AnimationUtils.loadAnimation(this, R.anim.fade_in),

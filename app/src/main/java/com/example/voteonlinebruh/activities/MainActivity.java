@@ -21,7 +21,8 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ImageButton button;
     private CollapsingToolbarLayout collapsingToolbarLayout;
-    private CardView pub, pri, man, res;
+    private CardView pri, man;
+    androidx.cardview.widget.CardView pub, res;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
