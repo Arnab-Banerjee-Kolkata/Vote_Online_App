@@ -107,7 +107,6 @@ public class Thanks extends AppCompatActivity {
             }
         }
         myRunnable thread = new myRunnable();
-        threadStop = false;
         new Thread(thread).start();
     }
 

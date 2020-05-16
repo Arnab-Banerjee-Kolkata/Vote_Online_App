@@ -35,6 +35,7 @@ public class VotingPage extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerViewAdapter adapter;
     private LinearLayoutManager layoutManager;
+    private ServerCall serverCall = new ServerCall();
     private ScreenControl screenControl= new ScreenControl();
     private RelativeLayout waitrel;
     private int themeId = MainActivity.TM.getThemeId(), themeId2;
@@ -51,7 +52,7 @@ public class VotingPage extends AppCompatActivity {
         mContext = getApplicationContext();
         waitrel=findViewById(R.id.waitRel3);
         final String boothId = getIntent().getStringExtra("boothId");
-        new ServerCall().getRandomKey(boothId, mContext, VotingPage.this);
+        serverCall.getRandomKey(boothId, mContext, VotingPage.this);
         waitrel.setVisibility(View.VISIBLE);
         screenControl.makeScreenUnresponsive(VotingPage.this.getWindow());
         //dialogbox
@@ -60,7 +61,6 @@ public class VotingPage extends AppCompatActivity {
                 .setPositiveButton("Yes, I Confirm !", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ServerCall serverCall = new ServerCall();
                         String candidateId = publicCandidates.get(selected).getId();
                         serverCall.storeVote(boothId, candidateId, mContext);
                         Intent intent = new Intent(mContext, Thanks.class);

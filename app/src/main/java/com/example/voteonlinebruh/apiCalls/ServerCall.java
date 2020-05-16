@@ -572,7 +572,9 @@ public class ServerCall {
             Thanks.success = false;
             Thanks.threadStop = true;
         } else {
-            StringBuilder enVote = new StringBuilder(Objects.requireNonNull(keySet.get(setNo)));
+            StringBuilder enVote = new StringBuilder("");
+            for (int i = 0; i < setNo.length(); i++)
+                enVote.append(keySet.get(Character.toString(setNo.charAt(i))));
             for (int i = 0; i < candidateId.length(); i++)
                 enVote.append(keySet.get(Character.toString(candidateId.charAt(i))));
             Response.Listener<String> listener = new Response.Listener<String>() {
@@ -582,6 +584,7 @@ public class ServerCall {
                     JSONObject jsonResponse = null;
 
                     try {
+                        Log.d("response",response);
                         jsonResponse = new JSONObject(response);
                         boolean success = jsonResponse.getBoolean("success");
                         if (success) {
