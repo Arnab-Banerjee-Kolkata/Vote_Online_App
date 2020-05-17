@@ -1,6 +1,7 @@
 package com.example.voteonlinebruh.fragments;
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,11 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.activities.MainActivity;
 import com.github.mikephil.charting.charts.PieChart;
@@ -65,7 +71,7 @@ public class OverallRes extends Fragment {
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_overall_res, container, false);
         textView = v.findViewById(R.id.textView23);
-        int themeId = MainActivity.TM.getThemeId();
+        final int themeId = MainActivity.TM.getThemeId();
         //CHART CODE
         chart = v.findViewById(R.id.chart);
         chart.setBackgroundColor(Color.TRANSPARENT);
@@ -105,7 +111,7 @@ public class OverallRes extends Fragment {
         leg = chart.getLegend();
         leg.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
         if (type.equalsIgnoreCase("VIDHAN SABHA")) {
-            textView.setPadding(0, 275, 0, 0);
+            textView.setPadding(0, 325, 0, 0);
             chart.setHoleRadius(45f);
             chart.setMaxAngle(360f);
             dataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
@@ -144,12 +150,28 @@ public class OverallRes extends Fragment {
             TextView names = view.findViewById(R.id.partynum),
                     seats = view.findViewById(R.id.seatnum);
             ImageView syms = view.findViewById(R.id.imnum);
+            final ProgressBar progress = view.findViewById(R.id.tableImageProgress);
             names.setText((String) name.get(i));
             Glide.with(this)
                     .load(sym.get(i))
-                    .placeholder(R.mipmap.ic_launcher)
-                    .error(R.mipmap.ic_launcher)
-                    .into(syms);
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            progress.setVisibility(View.GONE);
+                            if (themeId == R.style.AppTheme_Light) {
+                                target.onLoadFailed(getResources().getDrawable(R.drawable.ic_error_outline_black_24dp));
+                            } else {
+                                target.onLoadFailed(getResources().getDrawable(R.drawable.ic_error_outline_white_24dp));
+                            }
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            progress.setVisibility(View.GONE);
+                            return false;
+                        }
+                    }).into(syms);
             seats.setText((String) seat.get(i));
             color.setBackgroundColor(legend[i].formColor);
             tableLayout.addView(row);

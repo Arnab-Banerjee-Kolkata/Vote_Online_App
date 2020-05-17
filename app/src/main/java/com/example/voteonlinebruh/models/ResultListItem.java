@@ -6,15 +6,16 @@ import java.io.Serializable;
 
 public class ResultListItem implements Serializable {
     private int electionId, status, year;
-    private String type, name;
+    private String type, name, stateName;
 
-    public ResultListItem(int electionId, int status, int year, String type, String name) {
+    public ResultListItem(int electionId, int status, int year, String type, String name, String stateName) {
         this.year = year;
         CaseConverter converter = new CaseConverter();
         this.electionId = electionId;
         this.status = status;
         this.type = type;
         this.name = converter.toCamelCase(name);
+        this.stateName = converter.toCamelCase(stateName);
     }
 
     public String getName() {
@@ -35,5 +36,9 @@ public class ResultListItem implements Serializable {
 
     public int getYear() {
         return year;
+    }
+
+    public String getStateName() {
+        return stateName;
     }
 }

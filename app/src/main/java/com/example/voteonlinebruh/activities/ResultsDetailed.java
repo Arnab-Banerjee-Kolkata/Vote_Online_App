@@ -70,6 +70,7 @@ public class ResultsDetailed extends FragmentActivity {
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         }
         if (type.equalsIgnoreCase("VIDHAN SABHA")) {
+            stateName=intent.getStringExtra("stateName");
             container.setVisibility(View.GONE);
             viewPager.setPadding(0, 20, 0, 0);
             rel.setVisibility(View.VISIBLE);

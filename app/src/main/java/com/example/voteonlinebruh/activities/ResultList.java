@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.adapters.ListViewForResultListAdapter;
@@ -23,6 +24,7 @@ public class ResultList extends AppCompatActivity {
     private Toolbar toolbar;
     private ArrayList<ResultListItem> resultlist;
     private ListViewForResultListAdapter arrayAdapter;
+    RelativeLayout listContainer;
     private int themeId = MainActivity.TM.getThemeId();
 
     @Override
@@ -31,10 +33,14 @@ public class ResultList extends AppCompatActivity {
         setTheme(themeId);
         setContentView(R.layout.activity_election_result);
         toolbar = findViewById(R.id.toolbarres);
-        if (themeId == R.style.AppTheme_Light)
+        listContainer=findViewById(R.id.listContainer2);
+        if (themeId == R.style.AppTheme_Light) {
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
-        else
+            listContainer.setBackground(getDrawable(android.R.drawable.dialog_holo_light_frame));
+        } else {
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+            listContainer.setBackground(getDrawable(android.R.drawable.dialog_holo_dark_frame));
+        }
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,6 +63,7 @@ public class ResultList extends AppCompatActivity {
                     Intent intent = new Intent(getBaseContext(), ResultsDetailed.class);
                     intent.putExtra("electionId", resultlist.get(position).getElectionId());
                     intent.putExtra("type", type);
+                    intent.putExtra("stateName",resultlist.get(position).getStateName());
                     startActivity(intent);
                 } else {
                     serverCall.getOverallResult(type, resultlist.get(position).getElectionId(), getApplicationContext());

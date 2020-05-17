@@ -3,6 +3,8 @@ package com.example.voteonlinebruh.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,11 +13,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.apiCalls.ServerCall;
 import com.example.voteonlinebruh.models.PartywiseResultList;
@@ -155,14 +162,28 @@ public class ResultsSimplified extends AppCompatActivity {
             TextView names = view.findViewById(R.id.partynum),
                     seats = view.findViewById(R.id.seatnum);
             ImageView syms = view.findViewById(R.id.imnum);
+            final ProgressBar progress = view.findViewById(R.id.tableImageProgress);
             String resUrl = resultlist.get(i).getPartySymbol();
             names.setText(resultlist.get(i).getPartyname());
-            Glide
-                    .with(this)
+            Glide.with(this)
                     .load(resUrl)
-                    .placeholder(R.mipmap.ic_launcher)
-                    .error(R.mipmap.ic_launcher)
-                    .into(syms);
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            progress.setVisibility(View.GONE);
+                            if (themeId == R.style.AppTheme_Light)
+                                target.onLoadFailed(getDrawable(R.drawable.ic_error_outline_black_24dp));
+                            else
+                                target.onLoadFailed(getDrawable(R.drawable.ic_error_outline_white_24dp));
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            progress.setVisibility(View.GONE);
+                            return false;
+                        }
+                    }).into(syms);
             seats.setText(Integer.toString(resultlist.get(i).getSeatsWon()));
             color.setBackgroundColor(legend[i].formColor);
             tableLayout.addView(row);

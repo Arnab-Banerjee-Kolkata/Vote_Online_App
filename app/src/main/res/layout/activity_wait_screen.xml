@@ -27,7 +27,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.294" />
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,19 +39,21 @@
 
         <ImageView
             android:id="@+id/bg_left"
-            android:layout_width="0dp"
-            android:layout_height="178dp"
-            android:layout_weight=".5"
-            android:scaleType="fitEnd" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="150dp"
+            android:scaleType="fitEnd"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <ImageView
             android:id="@+id/bg_right"
-            android:layout_width="0dp"
-            android:layout_height="178dp"
-            android:layout_weight=".5"
-            android:scaleType="fitEnd" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="150dp"
+            android:scaleType="fitEnd"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout8"
@@ -74,8 +76,8 @@
 
     <RelativeLayout
         android:id="@+id/waitRel2"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -83,8 +85,8 @@
 
         <ProgressBar
             style="@android:style/Widget.Holo.ProgressBar"
-            android:layout_width="50dp"
-            android:layout_height="50dp" />
+            android:layout_width="60dp"
+            android:layout_height="60dp" />
 
     </RelativeLayout>
 
