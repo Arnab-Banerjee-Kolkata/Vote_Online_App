@@ -111,7 +111,7 @@ public class OverallRes extends Fragment {
         leg = chart.getLegend();
         leg.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
         if (type.equalsIgnoreCase("VIDHAN SABHA")) {
-            textView.setPadding(0, 275, 0, 0);
+            textView.setPadding(0, 325, 0, 0);
             chart.setHoleRadius(45f);
             chart.setMaxAngle(360f);
             dataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);

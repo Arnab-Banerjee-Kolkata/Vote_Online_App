@@ -32,7 +32,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class ServerCall {
     class myRunnable implements Runnable {
@@ -240,7 +239,8 @@ public class ServerCall {
                                     elections.getInt("status"),
                                     elections.getInt("year"),
                                     elections.getString("type"),
-                                    elections.getString("name")));
+                                    elections.getString("name"),
+                                    elections.getString("stateName")));
                         }
                         final Intent intent = new Intent(mContext, ResultList.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

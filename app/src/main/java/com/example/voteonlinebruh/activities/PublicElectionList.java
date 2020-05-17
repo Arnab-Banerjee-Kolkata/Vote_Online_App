@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -26,6 +27,7 @@ public class PublicElectionList extends AppCompatActivity {
     private ImageView imageView1, imageView2;
     private ArrayList<ElectionListItem> electionlist;
     private ListViewForElectionListAdapter arrayAdapter;
+    private RelativeLayout listContainer;
     int themeId = MainActivity.TM.getThemeId();
 
     @Override
@@ -35,10 +37,14 @@ public class PublicElectionList extends AppCompatActivity {
         setContentView(R.layout.activity_public_list);
         context = this;
         toolbar = findViewById(R.id.toolbarlist);
-        if (themeId == R.style.AppTheme_Light)
+        listContainer=findViewById(R.id.listContainer);
+        if (themeId == R.style.AppTheme_Light) {
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
-        else
+            listContainer.setBackground(getDrawable(android.R.drawable.dialog_holo_light_frame));
+        } else {
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+            listContainer.setBackground(getDrawable(android.R.drawable.dialog_holo_dark_frame));
+        }
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,8 +63,8 @@ public class PublicElectionList extends AppCompatActivity {
                 .load(resid).into(imageView2);
         Intent intent = getIntent();
         electionlist = (ArrayList<ElectionListItem>) intent.getSerializableExtra("list");
-        list = findViewById(R.id.list);
         arrayAdapter = new ListViewForElectionListAdapter(electionlist, this.getBaseContext());
+        list = findViewById(R.id.list);
         list.setAdapter(arrayAdapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

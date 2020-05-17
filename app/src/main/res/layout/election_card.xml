@@ -56,14 +56,13 @@
 
     <TextView
         android:id="@+id/electionStatus"
-        android:layout_width="70dp"
+        android:layout_width="65dp"
         android:layout_height="wrap_content"
         android:text="Status"
         android:textSize="12dp"
         android:textStyle="normal"
-        android:padding="5dp"
+        android:paddingStart="5dp"
         android:fontFamily="@font/azo"
-        android:layout_marginEnd="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
