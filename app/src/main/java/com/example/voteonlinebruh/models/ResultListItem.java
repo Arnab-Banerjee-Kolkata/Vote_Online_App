@@ -10,12 +10,12 @@ public class ResultListItem implements Serializable {
 
     public ResultListItem(int electionId, int status, int year, String type, String name, String stateName) {
         this.year = year;
-        this.stateName = stateName;
         CaseConverter converter = new CaseConverter();
         this.electionId = electionId;
         this.status = status;
         this.type = type;
         this.name = converter.toCamelCase(name);
+        this.stateName = converter.toCamelCase(stateName);
     }
 
     public String getName() {
