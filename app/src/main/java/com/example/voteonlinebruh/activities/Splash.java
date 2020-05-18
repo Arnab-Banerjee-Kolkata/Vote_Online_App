@@ -22,9 +22,6 @@ import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
 public class Splash extends AppCompatActivity {
 
-    private static final String SET_COOKIE_KEY = "Set-Cookie";
-    private static final String COOKIE_KEY = "Cookie";
-    private static final String SESSION_COOKIE = "sessionid";
     private static Splash _instance;
     private RequestQueue _requestQueue;
     private SharedPreferences _preferences;
@@ -86,13 +83,6 @@ public class Splash extends AppCompatActivity {
         _requestQueue = Volley.newRequestQueue(this);
 
         storeCookie();
-        String electionId = "1";
-        String electionName = "LOK SABHA";
-        SharedPreferences sharedPreferences = getSharedPreferences("ElectionDetails", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("electionId", electionId);
-        editor.putString("electionName", electionName);
-        editor.apply();
     }
 
     void storeCookie() {
