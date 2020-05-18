@@ -24,10 +24,6 @@ public class PublicElectionEntryPoint extends AppCompatActivity {
         setTheme(themeId);
         setContentView(R.layout.activity_public_election);
 
-        //SELECTED OPTION IS FOUND HERE
-        String ELECTION_NAME = getIntent().getStringExtra("NAME");
-        final Bundle bundle = getIntent().getExtras();
-
         toolbar = findViewById(R.id.toolbarpub);
         if (themeId == R.style.AppTheme_Light)
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
@@ -39,7 +35,6 @@ public class PublicElectionEntryPoint extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        toolbar.setTitle(ELECTION_NAME);
         imageView1 = findViewById(R.id.homeBg);
         int resid = R.drawable.homebg;
         Glide
@@ -51,7 +46,6 @@ public class PublicElectionEntryPoint extends AppCompatActivity {
             public void onClick(View v) {
                 b.setEnabled(false);
                 Intent intent = new Intent(getApplicationContext(), VotingInstructions.class);
-                intent.putExtra("bundle", bundle);
                 startActivity(intent);
 
             }

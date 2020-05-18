@@ -83,7 +83,8 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
-        android:layout_margin="10dp">
+        android:layout_margin="10dp"
+        android:weightSum="1">
 
         <Button
             android:id="@+id/demo"
@@ -93,11 +94,12 @@
             android:text="Demo"
             android:textAllCaps="false"
             android:layout_margin="3dp"
-            app:backgroundTint="@color/button" />
+            app:backgroundTint="@color/button"
+            android:layout_weight=".4"/>
 
         <Space
-            android:layout_width="25dp"
-            android:layout_height="wrap_content"/>
+            android:layout_width="15dp"
+            android:layout_height="0dp"/>
 
         <Button
             android:id="@+id/proceed"
@@ -107,7 +109,8 @@
             android:text="Proceed"
             android:textAllCaps="false"
             android:layout_margin="3dp"
-            app:backgroundTint="@color/button" />
+            app:backgroundTint="@color/button"
+            android:layout_weight=".4"/>
 
     </LinearLayout>
 

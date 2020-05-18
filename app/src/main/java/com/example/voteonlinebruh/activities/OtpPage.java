@@ -136,11 +136,6 @@ public class OtpPage extends AppCompatActivity {
         ets[2].setOnKeyListener(new listener(2));
         ets[3].setOnKeyListener(new listener(3));
 
-        //VALIDATION CODE
-        final Bundle bundle = getIntent().getBundleExtra("bundle");
-        final int electionId = bundle.getInt("electionId");
-        final String electionType = bundle.getString("electionType");
-
         login = findViewById(R.id.verifybut);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,7 +160,7 @@ public class OtpPage extends AppCompatActivity {
                     login.setEnabled(false);
                     String OTP = otp;
                     ServerCall serverCall = new ServerCall();
-                    serverCall.validateBoothOtp(electionId, boothId, electionType, OTP, mContext, OtpPage.this);
+                    serverCall.validateBoothOtp(boothId, OTP, mContext, OtpPage.this);
 
                     Intent intent = new Intent(getApplicationContext(), WaitScreen.class);
                     intent.putExtra("LABEL", "Authenticating");

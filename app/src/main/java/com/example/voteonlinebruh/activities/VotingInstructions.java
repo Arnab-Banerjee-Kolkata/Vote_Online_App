@@ -63,8 +63,6 @@ public class VotingInstructions extends AppCompatActivity implements View.OnClic
             v.setEnabled(false);
             Intent intent = new Intent(mContext, OtpPage.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            final Bundle bundle = getIntent().getBundleExtra("bundle");
-            intent.putExtra("bundle", bundle);
             mContext.startActivity(intent);
         }
     }

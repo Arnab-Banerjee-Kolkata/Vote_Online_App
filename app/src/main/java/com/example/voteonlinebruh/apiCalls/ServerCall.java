@@ -12,14 +12,12 @@ import com.android.volley.toolbox.Volley;
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.activities.ResultList;
 import com.example.voteonlinebruh.activities.OtpPage;
-import com.example.voteonlinebruh.activities.PublicElectionList;
 import com.example.voteonlinebruh.activities.ResultsDetailed;
 import com.example.voteonlinebruh.activities.ResultsSimplified;
 import com.example.voteonlinebruh.activities.Thanks;
 import com.example.voteonlinebruh.activities.VotingPage;
 import com.example.voteonlinebruh.activities.WaitScreen;
 import com.example.voteonlinebruh.models.ConstituencyWiseResultList;
-import com.example.voteonlinebruh.models.ElectionListItem;
 import com.example.voteonlinebruh.models.PartywiseResultList;
 import com.example.voteonlinebruh.models.PublicCandidate;
 import com.example.voteonlinebruh.models.ResultListItem;
@@ -55,7 +53,7 @@ public class ServerCall {
         }
     }
 
-    public void validateBoothOtp(final int electionId, final String boothId, final String electionType, final String otp, final Context mContext, final OtpPage otpPage) {
+    public void validateBoothOtp(final String boothId, final String otp, final Context mContext, final OtpPage otpPage) {
         final ArrayList<PublicCandidate> candidates = new ArrayList<PublicCandidate>();
         Response.Listener<String> listener = new Response.Listener<String>() {
             @Override
@@ -140,77 +138,10 @@ public class ServerCall {
         params.put("boothId", boothId);
         params.put("otp", otp);
         params.put("postAuthKey", mContext.getString(R.string.post_auth_key));
-        params.put("electionId", Integer.toString(electionId));
-        params.put("type", electionType);
 
         PostRequest postValidateOtp = new PostRequest(mContext, url, params, listener, errorListener);
         RequestQueue queue = Volley.newRequestQueue(mContext);
         queue.add(postValidateOtp);
-    }
-
-    public void getPublicElectionList(final Context mContext) {
-        final ArrayList<ElectionListItem> electionlist = new ArrayList<ElectionListItem>();
-
-        Response.Listener<String> listener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-                JSONObject jsonResponse = null;
-
-                try {
-                    jsonResponse = new JSONObject(response);
-                    boolean success = jsonResponse.getBoolean("success");
-                    boolean valid = jsonResponse.getBoolean("validAuth");
-                    if (!success | !valid) {
-                        Toast.makeText(mContext, "Server rejected request !", Toast.LENGTH_SHORT).show();
-                        WaitScreen.terminate = true;
-                    } else {
-                        JSONArray array = jsonResponse.getJSONArray("elections");
-                        int len = array.length();
-
-                        for (int i = 0; i < len; i++) {
-                            JSONObject elections = array.getJSONObject(i);
-                            electionlist.add(new ElectionListItem(elections.getInt("electionId"),
-                                    elections.getString("name"),
-                                    elections.getString("type"),
-                                    elections.getInt("status"),
-                                    elections.getInt("year")));
-                        }
-                        final Intent intent = new Intent(mContext, PublicElectionList.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra("list", electionlist);
-
-                        myRunnable thread = new myRunnable(intent, mContext);
-                        new Thread(thread).start();
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
-                    Log.d("response error", response);
-                    WaitScreen.terminate = true;
-                    //Toast.makeText(mContext, response, Toast.LENGTH_LONG).show();
-                }
-            }
-        };
-
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                WaitScreen.terminate = true;
-                Toast.makeText(mContext, "Error Occured", Toast.LENGTH_LONG).show();
-            }
-        };
-
-
-        String url = mContext.getString(R.string.web_host) + "/ShowPublicElections.php";
-        Map<String, String> params = new HashMap<>();
-        params.put("postAuthKey", mContext.getString(R.string.post_auth_key));
-
-
-        PostRequest postShowOptions = new PostRequest(mContext, url, params, listener, errorListener);
-        RequestQueue queue = Volley.newRequestQueue(mContext);
-        queue.add(postShowOptions);
     }
 
     public void getPublicResultList(final Context mContext) {
