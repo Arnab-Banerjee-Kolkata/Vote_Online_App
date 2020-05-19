@@ -1,6 +1,5 @@
 package com.example.voteonlinebruh.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.constraint.ConstraintLayout;
@@ -9,11 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.widget.ImageButton;
 
-import com.android.volley.toolbox.Volley;
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.apiCalls.ServerCall;
 import com.example.voteonlinebruh.utility.ThemeManager;
@@ -26,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton button;
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private ConstraintLayout pri, man, pub, res;
-    private WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        webView = findViewById(R.id.wv2);
         collapsingToolbarLayout = findViewById(R.id.collapsingToolbarLayout);
         button = findViewById(R.id.themeToggle);
         if (TM.getThemeId() == R.style.AppTheme_Light) {

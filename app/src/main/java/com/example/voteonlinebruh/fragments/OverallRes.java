@@ -89,7 +89,7 @@ public class OverallRes extends Fragment {
         for (int i = 0; i < rows; i++) {
             values.add(new PieEntry(Float.parseFloat((String) seat.get(i)), (String) name.get(i)));
         }
-        dataSet = new PieDataSet(values, "Election Results");
+        dataSet = new PieDataSet(values, "");
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(6f);
         dataSet.setColors(ColorTemplate.VORDIPLOM_COLORS);
@@ -130,6 +130,11 @@ public class OverallRes extends Fragment {
                 data.setValueTextColor(Color.WHITE);
             }
         } else {
+            if (themeId == R.style.AppTheme_Light) {
+                chart.setCenterTextColor(Color.BLACK);
+            } else {
+                chart.setCenterTextColor(Color.WHITE);
+            }
             leg.setVerticalAlignment(Legend.LegendVerticalAlignment.CENTER);
             leg.setYOffset(40);
             chart.setHoleRadius(40f);

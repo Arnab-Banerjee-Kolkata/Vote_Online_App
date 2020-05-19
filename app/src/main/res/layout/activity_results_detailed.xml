@@ -5,6 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.ResultsDetailed">
+    <WebView
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
 
     <RelativeLayout
         android:id="@+id/spinnerContainer"
