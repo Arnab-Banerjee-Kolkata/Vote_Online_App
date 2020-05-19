@@ -29,9 +29,7 @@ public class Splash extends AppCompatActivity {
     private Context mContext;
     private RelativeLayout waitRel;
     private WebView webView;
-    private String url = "";
-    private String cookie = "";
-    private CookieManager cookieManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +47,6 @@ public class Splash extends AppCompatActivity {
         waitRel = findViewById(R.id.waitRel);
 
         webView = (WebView) findViewById(R.id.wv1);
-
-        url = mContext.getString(R.string.web_host) + "/Check.php";
 
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -82,10 +78,14 @@ public class Splash extends AppCompatActivity {
 
         _requestQueue = Volley.newRequestQueue(this);
 
-        storeCookie();
+        storeCookie(mContext, webView, waitRel);
     }
 
-    void storeCookie() {
+    static void storeCookie(final Context mContext, WebView webView, final RelativeLayout waitRel) {
+        String url = "";
+        final CookieManager cookieManager;
+        url = mContext.getString(R.string.web_host) + "/Check.php";
+
         CookieSyncManager.createInstance(mContext);
         cookieManager = CookieManager.getInstance();
         webView.getSettings().setJavaScriptEnabled(true);
@@ -97,16 +97,18 @@ public class Splash extends AppCompatActivity {
                 super.onPageFinished(view, url);
 
                 cookieManager.setAcceptCookie(true);
-                cookie = cookieManager.getCookie(url);
+                final String cookie = cookieManager.getCookie(url);
 
                 //System.out.println(cookie);
 
-                SharedPreferences sharedPreferences = getSharedPreferences("CookieDetails", MODE_PRIVATE);
+                SharedPreferences sharedPreferences = mContext.getSharedPreferences("CookieDetails", MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("cookieStart", cookie);
                 editor.apply();
 
+
                 waitRel.setVisibility(View.GONE);
+
 
             }
         });
