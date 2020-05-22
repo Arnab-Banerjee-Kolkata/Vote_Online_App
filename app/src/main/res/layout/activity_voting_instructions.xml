@@ -38,16 +38,14 @@
                 android:layout_height="wrap_content"                
                 android:padding="15dp"
                 android:textStyle="normal"
-                android:text="1.  On tapping the 'Proceed' button you will be required to enter the booth ID and OTP. After that you will be taken to the voting area and you can vote there."
-                android:textSize="15dp" />
+                android:text="1.  On tapping the 'Proceed' button you will be required to enter the booth ID and OTP. After that you will be taken to the voting area and you can vote there." />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"                
                 android:padding="15dp"
                 android:textStyle="normal"
-                android:text="2.  The app will enter fullscreen mode to prevent you from accidentally pressing the navigation buttons."
-                android:textSize="15dp" />
+                android:text="2.  The app will enter fullscreen mode to prevent you from accidentally pressing the navigation buttons." />
 
             <TextView
                 android:layout_width="match_parent"
@@ -55,23 +53,21 @@
                 android:padding="15dp"
                 android:textStyle="normal"
                 android:text="3.  Pressing any navigation button while you are in the voting area will result in you getting logged out. Your vote will be registered as NOTA."
-                android:textSize="15dp" />
+                 />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"                
                 android:padding="15dp"
                 android:textStyle="normal"
-                android:text="4.  Before you proceed, it is recommended that you watch the demo by tapping the 'Demo' button to get an experience of the voting area."
-                android:textSize="15dp" />
+                android:text="4.  Before you proceed, it is recommended that you watch the demo by tapping the 'Demo' button to get an experience of the voting area." />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"                
                 android:padding="15dp"
                 android:textStyle="normal"
-                android:text="5.  Vote responsibly."
-                android:textSize="15dp" />
+                android:text="5.  Vote responsibly." />
 
         </LinearLayout>
 

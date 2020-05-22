@@ -86,15 +86,45 @@
         <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
 
     </style>
-    <style name="DialogTheme" parent="Theme.AppCompat.Dialog.Alert">
 
+    <style name="DialogTheme" parent="Theme.AppCompat.Dialog.Alert">
         <item name="windowNoTitle">true</item>
         <item name="windowFixedWidthMajor">90%</item>
-        <item name="windowFixedHeightMajor">95%</item>
+        <item name="windowFixedHeightMajor">80%</item>
+        <item name="android:textSize">15dp</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
 
     </style>
+
+    <style name="DialogTheme.Light" parent="DialogTheme">
+
+        <item name="android:fontFamily">@font/azo</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="toolbarStyle">@style/Toolbar.Light</item>
+        <item name="colorPrimaryDark">@android:color/white</item>
+        <item name="colorSecondary">@color/lightBg</item>
+        <item name="colorAccent">@android:color/black</item>
+        <item name="android:textColorPrimary">@android:color/black</item>
+        <item name="android:textColorSecondary">@android:color/black</item>
+
+    </style>
+
+    <style name="DialogTheme.Dark" parent="DialogTheme">
+
+        <item name="android:fontFamily">@font/azo</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="toolbarStyle">@style/Toolbar.Dark</item>
+        <item name="colorPrimaryDark">@color/darkBg</item>
+        <item name="colorSecondary">@android:color/black</item>
+        <item name="colorAccent">@android:color/white</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+
+    </style>
+
     <style name="ConfirmTheme.Light" parent="Theme.AppCompat.Light.Dialog.Alert">
 
         <item name="windowNoTitle">true</item>
@@ -118,8 +148,9 @@
         <item name="android:fontFamily">@font/azo</item>
         <item name="android:textStyle">bold</item>
     </style>
+
     <style name="azo2">
-        <item name="android:textSize">15dp</item>
+        <item name="android:textSize">20dp</item>
         <item name="android:fontFamily">@font/azo</item>
         <item name="android:textStyle">bold</item>
     </style>

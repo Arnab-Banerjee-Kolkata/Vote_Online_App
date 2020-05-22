@@ -91,15 +91,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Glide
                 .with(itemViewHolder.imageView.getContext())
                 .load(resUrl)
+                .error(themeId == R.style.AppTheme_Light?R.drawable.ic_error_outline_black_24dp:R.drawable.ic_error_outline_white_24dp)
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                         itemViewHolder.progress.setVisibility(View.GONE);
-                        if (themeId == R.style.AppTheme_Light) {
-                            target.onLoadFailed(context.getDrawable(R.drawable.ic_error_outline_black_24dp));
-                        } else {
-                            target.onLoadFailed(context.getDrawable(R.drawable.ic_error_outline_white_24dp));
-                        }
+                        itemViewHolder.imageView.setPadding(25,25,25,25);
                         return false;
                     }
 

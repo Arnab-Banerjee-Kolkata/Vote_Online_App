@@ -7,200 +7,143 @@
     tools:context=".activities.Demo">
 
     <ImageButton
+        android:id="@+id/closediag"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_margin="5dp"
-        android:src="@drawable/ic_close_white_24dp"
-        android:id="@+id/closediag"
-        android:elevation="1dp"
         android:background="#5B000000"
+        android:elevation="1dp"
+        android:src="@drawable/ic_close_white_24dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#313131"
-        android:padding="20dp">
-
-    <ImageView
-        android:id="@+id/screen"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:elevation="0dp"
-        android:src="@drawable/vote_demo_1"
-        android:visibility="invisible"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <View
-        android:id="@+id/party_high"
-        android:layout_width="100dp"
-        android:layout_height="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:background="@drawable/boxbg"
-        android:elevation="1dp"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/demoContainer"
         android:visibility="invisible"
-        app:layout_constraintHorizontal_bias="0.007"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.11" />
-
-    <View
-        android:id="@+id/cand_high"
-        android:layout_width="110dp"
-        android:layout_height="30dp"
-        android:background="@drawable/boxbg"
-        android:elevation="1dp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.003"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.159" />
-
-    <View
-        android:id="@+id/sym_high"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:background="@drawable/boxbg"
-        android:elevation="1dp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.83"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.115" />
-
-    <View
-        android:id="@+id/ind_high"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/boxbg"
-        android:elevation="1dp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.995"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.128" />
-
-    <View
-        android:id="@+id/tap1"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:background="@drawable/tap_outer"
-        android:elevation="1dp"
-        android:visibility="invisible"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.4" />
-
-    <View
-        android:id="@+id/tap2"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:background="@drawable/tap_inner"
-        android:elevation="2dp"
-        android:visibility="invisible"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.4" />
-
-    <View
-        android:id="@+id/tap3"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:background="@drawable/tap_outer"
-        android:elevation="1dp"
-        android:visibility="invisible"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.67" />
-
-    <View
-        android:id="@+id/tap4"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:background="@drawable/tap_inner"
-        android:elevation="2dp"
-        android:visibility="invisible"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.67" />
-
-    <View
-        android:id="@+id/shadowfull"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:elevation="1dp"
-        android:background="#CC000000"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        android:layout_margin="20dp"
+        android:background="@drawable/boxbg">
 
-    <ImageView
-        android:id="@+id/shadow_cut"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        android:elevation="1dp"
-        android:src="@drawable/shadow_cutout"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbarDemo"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_margin="2dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="Select Candidate"
+            app:titleTextAppearance="@style/azo2" />
 
-    <ImageView
-        android:id="@+id/shadow_bot"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        android:elevation="1dp"
-        android:src="@drawable/shadowbot"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        <ImageView
+            android:id="@+id/tap1outer"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="100dp"
+            android:elevation="2dp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbarDemo" />
 
-    <TextView
-        android:id="@+id/text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="15dp"
-        android:fontFamily="@font/azo"
-        android:padding="10dp"
-        android:textColor="@android:color/white"
-        android:elevation="2dp"
-        android:textAlignment="center"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        <ImageView
+            android:id="@+id/tap1inner"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="100dp"
+            android:elevation="2dp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbarDemo" />
+
+        <ImageView
+            android:id="@+id/tap2outer"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="175dp"
+            android:elevation="2dp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbarDemo" />
+
+        <ImageView
+            android:id="@+id/tap2inner"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="175dp"
+            android:elevation="2dp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbarDemo" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rec2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:layout_constraintTop_toBottomOf="@id/toolbarDemo" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorSecondary"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <Button
+                android:layout_width="140dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/buttonbg"
+                android:text="Done"
+                android:textAllCaps="false"
+                android:theme="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                app:backgroundTint="@color/button" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rel1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gradient_bg_bottom"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:id="@+id/messageDemo"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:elevation="2dp"
+                android:gravity="center"
+                android:paddingStart="10dp"
+                android:paddingTop="100dp"
+                android:paddingEnd="10dp"
+                android:text="Sample Text"
+                android:textSize="17dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rel2"
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="2dp"
+            android:background="@drawable/gradient_bg_top"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/messageDemo2"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:elevation="2dp"
+                android:gravity="center"
+                android:paddingStart="10dp"
+                android:paddingBottom="20dp"
+                android:paddingEnd="10dp"
+                android:text="Tap on the Done button at the bottom of the screen to submit your vote !"
+                android:textSize="17dp" />
+        </RelativeLayout>
     </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>
