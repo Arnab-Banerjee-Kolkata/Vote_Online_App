@@ -124,6 +124,46 @@ public class Splash extends AppCompatActivity {
         cookieManager.removeSessionCookie();
     }
 
+    static void storeCookie(final Context mContext, WebView webView) {
+        String url = "";
+        final CookieManager cookieManager;
+        url = mContext.getString(R.string.web_host) + "/Check.php";
+
+        CookieSyncManager.createInstance(mContext);
+        cookieManager = CookieManager.getInstance();
+        webView.getSettings().setJavaScriptEnabled(true);
+
+        webView.setWebViewClient(new WebViewClient() {
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+
+                cookieManager.setAcceptCookie(true);
+                final String cookie = cookieManager.getCookie(url);
+
+                //System.out.println(cookie);
+
+                SharedPreferences sharedPreferences = mContext.getSharedPreferences("CookieDetails", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("cookieStart", cookie);
+                editor.apply();
+
+
+            }
+        });
+
+        webView.setWebChromeClient(new WebChromeClient());
+        webView.loadUrl(url);
+
+
+        webView.clearCache(true);
+        webView.clearHistory();
+
+        cookieManager.removeAllCookie();
+        cookieManager.removeSessionCookie();
+    }
+
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
