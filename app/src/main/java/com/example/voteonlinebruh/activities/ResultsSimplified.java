@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -46,9 +47,11 @@ public class ResultsSimplified extends AppCompatActivity {
     private Button button;
     private PieDataSet dataSet;
     private LayoutInflater layoutInflater;
-    private ArrayList<PartywiseResultList> resultlist;
     private TableLayout tableLayout;
-    int themeId = MainActivity.TM.getThemeId();
+    SwipeRefreshLayout swipe;
+    SwipeRefreshLayout.OnRefreshListener listener;
+    private int themeId = MainActivity.TM.getThemeId(), status, totalSeats;
+    private boolean oneTimeDataLoad = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,15 +72,16 @@ public class ResultsSimplified extends AppCompatActivity {
             public void onClick(View v) {
                 button.setEnabled(false);
                 ServerCall serverCall = new ServerCall();
-                serverCall.getStatelist(intent.getIntExtra("electionId", 0), intent.getStringExtra("type"), getApplicationContext());
+                serverCall.getStatelist(intent.getIntExtra("electionId", 0),
+                        intent.getStringExtra("type"), getApplicationContext());
                 Intent intent = new Intent(getBaseContext(), WaitScreen.class);
                 intent.putExtra("LABEL", "Hold on");
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
-        int status = intent.getIntExtra("status", 0);
-        int totalSeats = intent.getIntExtra("totalSeats", 0);
+        status = intent.getIntExtra("status", 0);
+        totalSeats = intent.getIntExtra("totalSeats", 0);
         ImageView indicator = findViewById(R.id.indicator2);
         switch (status) {
             case 2:
@@ -87,9 +91,26 @@ public class ResultsSimplified extends AppCompatActivity {
                 indicator.setImageResource(R.drawable.complete);
                 break;
         }
-        resultlist = (ArrayList<PartywiseResultList>) intent.getSerializableExtra("list");
+        ArrayList<PartywiseResultList> resultlist =
+                (ArrayList<PartywiseResultList>) intent.getSerializableExtra("list");
 
         chart = findViewById(R.id.chartoverall);
+        tableLayout = findViewById(R.id.tableoverall);
+        swipe = findViewById(R.id.swipeRefreshSimplifiedPage);
+        listener = new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                ServerCall serverCall = new ServerCall();
+                serverCall.getOverallResult(intent.getStringExtra("type"),
+                        intent.getIntExtra("electionId", 0), getApplicationContext(),
+                        ResultsSimplified.this, true);
+            }
+        };
+        swipe.setOnRefreshListener(listener);
+        populate(resultlist);
+    }
+
+    public void populate(ArrayList<PartywiseResultList> resultlist) {
         chart.setBackgroundColor(Color.TRANSPARENT);
         chart.setUsePercentValues(false);
         chart.getDescription().setEnabled(false);
@@ -122,7 +143,8 @@ public class ResultsSimplified extends AppCompatActivity {
         data.setValueTypeface(ResourcesCompat.getFont(chart.getContext(), R.font.azo));
         data.setValueFormatter(new IValueFormatter() {
             @Override
-            public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+            public String getFormattedValue(float value, Entry entry,
+                                            int dataSetIndex, ViewPortHandler viewPortHandler) {
                 return "" + (int) value;
             }
         });
@@ -137,7 +159,6 @@ public class ResultsSimplified extends AppCompatActivity {
         leg.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
         LegendEntry[] legend = leg.getEntries();
         layoutInflater = (LayoutInflater) this.getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        tableLayout = findViewById(R.id.tableoverall);
         if (themeId == R.style.AppTheme_Light) {
             dataSet.setValueLineColor(Color.BLACK);
             chart.setCenterTextColor(Color.BLACK);
@@ -153,6 +174,7 @@ public class ResultsSimplified extends AppCompatActivity {
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
             tableLayout.setBackgroundResource(android.R.drawable.dialog_holo_dark_frame);
         }
+        tableLayout.removeViews(1, tableLayout.getChildCount() - 1);
         for (int i = 0; i < resultlist.size(); i++) {
             View view = layoutInflater.inflate(R.layout.row, tableLayout, false);
             TableRow row = view.findViewById(R.id.rowwwww);
@@ -169,7 +191,8 @@ public class ResultsSimplified extends AppCompatActivity {
                     .load(resUrl)
                     .listener(new RequestListener<Drawable>() {
                         @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                                                    Target<Drawable> target, boolean isFirstResource) {
                             progress.setVisibility(View.GONE);
                             if (themeId == R.style.AppTheme_Light)
                                 target.onLoadFailed(getDrawable(R.drawable.ic_error_outline_black_24dp));
@@ -179,7 +202,8 @@ public class ResultsSimplified extends AppCompatActivity {
                         }
 
                         @Override
-                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
+                                                       DataSource dataSource, boolean isFirstResource) {
                             progress.setVisibility(View.GONE);
                             return false;
                         }
@@ -187,12 +211,22 @@ public class ResultsSimplified extends AppCompatActivity {
             seats.setText(Integer.toString(resultlist.get(i).getSeatsWon()));
             color.setBackgroundColor(legend[i].formColor);
             tableLayout.addView(row);
+            swipe.setRefreshing(false);
         }
     }
 
     @Override
     protected void onResume() {
         button.setEnabled(true);
+        if (oneTimeDataLoad)
+            swipe.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipe.setRefreshing(true);
+                    listener.onRefresh();
+                }
+            });
         super.onResume();
+        oneTimeDataLoad=true;
     }
 }

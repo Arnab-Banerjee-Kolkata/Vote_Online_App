@@ -10,94 +10,101 @@
         android:layout_width="0dp"
         android:layout_height="0dp"/>
 
-    <ScrollView
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshSimplifiedPage"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:elevation="5dp"
         app:layout_constraintTop_toBottomOf="@id/toolbarResSim"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <android.support.constraint.ConstraintLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <Button
-                android:id="@+id/detailBut"
+            <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="40dp"
-                android:background="@drawable/buttonbg"
-                android:text="State-wise Results"
-                android:textAllCaps="false"
-                android:theme="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                app:backgroundTint="@color/button"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/chartoverall"
-                />
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/textView16"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Party-wise Seat Distribution"
-                android:textSize="16dp"
-                android:layout_margin="20dp"
-                android:gravity="center"
-                app:layout_constraintTop_toBottomOf="@id/detailBut"/>
-
-            <TableLayout
-                android:id="@+id/tableoverall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:stretchColumns="1"
-                app:layout_constraintTop_toBottomOf="@+id/textView16">
-
-                <TableRow
+                <Button
+                    android:id="@+id/detailBut"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/button">
+                    android:layout_margin="40dp"
+                    android:background="@drawable/buttonbg"
+                    android:text="State-wise Results"
+                    android:textAllCaps="false"
+                    android:theme="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    app:backgroundTint="@color/button"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/chartoverall"
+                    />
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/textView16"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Party-wise Seat Distribution"
+                    android:textSize="16dp"
+                    android:layout_margin="20dp"
+                    android:gravity="center"
+                    app:layout_constraintTop_toBottomOf="@id/detailBut"/>
+
+                <TableLayout
+                    android:id="@+id/tableoverall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:stretchColumns="1"
+                    app:layout_constraintTop_toBottomOf="@+id/textView16">
+
+                    <TableRow
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_column="1"
-                        android:layout_margin="15dp"
-                        android:gravity="center"
-                        android:text="Party"
-                        android:textStyle="bold" />
+                        android:background="@color/button">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_column="2"
-                        android:layout_margin="15dp"
-                        android:gravity="center"
-                        android:text="Symbol"
-                        android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_column="1"
+                            android:layout_margin="15dp"
+                            android:gravity="center"
+                            android:text="Party"
+                            android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_column="3"
-                        android:layout_margin="15dp"
-                        android:gravity="center"
-                        android:text="Seats"
-                        android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_column="2"
+                            android:layout_margin="15dp"
+                            android:gravity="center"
+                            android:text="Symbol"
+                            android:textStyle="bold" />
 
-                </TableRow>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_column="3"
+                            android:layout_margin="15dp"
+                            android:gravity="center"
+                            android:text="Seats"
+                            android:textStyle="bold" />
 
-            </TableLayout>
+                    </TableRow>
 
-            <com.github.mikephil.charting.charts.PieChart
-                android:id="@+id/chartoverall"
-                android:layout_width="match_parent"
-                android:layout_height="275dp"
-                android:layout_margin="15dp"
-                app:layout_constraintTop_toTopOf="parent"/>
-        </android.support.constraint.ConstraintLayout>
+                </TableLayout>
 
-    </ScrollView>
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/chartoverall"
+                    android:layout_width="match_parent"
+                    android:layout_height="275dp"
+                    android:layout_margin="15dp"
+                    app:layout_constraintTop_toTopOf="parent"/>
+            </android.support.constraint.ConstraintLayout>
+
+        </ScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 
     <android.support.v7.widget.Toolbar

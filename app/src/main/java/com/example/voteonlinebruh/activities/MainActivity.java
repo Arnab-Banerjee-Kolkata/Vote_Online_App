@@ -135,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
             scheduledRestart = false;
             Intent i = new Intent(getBaseContext(), MainActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
             startActivity(i);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         }

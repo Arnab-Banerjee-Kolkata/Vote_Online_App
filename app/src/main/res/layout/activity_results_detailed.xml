@@ -5,74 +5,83 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.ResultsDetailed">
+
     <WebView
         android:id="@+id/wv7"
         android:layout_width="0dp"
-        android:layout_height="0dp"/>
+        android:layout_height="0dp" />
 
-    <RelativeLayout
-        android:id="@+id/spinnerContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:background="@drawable/boxbg"
-        android:elevation="1dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tab">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@id/spinner"
-            android:padding="5dp"
-            android:src="@drawable/ic_keyboard_arrow_down_black_24dp" />
-
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="300dp"
-            android:layout_height="35dp"
-            android:background="@android:color/transparent"
-            android:dropDownSelector="@color/shade"
-            android:padding="5dp"
-            android:textAlignment="center"
-            android:dropDownWidth="290dp"
-            android:spinnerMode="dropdown" />
-    </RelativeLayout>
-
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tab"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="5dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbarvres"
-        app:tabTextAppearance="@style/azo2">
-
-        <android.support.design.widget.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Overall Trends">
-
-        </android.support.design.widget.TabItem>
-
-        <android.support.design.widget.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Constituency Trends">
-
-        </android.support.design.widget.TabItem>
-
-    </android.support.design.widget.TabLayout>
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:paddingTop="55dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tab" />
+        app:layout_constraintTop_toBottomOf="@id/toolbarvres">
+
+        <RelativeLayout
+            android:id="@+id/spinnerContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/boxbg"
+            android:elevation="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tab">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@id/spinner"
+                android:padding="5dp"
+                android:src="@drawable/ic_keyboard_arrow_down_black_24dp" />
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="300dp"
+                android:layout_height="35dp"
+                android:background="@android:color/transparent"
+                android:dropDownWidth="290dp"
+                android:dropDownSelector="@color/shade"
+                android:padding="5dp"
+                android:spinnerMode="dropdown"
+                android:textAlignment="center" />
+        </RelativeLayout>
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tabTextAppearance="@style/azo3">
+
+            <android.support.design.widget.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Overall Trends">
+
+            </android.support.design.widget.TabItem>
+
+            <android.support.design.widget.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Constituency Trends">
+
+            </android.support.design.widget.TabItem>
+
+        </android.support.design.widget.TabLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:paddingTop="55dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tab" />
+
+    </android.support.constraint.ConstraintLayout>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbarvres"
@@ -83,27 +92,46 @@
         app:title="Result"
         app:titleTextAppearance="@style/azo" />
 
-    <TextView
+    <FrameLayout
+        android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tab"
-        android:id="@+id/errorMessage"
-        android:visibility="invisible"
-        android:gravity="center"
-        app:layout_constraintVertical_bias=".6"
-        android:textSize="18dp"
-        android:textStyle="normal"
-        android:text="Results not yet declared for selected state !"
-        android:padding="30dp"/>
+        android:layout_marginTop="100dp"
+        app:layout_constraintTop_toBottomOf="@id/toolbarvres">
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshDetailedPage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/errorMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="30dp"
+                    android:text="Results not yet declared for selected state !"
+                    android:textSize="18dp"
+                    android:textStyle="normal"
+                    app:layout_constraintVertical_bias=".35"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+            </android.support.constraint.ConstraintLayout>
+        </android.support.v4.widget.SwipeRefreshLayout>
+    </FrameLayout>
 
     <RelativeLayout
         android:id="@+id/waitRel2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible"
-        android:gravity="center"
         android:background="#80000000"
+        android:gravity="center"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

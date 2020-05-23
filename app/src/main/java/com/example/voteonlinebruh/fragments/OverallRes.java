@@ -1,11 +1,13 @@
 package com.example.voteonlinebruh.fragments;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,8 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.activities.MainActivity;
+import com.example.voteonlinebruh.activities.ResultsDetailed;
+import com.example.voteonlinebruh.apiCalls.ServerCall;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LegendEntry;
@@ -37,9 +41,11 @@ import java.util.ArrayList;
 
 public class OverallRes extends Fragment {
 
-    private ArrayList name, sym, seat;
-    private int rows, totalSeats;
-    private String type;
+    private static ArrayList name, sym, seat;
+    private static int rows, totalSeats, electionId;
+    private static String type, stateCode;
+    private static boolean oneTimeDataLoad = false;
+    private static ResultsDetailed context;
     private PieChart chart;
     private ArrayList<PieEntry> values;
     private Legend leg;
@@ -48,11 +54,19 @@ public class OverallRes extends Fragment {
     private View v;
     private TableLayout tableLayout;
     private TextView textView;
+    private static SwipeRefreshLayout swipe;
+    private static SwipeRefreshLayout.OnRefreshListener listener;
 
     public static OverallRes newInstance(Bundle args) {
         OverallRes overallRes = new OverallRes();
         overallRes.setArguments(args);
         return overallRes;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        context = (ResultsDetailed) activity;
     }
 
     @Override
@@ -64,12 +78,24 @@ public class OverallRes extends Fragment {
         this.rows = args.getInt("ROWS");
         this.type = args.getString("type");
         this.totalSeats = args.getInt("totalSeats");
+        this.stateCode = args.getString("stateCode");
+        this.electionId = args.getInt("ID");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_overall_res, container, false);
+        listener = new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                ServerCall serverCall = new ServerCall();
+                serverCall.getOverallResult(type, electionId, stateCode,
+                        getContext(), context);
+            }
+        };
+        swipe = v.findViewById(R.id.swipeRefreshOverallFrag);
+        swipe.setOnRefreshListener(listener);
         textView = v.findViewById(R.id.textView23);
         final int themeId = MainActivity.TM.getThemeId();
         //CHART CODE
@@ -188,6 +214,22 @@ public class OverallRes extends Fragment {
             leg.setTextColor(Color.WHITE);
             tableLayout.setBackgroundResource(android.R.drawable.dialog_holo_dark_frame);
         }
+        swipe.setRefreshing(false);
+        oneTimeDataLoad = false;
         return v;
+    }
+
+    @Override
+    public void onStart() {
+        if (oneTimeDataLoad)
+            swipe.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipe.setRefreshing(true);
+                    listener.onRefresh();
+                }
+            });
+        super.onStart();
+        oneTimeDataLoad = true;
     }
 }

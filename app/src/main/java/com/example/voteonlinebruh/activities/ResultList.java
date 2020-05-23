@@ -33,7 +33,7 @@ public class ResultList extends AppCompatActivity {
         setTheme(themeId);
         setContentView(R.layout.activity_election_result);
         toolbar = findViewById(R.id.toolbarres);
-        listContainer=findViewById(R.id.listContainer2);
+        listContainer = findViewById(R.id.listContainer2);
         if (themeId == R.style.AppTheme_Light) {
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
             listContainer.setBackground(getDrawable(android.R.drawable.dialog_holo_light_frame));
@@ -63,10 +63,10 @@ public class ResultList extends AppCompatActivity {
                     Intent intent = new Intent(getBaseContext(), ResultsDetailed.class);
                     intent.putExtra("electionId", resultlist.get(position).getElectionId());
                     intent.putExtra("type", type);
-                    intent.putExtra("stateName",resultlist.get(position).getStateName());
+                    intent.putExtra("stateName", resultlist.get(position).getStateName());
                     startActivity(intent);
                 } else {
-                    serverCall.getOverallResult(type, resultlist.get(position).getElectionId(), getApplicationContext());
+                    serverCall.getOverallResult(type, resultlist.get(position).getElectionId(), getApplicationContext(), null, false);
                     Intent intent = new Intent(getBaseContext(), WaitScreen.class);
                     intent.putExtra("LABEL", "Hold on");
                     startActivity(intent);

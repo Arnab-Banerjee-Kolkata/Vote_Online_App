@@ -6,10 +6,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -27,17 +29,21 @@ import java.util.List;
 
 public class ResultsDetailed extends FragmentActivity {
     private RelativeLayout rel, container;
+    private FrameLayout swipeContainer;
     private TabLayout tabLayout;
     private Toolbar toolbar;
-    private String stateName;
+    private String stateName, stateCode = "";
     private Spinner spinner;
     private ViewPager viewPager;
-    private TextView message;
     private ArrayAdapter<String> arrayAdapter;
     private Bundle args, args2;
     private FragmentAdapter fragmentAdapter;
-    ScreenControl screenControl = new ScreenControl();
-    int themeid = MainActivity.TM.getThemeId();
+    private ScreenControl screenControl = new ScreenControl();
+    private int themeid = MainActivity.TM.getThemeId(), electionId;
+    private ArrayList<StateListItem> list;
+    private SwipeRefreshLayout swipe;
+    SwipeRefreshLayout.OnRefreshListener listener;
+    private static boolean stopLoad = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +58,13 @@ public class ResultsDetailed extends FragmentActivity {
             }
         });
         viewPager = findViewById(R.id.pager);
-        message = findViewById(R.id.errorMessage);
         tabLayout = findViewById(R.id.tab);
         rel = findViewById(R.id.waitRel2);
         container = findViewById(R.id.spinnerContainer);
+        swipe = findViewById(R.id.swipeRefreshDetailedPage);
+        swipeContainer = findViewById(R.id.swipeContainer);
         Intent intent = getIntent();
-        final int electionId = intent.getIntExtra("electionId", 0);
+        electionId = intent.getIntExtra("electionId", 0);
         final String type = intent.getStringExtra("type");
         spinner = findViewById(R.id.spinner);
         if (themeid == R.style.AppTheme_Light) {
@@ -70,9 +77,9 @@ public class ResultsDetailed extends FragmentActivity {
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         }
         if (type.equalsIgnoreCase("VIDHAN SABHA")) {
-            stateName=intent.getStringExtra("stateName");
+            stateName = intent.getStringExtra("stateName");
             container.setVisibility(View.GONE);
-            viewPager.setPadding(0, 20, 0, 0);
+            viewPager.setPadding(0, 0, 0, 0);
             rel.setVisibility(View.VISIBLE);
             screenControl.makeScreenUnresponsive(ResultsDetailed.this.getWindow());
             ServerCall serverCall = new ServerCall();
@@ -81,7 +88,7 @@ public class ResultsDetailed extends FragmentActivity {
                     getApplicationContext(),
                     ResultsDetailed.this);
         } else {
-            final ArrayList<StateListItem> list = (ArrayList<StateListItem>) intent.getSerializableExtra("list");
+            list = (ArrayList<StateListItem>) intent.getSerializableExtra("list");
             String[] states = new String[list.size()];
             for (int i = 0; i < list.size(); i++)
                 states[i] = list.get(i).getStateName();
@@ -94,9 +101,10 @@ public class ResultsDetailed extends FragmentActivity {
                     rel.setVisibility(View.VISIBLE);
                     screenControl.makeScreenUnresponsive(ResultsDetailed.this.getWindow());
                     stateName = list.get(position).getStateName();
+                    stateCode = list.get(position).getStateCode();
                     ServerCall serverCall = new ServerCall();
                     serverCall.getOverallResult(type, electionId,
-                            list.get(position).getStateCode(),
+                            stateCode,
                             getApplicationContext(),
                             ResultsDetailed.this);
                 }
@@ -106,18 +114,27 @@ public class ResultsDetailed extends FragmentActivity {
 
                 }
             });
+            listener = new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    ServerCall serverCall = new ServerCall();
+                    serverCall.getOverallResult(type, electionId, stateCode,
+                            getApplicationContext(), ResultsDetailed.this);
+                }
+            };
+            swipe.setOnRefreshListener(listener);
         }
     }
 
     public void release(ArrayList<PartywiseResultList> partyresultlist, ArrayList<ConstituencyWiseResultList> constresultlist, int status, int totalSeats, String type, boolean requestStatus) {
         if (!requestStatus) {
-            message.setVisibility(View.VISIBLE);
+            swipeContainer.setVisibility(View.VISIBLE);
             viewPager.removeAllViews();
             viewPager.setVisibility(View.GONE);
         } else {
+            swipeContainer.setVisibility(View.GONE);
             viewPager.removeAllViews();
             viewPager.setVisibility(View.VISIBLE);
-            message.setVisibility(View.INVISIBLE);
             ArrayList name = new ArrayList(),
                     sym = new ArrayList(),
                     seat = new ArrayList(),
@@ -143,20 +160,22 @@ public class ResultsDetailed extends FragmentActivity {
             args.putIntegerArrayList("SYMS", sym);
             args.putInt("ROWS", partyresultlist.size());
             args.putInt("totalSeats", totalSeats);
-            args.putString("type",type);
+            args.putString("type", type);
+            args.putString("stateCode", stateCode);
+            args.putInt("ID", electionId);
             args2.putStringArrayList("CON_NAME", con_name);
             args2.putStringArrayList("CAND_NAME", can_name);
             args2.putStringArrayList("PAR_NAME", p_name);
             args2.putStringArrayList("VOTES", votes);
             args2.putString("STATE_NAME", stateName);
+            args2.putString("type", type);
+            args2.putInt("ID", electionId);
+            args2.putString("stateCode", stateCode);
             args2.putInt("ROWS", constresultlist.size());
-            List<Fragment> list = getSupportFragmentManager().getFragments();
-            for (int i = 0; i < list.size(); i++)
-                getSupportFragmentManager().beginTransaction().remove(list.get(i)).commitNow();
+            removeFragments();
             fragmentAdapter = new FragmentAdapter(getBaseContext(), getSupportFragmentManager(), args, args2);
             viewPager.setAdapter(fragmentAdapter);
             viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
             tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {
@@ -176,5 +195,20 @@ public class ResultsDetailed extends FragmentActivity {
         }
         screenControl.makeWindowResponsive(ResultsDetailed.this.getWindow());
         rel.setVisibility(View.GONE);
+        swipe.setRefreshing(false);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        stopLoad = true;
+    }
+
+    private void removeFragments() {
+        if (!getSupportFragmentManager().isDestroyed() && !stopLoad) {
+            List<Fragment> list = getSupportFragmentManager().getFragments();
+            for (int i = 0; i < list.size(); i++)
+                getSupportFragmentManager().beginTransaction().remove(list.get(i)).commitNow();
+        }
     }
 }

@@ -210,7 +210,7 @@ public class ServerCall {
         queue.add(postShowOptions);
     }
 
-    public void getOverallResult(final String type, final int electionId, final Context mContext) {
+    public void getOverallResult(final String type, final int electionId, final Context mContext, final ResultsSimplified resultsSimplified, final boolean release) {
         final ArrayList<PartywiseResultList> partyresultlist = new ArrayList<PartywiseResultList>();
 
         Response.Listener<String> listener = new Response.Listener<String>() {
@@ -246,15 +246,19 @@ public class ServerCall {
                                     elections.getInt("seatsWon"),
                                     elections.getString("partySymbol")));
                         }
-                        final Intent intent = new Intent(mContext, ResultsSimplified.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra("list", partyresultlist);
-                        intent.putExtra("electionId", electionId);
-                        intent.putExtra("type", type);
-                        intent.putExtra("status", status);
-                        intent.putExtra("totalSeats", totalSeats);
-                        myRunnable thread = new myRunnable(intent, mContext);
-                        new Thread(thread).start();
+                        if (release) {
+                            resultsSimplified.populate(partyresultlist);
+                        } else {
+                            final Intent intent = new Intent(mContext, ResultsSimplified.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.putExtra("list", partyresultlist);
+                            intent.putExtra("electionId", electionId);
+                            intent.putExtra("type", type);
+                            intent.putExtra("status", status);
+                            intent.putExtra("totalSeats", totalSeats);
+                            myRunnable thread = new myRunnable(intent, mContext);
+                            new Thread(thread).start();
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

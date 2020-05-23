@@ -1,10 +1,12 @@
 package com.example.voteonlinebruh.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,22 +17,35 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.voteonlinebruh.R;
+import com.example.voteonlinebruh.activities.ResultsDetailed;
+import com.example.voteonlinebruh.apiCalls.ServerCall;
 import com.example.voteonlinebruh.utility.CaseConverter;
 
 import java.util.ArrayList;
 
 public class ConstRes extends Fragment {
 
-    private ArrayList cons_name, cand_name, par_name, votes;
-    private String state_name;
-    private int rows;
-    private ListView listView;
+    private static ArrayList cons_name, cand_name, par_name, votes;
+    private static String state_name, stateCode, type;
+    private static int rows, electionId;
+    private static ResultsDetailed context;
+    private static ListView listView;
+    private static SwipeRefreshLayout swipe;
+    private static boolean oneTimeDataLoad = false;
+    private static SwipeRefreshLayout.OnRefreshListener listener;
 
     public static ConstRes newInstance(Bundle args) {
         ConstRes constRes = new ConstRes();
         constRes.setArguments(args);
         return constRes;
     }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        context = (ResultsDetailed) activity;
+    }
+
 
     @Override
     public void setArguments(@Nullable Bundle args) {
@@ -41,12 +56,25 @@ public class ConstRes extends Fragment {
         this.par_name = args.getStringArrayList("PAR_NAME");
         this.votes = args.getStringArrayList("VOTES");
         this.rows = args.getInt("ROWS");
+        this.type = args.getString("type");
+        this.stateCode = args.getString("stateCode");
+        this.electionId = args.getInt("ID");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_const_res, container, false);
+        listener = new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                ServerCall serverCall = new ServerCall();
+                serverCall.getOverallResult(type, electionId, stateCode,
+                        getContext(), context);
+            }
+        };
+        swipe = view.findViewById(R.id.swipeRefreshConstFrag);
+        swipe.setOnRefreshListener(listener);
         listView = view.findViewById(R.id.list3);
         class MyAdapter extends ArrayAdapter<ArrayList> {
             ArrayList list;
@@ -76,6 +104,22 @@ public class ConstRes extends Fragment {
         }
         final MyAdapter arrayAdapter = new MyAdapter(cons_name, view.getContext());
         listView.setAdapter(arrayAdapter);
+        swipe.setRefreshing(false);
+        oneTimeDataLoad = false;
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        if (oneTimeDataLoad)
+            swipe.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipe.setRefreshing(true);
+                    listener.onRefresh();
+                }
+            });
+        super.onStart();
+        oneTimeDataLoad = true;
     }
 }
