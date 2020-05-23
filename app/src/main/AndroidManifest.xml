@@ -55,10 +55,6 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.PublicElectionList"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activities.PublicElectionEntryPoint"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />

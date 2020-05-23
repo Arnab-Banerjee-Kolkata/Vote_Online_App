@@ -1,129 +1,196 @@
 package com.example.voteonlinebruh.activities;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.voteonlinebruh.R;
+import com.example.voteonlinebruh.adapters.RecyclerViewAdapter;
+import com.example.voteonlinebruh.models.RecyclerViewItem;
+
+import java.util.ArrayList;
 
 public class Demo extends AppCompatActivity {
 
     private Handler handler = new Handler();
     private boolean threadstop = false;
-    private ImageView imageView, shadowcut, shadowbot;
     private Animation fadein, fadeout, scale_slow, scale_fast;
-    private View shadowfull, party, cand, sym, indi, tap1, tap2, tap3, tap4;
-    private TextView text;
+    private TextView message, message2;
     private ImageButton cl;
-    private int resid1, resid2, resid3;
+    private RecyclerView recyclerView;
+    private RecyclerViewAdapter adapter;
+    private LinearLayoutManager layoutManager;
+    private ConstraintLayout constraintLayout;
+    private RelativeLayout rel1, rel2;
+    private ImageView tap1inner, tap1outer, tap2inner, tap2outer;
+    private Context context;
+    CardView view;
+    ConstraintLayout constraintLayout2;
+    LinearLayout linearLayout, linearLayout1;
+    TextView pname, cname;
+    RelativeLayout pimg;
+    ImageView indicator;
+    private int themeId = MainActivity.TM.getThemeId(), resid, resid2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        int tapinnerRes, tapouterRes;
+        if (themeId == R.style.AppTheme_Light) {
+            setTheme(R.style.DialogTheme_Light);
+            getWindow().setBackgroundDrawableResource(android.R.color.white);
+            resid = R.drawable.bulboff_black;
+            resid2 = R.drawable.bulbon_black;
+            tapinnerRes = R.drawable.tap_white;
+            tapouterRes = R.drawable.tap_black;
+        } else {
+            setTheme(R.style.DialogTheme_Dark);
+            getWindow().setBackgroundDrawableResource(R.color.darkBg);
+            resid = R.drawable.bulboff_white;
+            resid2 = R.drawable.bulbon_white;
+            tapinnerRes = R.drawable.tap_black;
+            tapouterRes = R.drawable.tap_white;
+        }
         setContentView(R.layout.activity_demo);
+        ArrayList<RecyclerViewItem> recyclerViewItem_list = new ArrayList<>();
+        for (int i = 1; i < 9; i++)
+            recyclerViewItem_list.add(new RecyclerViewItem("", "Party " + i, "Candidate " + i, resid));
+        recyclerView = findViewById(R.id.rec2);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
+        context = getApplicationContext();
+        adapter = new RecyclerViewAdapter(recyclerViewItem_list, context);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
         setFinishOnTouchOutside(false);
-        imageView = findViewById(R.id.screen);
-        resid1 = R.drawable.vote_demo_1;
-        resid2 = R.drawable.vote_demo_2;
-        resid3 = R.drawable.vote_demo_3;
-        final Context context = getApplicationContext();
+        constraintLayout = findViewById(R.id.demoContainer);
+        message = findViewById(R.id.messageDemo);
+        message2 = findViewById(R.id.messageDemo2);
+        tap1inner = findViewById(R.id.tap1inner);
+        tap1outer = findViewById(R.id.tap1outer);
+        tap2inner = findViewById(R.id.tap2inner);
+        tap2outer = findViewById(R.id.tap2outer);
+        tap1inner.setImageResource(tapinnerRes);
+        tap1outer.setImageResource(tapouterRes);
+        tap2inner.setImageResource(tapinnerRes);
+        tap2outer.setImageResource(tapouterRes);
+        rel1 = findViewById(R.id.rel1);
+        rel2 = findViewById(R.id.rel2);
+        fadein = AnimationUtils.loadAnimation(context, R.anim.fade_in);
+        fadein.setDuration(1000);
+        fadeout = AnimationUtils.loadAnimation(context, R.anim.fade_out);
+        fadeout.setDuration(1000);
+        scale_slow = AnimationUtils.loadAnimation(context, R.anim.scaleslow);
+        scale_fast = AnimationUtils.loadAnimation(context, R.anim.scalefast);
+        cl = findViewById(R.id.closediag);
+        cl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        final Drawable[] layer = new Drawable[2];
+        layer[0] = new Drawable() {
+            @Override
+            public void draw(@NonNull Canvas canvas) {
 
-        class optimize implements Runnable {
+            }
 
             @Override
-            public void run() {
+            public void setAlpha(int alpha) {
 
-                fadein = AnimationUtils.loadAnimation(context, R.anim.fade_in);
-                fadein.setDuration(1000);
-                fadeout = AnimationUtils.loadAnimation(context, R.anim.fade_out);
-                fadeout.setDuration(1000);
-                scale_slow = AnimationUtils.loadAnimation(context, R.anim.scaleslow);
-                scale_fast = AnimationUtils.loadAnimation(context, R.anim.scalefast);
-                text = findViewById(R.id.text);
-                shadowfull = findViewById(R.id.shadowfull);
-                party = findViewById(R.id.party_high);
-                cand = findViewById(R.id.cand_high);
-                sym = findViewById(R.id.sym_high);
-                indi = findViewById(R.id.ind_high);
-                shadowcut = findViewById(R.id.shadow_cut);
-                tap1 = findViewById(R.id.tap1);
-                tap2 = findViewById(R.id.tap2);
-                tap3 = findViewById(R.id.tap3);
-                tap4 = findViewById(R.id.tap4);
-                shadowbot = findViewById(R.id.shadow_bot);
             }
-        }
-        optimize o = new optimize();
-        new Thread(o).start();
 
-        class myRunnable implements Runnable {
+            @Override
+            public void setColorFilter(@Nullable ColorFilter colorFilter) {
+
+            }
+
+            @Override
+            public int getOpacity() {
+                return PixelFormat.TRANSPARENT;
+            }
+        };
+        layer[1] = getDrawable(R.drawable.highlighter);
+        final TransitionDrawable drawable = new TransitionDrawable(layer);
+
+        class AnimationHandler implements Runnable {
+
             @Override
             public void run() {
                 try {
-                    for (int i = 0; i >= 0 && !threadstop; i++) {
-                        Log.d("Animation Thread", "i=" + i);
-                        switch (i % 20) {
+                    for (int i = 0; !threadstop; i++) {
+                        Log.d("Animation thread", Integer.toString(i));
+                        switch (i % 19) {
                             case 0:
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Glide
-                                                .with(context)
-                                                .load(resid1).into(imageView);
-                                        text.setText("This is the screen you will be seeing in the voting area.");
-                                        shadowfull.startAnimation(fadein);
-                                        text.startAnimation(fadein);
-                                        shadowfull.setVisibility(View.VISIBLE);
-                                        text.setVisibility(View.VISIBLE);
+                                        message.setText("This is the screen you will see in the voting area.");
+                                        message.startAnimation(fadein);
+                                        message.setVisibility(View.VISIBLE);
                                     }
                                 });
-                                Thread.sleep(2000);
+                                Thread.sleep(500);
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        constraintLayout.startAnimation(fadein);
+                                        constraintLayout.setVisibility(View.VISIBLE);
+                                    }
+                                });
+                                Thread.sleep(4000);
                                 break;
                             case 1:
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        imageView.startAnimation(fadein);
-                                        imageView.setVisibility(View.VISIBLE);
-                                        shadowfull.startAnimation(fadeout);
-                                        text.startAnimation(fadeout);
-                                        shadowfull.setVisibility(View.GONE);
-                                        text.setVisibility(View.GONE);
+                                        message.startAnimation(fadeout);
                                     }
                                 });
-                                Thread.sleep(1500);
                                 break;
                             case 2:
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        text.setText("This line will have the name of the party.");
-                                        shadowcut.startAnimation(fadein);
-                                        party.startAnimation(fadein);
-                                        text.startAnimation(fadein);
-                                        shadowcut.setVisibility(View.VISIBLE);
-                                        party.setVisibility(View.VISIBLE);
-                                        text.setVisibility(View.VISIBLE);
+                                        message.setText("This demo will guide you through the different items and the process of voting.");
+                                        message.startAnimation(fadein);
                                     }
                                 });
-                                Thread.sleep(1500);
+                                Thread.sleep(4000);
                                 break;
                             case 3:
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        party.startAnimation(fadeout);
-                                        text.startAnimation(fadeout);
-                                        party.setVisibility(View.GONE);
+                                        message.startAnimation(fadeout);
                                     }
                                 });
                                 break;
@@ -131,21 +198,28 @@ public class Demo extends AppCompatActivity {
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        text.setText("This line will have the name of the candidate.");
-                                        cand.startAnimation(fadein);
-                                        text.startAnimation(fadein);
-                                        cand.setVisibility(View.VISIBLE);
+                                        view = (CardView) recyclerView.getChildAt(1);
+                                        constraintLayout2 = (ConstraintLayout) view.getChildAt(0);
+                                        linearLayout = (LinearLayout) constraintLayout2.getChildAt(1);
+                                        linearLayout1 = (LinearLayout) linearLayout.getChildAt(0);
+                                        pname = (TextView) linearLayout1.getChildAt(0);
+                                        cname = (TextView) linearLayout1.getChildAt(1);
+                                        pimg = (RelativeLayout) linearLayout.getChildAt(1);
+                                        indicator = (ImageView) linearLayout.getChildAt(2);
+                                        pname.setBackground(drawable);
+                                        drawable.startTransition(1000);
+                                        message.setText("This line will contain the name of the party");
+                                        message.startAnimation(fadein);
                                     }
                                 });
-                                Thread.sleep(1500);
+                                Thread.sleep(2000);
                                 break;
                             case 5:
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        cand.startAnimation(fadeout);
-                                        text.startAnimation(fadeout);
-                                        cand.setVisibility(View.GONE);
+                                        drawable.reverseTransition(1000);
+                                        message.startAnimation(fadeout);
                                     }
                                 });
                                 break;
@@ -153,21 +227,21 @@ public class Demo extends AppCompatActivity {
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        text.setText("This area will have the symbol of the corresponding party.");
-                                        text.startAnimation(fadein);
-                                        sym.startAnimation(fadein);
-                                        sym.setVisibility(View.VISIBLE);
+                                        pname.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                                        cname.setBackground(drawable);
+                                        drawable.startTransition(1000);
+                                        message.setText("This line will contain the name of the candidate.");
+                                        message.startAnimation(fadein);
                                     }
                                 });
-                                Thread.sleep(1500);
+                                Thread.sleep(2000);
                                 break;
                             case 7:
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        text.startAnimation(fadeout);
-                                        sym.startAnimation(fadeout);
-                                        sym.setVisibility(View.GONE);
+                                        drawable.reverseTransition(1000);
+                                        message.startAnimation(fadeout);
                                     }
                                 });
                                 break;
@@ -175,73 +249,75 @@ public class Demo extends AppCompatActivity {
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        text.setText("This indicator will show you the candidate you are voting for.");
-                                        text.startAnimation(fadein);
-                                        indi.startAnimation(fadein);
-                                        indi.setVisibility(View.VISIBLE);
+                                        cname.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                                        pimg.setBackground(drawable);
+                                        drawable.startTransition(1000);
+                                        message.setText("This area will have the symbol of the party.");
+                                        message.startAnimation(fadein);
                                     }
                                 });
-                                Thread.sleep(1500);
+                                Thread.sleep(2000);
                                 break;
                             case 9:
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        indi.startAnimation(fadeout);
-                                        text.startAnimation(fadeout);
-                                        indi.setVisibility(View.GONE);
-                                        text.setVisibility(View.GONE);
+                                        drawable.reverseTransition(1000);
+                                        message.startAnimation(fadeout);
                                     }
                                 });
+                                break;
+                            case 10:
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        pimg.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                                        indicator.setBackground(drawable);
+                                        drawable.startTransition(1000);
+                                        message.setText("This will indicate the choice that you have made.");
+                                        message.startAnimation(fadein);
+                                    }
+                                });
+                                Thread.sleep(2000);
                                 break;
                             case 11:
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        text.setText("Tap on your desired candidate/party to cast your vote.");
-                                        text.setVisibility(View.VISIBLE);
-                                        text.startAnimation(fadein);
-                                        shadowcut.startAnimation(fadeout);
-                                        shadowcut.setVisibility(View.GONE);
-                                        shadowfull.startAnimation(fadein);
-                                        shadowfull.setVisibility(View.VISIBLE);
+                                        drawable.reverseTransition(1000);
+                                        message.startAnimation(fadeout);
                                     }
                                 });
-                                Thread.sleep(1500);
                                 break;
                             case 12:
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        shadowfull.startAnimation(fadeout);
-                                        shadowfull.setVisibility(View.GONE);
-                                        text.startAnimation(fadeout);
-                                        text.setVisibility(View.GONE);
+                                        indicator.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                                        message.setText("Tap on one of the options to cast your vote.");
+                                        message.startAnimation(fadein);
                                     }
                                 });
-                                Thread.sleep(500);
                                 break;
                             case 13:
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        tap1.startAnimation(scale_slow);
+                                        tap1outer.startAnimation(scale_slow);
                                     }
                                 });
                                 Thread.sleep(300);
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        tap2.startAnimation(scale_fast);
+                                        tap1inner.startAnimation(scale_fast);
                                     }
                                 });
                                 Thread.sleep(350);
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Glide
-                                                .with(context)
-                                                .load(resid2).placeholder(resid1).into(imageView);
+                                        indicator.setImageResource(resid2);
                                     }
                                 });
                                 break;
@@ -249,74 +325,81 @@ public class Demo extends AppCompatActivity {
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        shadowfull.startAnimation(fadein);
-                                        shadowfull.setVisibility(View.VISIBLE);
-                                        text.setText("You can change your choice if you wish to.");
-                                        text.startAnimation(fadein);
-                                        text.setVisibility(View.VISIBLE);
+                                        message.startAnimation(fadeout);
                                     }
                                 });
-                                Thread.sleep(1500);
+                                Thread.sleep(1000);
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        message.setText("You can also change you choice if you wish to.");
+                                        message.startAnimation(fadein);
+                                    }
+                                });
                                 break;
                             case 15:
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        shadowfull.startAnimation(fadeout);
-                                        shadowfull.setVisibility(View.GONE);
-                                        text.startAnimation(fadeout);
-                                        text.setVisibility(View.GONE);
-                                    }
-                                });
-                                Thread.sleep(501);
-                                break;
-                            case 16:
-                                handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        tap3.startAnimation(scale_slow);
+                                        tap2outer.startAnimation(scale_slow);
                                     }
                                 });
                                 Thread.sleep(300);
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        tap4.startAnimation(scale_fast);
+                                        tap2inner.startAnimation(scale_fast);
                                     }
                                 });
                                 Thread.sleep(350);
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Glide
-                                                .with(context)
-                                                .load(resid3).placeholder(resid2).into(imageView);
+                                        indicator.setImageResource(resid);
+                                        view = (CardView) recyclerView.getChildAt(2);
+                                        constraintLayout2 = (ConstraintLayout) view.getChildAt(0);
+                                        linearLayout = (LinearLayout) constraintLayout2.getChildAt(1);
+                                        indicator = (ImageView) linearLayout.getChildAt(2);
+                                        indicator.setImageResource(resid2);
                                     }
                                 });
+                                break;
+                            case 16:
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        rel1.startAnimation(fadeout);
+                                        rel2.startAnimation(fadein);
+                                        rel2.setVisibility(View.VISIBLE);
+                                    }
+                                });
+                                Thread.sleep(1000);
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        rel1.setVisibility(View.INVISIBLE);
+                                        message.setVisibility(View.INVISIBLE);
+                                    }
+                                });
+                                Thread.sleep(3000);
                                 break;
                             case 17:
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        shadowbot.startAnimation(fadein);
-                                        shadowbot.setVisibility(View.VISIBLE);
-                                        text.setText("Tap on the 'Done' button to submit your vote.");
-                                        text.startAnimation(fadein);
-                                        text.setVisibility(View.VISIBLE);
+                                        indicator.setImageResource(resid);
+                                        constraintLayout.startAnimation(fadeout);
+                                        message2.startAnimation(fadeout);
                                     }
                                 });
-                                Thread.sleep(1500);
                                 break;
                             case 18:
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        shadowbot.startAnimation(fadeout);
-                                        shadowbot.setVisibility(View.GONE);
-                                        imageView.startAnimation(fadeout);
-                                        imageView.setVisibility(View.GONE);
-                                        text.startAnimation(fadeout);
-                                        text.setVisibility(View.GONE);
+                                        rel2.setVisibility(View.INVISIBLE);
+                                        constraintLayout.setVisibility(View.INVISIBLE);
+                                        rel1.setVisibility(View.VISIBLE);
                                     }
                                 });
                         }
@@ -327,16 +410,9 @@ public class Demo extends AppCompatActivity {
                 }
             }
         }
-        myRunnable thread = new myRunnable();
-        new Thread(thread).start();
 
-        cl = findViewById(R.id.closediag);
-        cl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        AnimationHandler animationHandler = new AnimationHandler();
+        new Thread(animationHandler).start();
     }
 
     @Override

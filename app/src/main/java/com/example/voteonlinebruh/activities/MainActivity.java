@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.ImageButton;
 
 import com.example.voteonlinebruh.R;
@@ -44,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         setContentView(R.layout.activity_main);
-
         toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,12 +89,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 pub.setEnabled(false);
-                ServerCall serverCall = new ServerCall();
-                serverCall.getPublicElectionList(getApplicationContext());
-                Intent intent = new Intent(getBaseContext(), WaitScreen.class);
-                intent.putExtra("LABEL", "Refreshing");
+                Intent intent = new Intent(getBaseContext(), PublicElectionEntryPoint.class);
                 startActivity(intent);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
 
@@ -130,7 +126,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         /*UI CODE END*/
-
     }
 
     @Override

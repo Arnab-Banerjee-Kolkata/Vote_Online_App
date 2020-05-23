@@ -5,6 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.ResultsSimplified">
+    <WebView
+        android:id="@+id/wv6"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
 
     <ScrollView
         android:layout_width="match_parent"

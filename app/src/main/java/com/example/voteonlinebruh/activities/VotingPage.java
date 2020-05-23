@@ -36,21 +36,24 @@ public class VotingPage extends AppCompatActivity {
     private RecyclerViewAdapter adapter;
     private LinearLayoutManager layoutManager;
     private ServerCall serverCall = new ServerCall();
-    private ScreenControl screenControl= new ScreenControl();
+    private ScreenControl screenControl = new ScreenControl();
     private RelativeLayout waitrel;
-    private int themeId = MainActivity.TM.getThemeId(), themeId2;
+    private int themeId = MainActivity.TM.getThemeId(), themeId2, resid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTheme(themeId);
-        if (themeId == R.style.AppTheme_Light)
+        if (themeId == R.style.AppTheme_Light) {
             themeId2 = R.style.ConfirmTheme_Light;
-        else
+            resid = R.drawable.bulboff_black;
+        } else {
             themeId2 = R.style.ConfirmTheme_Dark;
+            resid = R.drawable.bulboff_white;
+        }
         setContentView(R.layout.activity_voting_page);
         mContext = getApplicationContext();
-        waitrel=findViewById(R.id.waitRel3);
+        waitrel = findViewById(R.id.waitRel3);
         final String boothId = getIntent().getStringExtra("boothId");
         serverCall.getRandomKey(boothId, mContext, VotingPage.this);
         waitrel.setVisibility(View.VISIBLE);
@@ -83,7 +86,7 @@ public class VotingPage extends AppCompatActivity {
         recyclerViewItem_list = new ArrayList<>();
 
         for (int i = 0; i < len; i++) {
-            recyclerViewItem_list.add(new RecyclerViewItem(publicCandidates.get(i).getSymbol(), publicCandidates.get(i).getPartyName(), publicCandidates.get(i).getName(), R.drawable.bulboff));
+            recyclerViewItem_list.add(new RecyclerViewItem(publicCandidates.get(i).getSymbol(), publicCandidates.get(i).getPartyName(), publicCandidates.get(i).getName(), resid));
         }
         recyclerView = findViewById(R.id.rec);
         recyclerView.setHasFixedSize(true);
@@ -102,7 +105,10 @@ public class VotingPage extends AppCompatActivity {
                     ConstraintLayout constraintLayout = (ConstraintLayout) view.getChildAt(0);
                     LinearLayout linearLayout = (LinearLayout) constraintLayout.getChildAt(1);
                     ImageView indicator = (ImageView) linearLayout.getChildAt(2);
-                    indicator.setImageResource(R.drawable.bulbon);
+                    if (resid == R.drawable.bulboff_white)
+                        indicator.setImageResource(R.drawable.bulbon_white);
+                    else
+                        indicator.setImageResource(R.drawable.bulboff_black);
                     selected = position;
                 }
             }
@@ -124,7 +130,7 @@ public class VotingPage extends AppCompatActivity {
 
     }
 
-    public void release(){
+    public void release() {
         waitrel.setVisibility(View.GONE);
         screenControl.makeWindowResponsive(VotingPage.this.getWindow());
     }

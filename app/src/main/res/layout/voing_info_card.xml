@@ -76,8 +76,7 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_weight="0"
-                android:scaleType="centerCrop"
-                android:src="@drawable/bulboff" />
+                android:scaleType="centerCrop" />
 
         </LinearLayout>
 
