@@ -69,6 +69,7 @@
         <activity
             android:name=".activities.OtpPage"
             android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.VotingPage"

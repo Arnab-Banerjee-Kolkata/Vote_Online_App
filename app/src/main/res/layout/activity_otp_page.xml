@@ -66,7 +66,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="15dp"
-        android:text="Enter the 4-digit booth OTP provided by the polling officer : "
+        android:text="Enter the 6-digit booth OTP provided by the polling officer : "
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.47"
@@ -84,9 +84,10 @@
             android:id="@+id/otp1"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="3dp"
             android:gravity="center"
-            android:inputType="numberPassword"
+            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+            android:inputType="textCapCharacters"
             android:maxLength="1"
             android:textSize="30dp" />
 
@@ -94,9 +95,10 @@
             android:id="@+id/otp2"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="3dp"
             android:gravity="center"
-            android:inputType="numberPassword"
+            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+            android:inputType="textCapCharacters"
             android:maxLength="1"
             android:textSize="30dp" />
 
@@ -104,9 +106,10 @@
             android:id="@+id/otp3"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="3dp"
             android:gravity="center"
-            android:inputType="numberPassword"
+            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+            android:inputType="textCapCharacters"
             android:maxLength="1"
             android:textSize="30dp" />
 
@@ -114,9 +117,32 @@
             android:id="@+id/otp4"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="3dp"
             android:gravity="center"
-            android:inputType="numberPassword"
+            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+            android:inputType="textCapCharacters"
+            android:maxLength="1"
+            android:textSize="30dp" />
+
+        <EditText
+            android:id="@+id/otp5"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="3dp"
+            android:gravity="center"
+            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+            android:inputType="textCapCharacters"
+            android:maxLength="1"
+            android:textSize="30dp" />
+
+        <EditText
+            android:id="@+id/otp6"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="3dp"
+            android:gravity="center"
+            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+            android:inputType="textCapCharacters"
             android:maxLength="1"
             android:textSize="30dp" />
 

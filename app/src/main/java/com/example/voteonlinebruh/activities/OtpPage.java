@@ -56,7 +56,7 @@ public class OtpPage extends AppCompatActivity {
                 .load(resid).into(imageView);
         //ET CODE
 
-        ets = new EditText[4];
+        ets = new EditText[6];
         ets[0] = findViewById(R.id.otp1);
         ets[0].setTransformationMethod(null);
         ets[1] = findViewById(R.id.otp2);
@@ -65,6 +65,10 @@ public class OtpPage extends AppCompatActivity {
         ets[2].setTransformationMethod(null);
         ets[3] = findViewById(R.id.otp4);
         ets[3].setTransformationMethod(null);
+        ets[4] = findViewById(R.id.otp5);
+        ets[4].setTransformationMethod(null);
+        ets[5] = findViewById(R.id.otp6);
+        ets[5].setTransformationMethod(null);
 
         boothid = findViewById(R.id.boothid);
 
@@ -93,6 +97,14 @@ public class OtpPage extends AppCompatActivity {
                     case R.id.otp3:
                         if (text.length() == 1)
                             ets[3].requestFocus();
+                        break;
+                    case R.id.otp4:
+                        if (text.length() == 1)
+                            ets[4].requestFocus();
+                        break;
+                    case R.id.otp5:
+                        if (text.length() == 1)
+                            ets[5].requestFocus();
                         break;
                 }
             }
@@ -130,11 +142,15 @@ public class OtpPage extends AppCompatActivity {
         ets[1].addTextChangedListener(new textFocus(ets[1]));
         ets[2].addTextChangedListener(new textFocus(ets[2]));
         ets[3].addTextChangedListener(new textFocus(ets[3]));
+        ets[4].addTextChangedListener(new textFocus(ets[4]));
+        ets[5].addTextChangedListener(new textFocus(ets[5]));
 
         ets[0].setOnKeyListener(new listener(0));
         ets[1].setOnKeyListener(new listener(1));
         ets[2].setOnKeyListener(new listener(2));
         ets[3].setOnKeyListener(new listener(3));
+        ets[4].setOnKeyListener(new listener(4));
+        ets[5].setOnKeyListener(new listener(5));
 
         login = findViewById(R.id.verifybut);
         login.setOnClickListener(new View.OnClickListener() {
@@ -146,7 +162,7 @@ public class OtpPage extends AppCompatActivity {
                     otp = "";
                     for (EditText x : ets)
                         otp += x.getText().toString();
-                    if (otp.length() != 4) {
+                    if (otp.length() != 6) {
                         otp = "";
                         throw new Exception("Please enter OTP !");
                     }
