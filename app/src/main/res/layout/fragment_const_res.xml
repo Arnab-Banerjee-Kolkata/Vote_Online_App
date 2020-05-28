@@ -8,7 +8,7 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="5dp">
 
         <LinearLayout
@@ -18,6 +18,7 @@
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
             android:background="@color/button"
+            android:elevation="1dp"
             android:orientation="horizontal"
             android:padding="10dp"
             android:weightSum="1"
@@ -40,22 +41,27 @@
                 android:text="Won By" />
         </LinearLayout>
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefreshConstFrag"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            android:paddingTop="45dp"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout6"
             app:layout_constraintBottom_toBottomOf="parent">
 
-            <ListView
-                android:id="@+id/list3"
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swipeRefreshConstFrag"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:divider="@android:color/transparent"
-                android:dividerHeight="10dp"
-                android:padding="5dp" />
+                android:layout_height="wrap_content">
 
-        </android.support.v4.widget.SwipeRefreshLayout>
+                <ListView
+                    android:id="@+id/list3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:divider="@android:color/transparent"
+                    android:dividerHeight="10dp"
+                    android:padding="5dp" />
+
+            </android.support.v4.widget.SwipeRefreshLayout>
+        </ScrollView>
     </android.support.constraint.ConstraintLayout>
 </FrameLayout>
