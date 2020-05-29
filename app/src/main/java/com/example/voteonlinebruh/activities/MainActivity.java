@@ -21,14 +21,13 @@ public class MainActivity extends AppCompatActivity {
     public static ThemeManager TM = new ThemeManager();
     private Toolbar toolbar;
     private ImageButton button;
+    public static WebView webView;
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private ConstraintLayout pri, man, pub, res;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         final SharedPreferences pref = getSharedPreferences("Voter.Online.Theme", MODE_PRIVATE);
         final SharedPreferences.Editor edit = pref.edit();
         if (!pref.contains("themeLight")) {
@@ -42,9 +41,8 @@ public class MainActivity extends AppCompatActivity {
                 TM.change(0);
         }
         setTheme(TM.getThemeId());
-
-
         setContentView(R.layout.activity_main);
+        webView = findViewById(R.id.wv2);
         toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

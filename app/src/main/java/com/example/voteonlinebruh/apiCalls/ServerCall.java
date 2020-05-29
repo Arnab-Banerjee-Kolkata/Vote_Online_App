@@ -2,7 +2,13 @@ package com.example.voteonlinebruh.apiCalls;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -10,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.example.voteonlinebruh.R;
+import com.example.voteonlinebruh.activities.MainActivity;
 import com.example.voteonlinebruh.activities.ResultList;
 import com.example.voteonlinebruh.activities.OtpPage;
 import com.example.voteonlinebruh.activities.ResultsDetailed;
@@ -31,6 +38,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class ServerCall {
     class myRunnable implements Runnable {
         Intent intent;
@@ -51,6 +60,34 @@ public class ServerCall {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void storeCookie(final Context mContext, WebView webView) {
+        String url = "";
+        final CookieManager cookieManager;
+        url = mContext.getString(R.string.web_host) + "/Check.php";
+        CookieSyncManager.createInstance(mContext);
+        cookieManager = CookieManager.getInstance();
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.setWebViewClient(new WebViewClient() {
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                cookieManager.setAcceptCookie(true);
+                final String cookie = cookieManager.getCookie(url);
+                SharedPreferences sharedPreferences = mContext.getSharedPreferences("CookieDetails", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("cookieStart", cookie);
+                editor.apply();
+            }
+        });
+        webView.setWebChromeClient(new WebChromeClient());
+        webView.loadUrl(url);
+        webView.clearCache(true);
+        webView.clearHistory();
+        cookieManager.removeAllCookie();
+        cookieManager.removeSessionCookie();
     }
 
     public void validateBoothOtp(final String boothId, final String otp, final Context mContext, final OtpPage otpPage) {
@@ -115,6 +152,9 @@ public class ServerCall {
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Log.d("response error", response);
+                    storeCookie(mContext, MainActivity.webView);
+                    validateBoothOtp(boothId, otp, mContext, otpPage);
                     //Toast.makeText(mContext,response,Toast.LENGTH_LONG).show();
                     WaitScreen.terminate = true;
                     params.put("message", "Failed");
@@ -185,6 +225,8 @@ public class ServerCall {
                     e.printStackTrace();
                     Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
                     Log.d("response error", response);
+                    storeCookie(mContext, MainActivity.webView);
+                    getPublicResultList(mContext);
                     //Toast.makeText(mContext, response, Toast.LENGTH_LONG).show();
                     WaitScreen.terminate = true;
                 }
@@ -264,6 +306,8 @@ public class ServerCall {
                     e.printStackTrace();
                     Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
                     Log.d("response error", response);
+                    storeCookie(mContext, MainActivity.webView);
+                    getOverallResult(type, electionId, mContext, resultsSimplified, release);
                     //Toast.makeText(mContext, response, Toast.LENGTH_LONG).show();
                     WaitScreen.terminate = true;
                 }
@@ -335,7 +379,9 @@ public class ServerCall {
                     e.printStackTrace();
                     Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
                     Log.d("response error", response);
-                    resultsDetailed.release(null, null, 0, 0, "", false);
+                    storeCookie(mContext, MainActivity.webView);
+                    getOverallResult(type, electionId, stateCode, mContext, resultsDetailed);
+                    //resultsDetailed.release(null, null, 0, 0, "", false);
                     //Toast.makeText(mContext, response, Toast.LENGTH_LONG).show();
                 }
             }
@@ -408,7 +454,9 @@ public class ServerCall {
                     e.printStackTrace();
                     Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
                     Log.d("response error", response);
-                    resultsDetailed.release(null, null, 0, 0, "", false);
+                    storeCookie(mContext, MainActivity.webView);
+                    getOverallResult(type, electionId, stateCode, mContext, resultsDetailed);
+                    //resultsDetailed.release(null, null, 0, 0, "", false);
                     //Toast.makeText(mContext, response, Toast.LENGTH_LONG).show();
                 }
             }
@@ -474,6 +522,8 @@ public class ServerCall {
                     e.printStackTrace();
                     Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
                     Log.d("response error", response);
+                    storeCookie(mContext, MainActivity.webView);
+                    getStatelist(electionId, type, mContext);
                     //Toast.makeText(mContext, response, Toast.LENGTH_LONG).show();
                     WaitScreen.terminate = true;
                 }
@@ -542,6 +592,8 @@ public class ServerCall {
                         Thanks.threadStop = true;
                         Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
                         Log.d("response error", response);
+                        storeCookie(mContext, MainActivity.webView);
+                        storeVote(boothId, candidateId, mContext);
                         //Toast.makeText(mContext, response, Toast.LENGTH_LONG).show();
                     }
                 }
@@ -601,6 +653,8 @@ public class ServerCall {
                     e.printStackTrace();
                     Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
                     Log.d("response error", response);
+                    storeCookie(mContext, MainActivity.webView);
+                    getRandomKey(boothId, mContext, votingPage);
                     //Toast.makeText(mContext, response, Toast.LENGTH_LONG).show();
                 } finally {
                     votingPage.release();

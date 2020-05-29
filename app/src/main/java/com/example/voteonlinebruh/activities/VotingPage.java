@@ -108,7 +108,7 @@ public class VotingPage extends AppCompatActivity {
                     if (resid == R.drawable.bulboff_white)
                         indicator.setImageResource(R.drawable.bulbon_white);
                     else
-                        indicator.setImageResource(R.drawable.bulboff_black);
+                        indicator.setImageResource(R.drawable.bulbon_black);
                     selected = position;
                 }
             }

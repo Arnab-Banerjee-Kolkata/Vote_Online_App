@@ -162,16 +162,19 @@ public class OtpPage extends AppCompatActivity {
                     otp = "";
                     for (EditText x : ets)
                         otp += x.getText().toString();
+                    if (boothid.getText().toString().isEmpty()) {
+                        throw new Exception("Please enter the booth ID !");
+                    }
                     if (otp.length() != 6) {
                         otp = "";
                         throw new Exception("Please enter OTP !");
                     }
-                    if (boothid.getText().toString().isEmpty()) {
-                        throw new Exception("Please enter the booth ID !");
-                    }
                     String boothId = boothid.getText().toString();
-                    if (!validBooth(boothId)) {
-                        throw new Exception("Invalid Booth ID");
+                    if (!validInput(boothId)) {
+                        throw new Exception("Invalid Booth ID !");
+                    }
+                    if(!validInput(otp)){
+                        throw new Exception("Invalid OTP !");
                     }
                     login.setEnabled(false);
                     String OTP = otp;
@@ -191,7 +194,7 @@ public class OtpPage extends AppCompatActivity {
         });
     }
 
-    private boolean validBooth(String s) {
+    private boolean validInput(String s) {
         char c;
         boolean retval = true;
         for (int i = 0; i < s.length(); i++) {

@@ -65,12 +65,11 @@
         android:id="@+id/textView5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="15dp"
+        android:padding="20dp"
         android:text="Enter the 6-digit booth OTP provided by the polling officer : "
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.47"
-        tools:layout_editor_absoluteX="-5dp" />
+        app:layout_constraintVertical_bias="0.47"/>
 
     <LinearLayout
         android:id="@+id/linearLayout4"
@@ -78,6 +77,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
+        android:padding="10dp"
         app:layout_constraintTop_toBottomOf="@+id/textView5">
 
         <EditText
@@ -87,9 +87,9 @@
             android:layout_margin="3dp"
             android:gravity="center"
             android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
-            android:inputType="textCapCharacters"
+            android:inputType="textCapCharacters|textNoSuggestions"
             android:maxLength="1"
-            android:textSize="30dp" />
+            android:textSize="28dp" />
 
         <EditText
             android:id="@+id/otp2"
@@ -98,9 +98,9 @@
             android:layout_margin="3dp"
             android:gravity="center"
             android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
-            android:inputType="textCapCharacters"
+            android:inputType="textCapCharacters|textNoSuggestions"
             android:maxLength="1"
-            android:textSize="30dp" />
+            android:textSize="28dp" />
 
         <EditText
             android:id="@+id/otp3"
@@ -109,9 +109,9 @@
             android:layout_margin="3dp"
             android:gravity="center"
             android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
-            android:inputType="textCapCharacters"
+            android:inputType="textCapCharacters|textNoSuggestions"
             android:maxLength="1"
-            android:textSize="30dp" />
+            android:textSize="28dp" />
 
         <EditText
             android:id="@+id/otp4"
@@ -120,9 +120,9 @@
             android:layout_margin="3dp"
             android:gravity="center"
             android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
-            android:inputType="textCapCharacters"
+            android:inputType="textCapCharacters|textNoSuggestions"
             android:maxLength="1"
-            android:textSize="30dp" />
+            android:textSize="28dp" />
 
         <EditText
             android:id="@+id/otp5"
@@ -131,9 +131,9 @@
             android:layout_margin="3dp"
             android:gravity="center"
             android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
-            android:inputType="textCapCharacters"
+            android:inputType="textCapCharacters|textNoSuggestions"
             android:maxLength="1"
-            android:textSize="30dp" />
+            android:textSize="28dp" />
 
         <EditText
             android:id="@+id/otp6"
@@ -142,9 +142,9 @@
             android:layout_margin="3dp"
             android:gravity="center"
             android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
-            android:inputType="textCapCharacters"
+            android:inputType="textCapCharacters|textNoSuggestions"
             android:maxLength="1"
-            android:textSize="30dp" />
+            android:textSize="28dp" />
 
     </LinearLayout>
 

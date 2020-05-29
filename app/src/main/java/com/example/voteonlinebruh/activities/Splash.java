@@ -81,7 +81,7 @@ public class Splash extends AppCompatActivity {
         storeCookie(mContext, webView, waitRel);
     }
 
-    static void storeCookie(final Context mContext, WebView webView, final RelativeLayout waitRel) {
+    public static void storeCookie(final Context mContext, WebView webView, final RelativeLayout waitRel) {
         String url = "";
         final CookieManager cookieManager;
         url = mContext.getString(R.string.web_host) + "/Check.php";
@@ -124,7 +124,7 @@ public class Splash extends AppCompatActivity {
         cookieManager.removeSessionCookie();
     }
 
-    static void storeCookie(final Context mContext, WebView webView) {
+    public static void storeCookie(final Context mContext, WebView webView) {
         String url = "";
         final CookieManager cookieManager;
         url = mContext.getString(R.string.web_host) + "/Check.php";
