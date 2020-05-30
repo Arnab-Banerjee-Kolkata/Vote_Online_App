@@ -151,11 +151,9 @@ public class ServerCall {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
                     Log.d("response error", response);
                     storeCookie(mContext, MainActivity.webView);
                     validateBoothOtp(boothId, otp, mContext, otpPage);
-                    //Toast.makeText(mContext,response,Toast.LENGTH_LONG).show();
                     WaitScreen.terminate = true;
                     params.put("message", "Failed");
                 }
@@ -166,9 +164,11 @@ public class ServerCall {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
                 WaitScreen.terminate = true;
                 Toast.makeText(mContext, "Error occured. Try again", Toast.LENGTH_LONG).show();
-
+                storeCookie(mContext, MainActivity.webView);
+                validateBoothOtp(boothId, otp, mContext, otpPage);
             }
         };
 
@@ -223,11 +223,9 @@ public class ServerCall {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
                     Log.d("response error", response);
                     storeCookie(mContext, MainActivity.webView);
                     getPublicResultList(mContext);
-                    //Toast.makeText(mContext, response, Toast.LENGTH_LONG).show();
                     WaitScreen.terminate = true;
                 }
             }
@@ -236,8 +234,11 @@ public class ServerCall {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
                 WaitScreen.terminate = true;
                 Toast.makeText(mContext, "Error Occured", Toast.LENGTH_LONG).show();
+                storeCookie(mContext, MainActivity.webView);
+                getPublicResultList(mContext);
             }
         };
 
@@ -304,11 +305,9 @@ public class ServerCall {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
                     Log.d("response error", response);
                     storeCookie(mContext, MainActivity.webView);
                     getOverallResult(type, electionId, mContext, resultsSimplified, release);
-                    //Toast.makeText(mContext, response, Toast.LENGTH_LONG).show();
                     WaitScreen.terminate = true;
                 }
             }
@@ -317,8 +316,11 @@ public class ServerCall {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
                 WaitScreen.terminate = true;
                 Toast.makeText(mContext, "Error Occured", Toast.LENGTH_LONG).show();
+                storeCookie(mContext, MainActivity.webView);
+                getOverallResult(type, electionId, mContext, resultsSimplified, release);
             }
         };
 
@@ -377,12 +379,10 @@ public class ServerCall {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
                     Log.d("response error", response);
                     storeCookie(mContext, MainActivity.webView);
                     getOverallResult(type, electionId, stateCode, mContext, resultsDetailed);
                     //resultsDetailed.release(null, null, 0, 0, "", false);
-                    //Toast.makeText(mContext, response, Toast.LENGTH_LONG).show();
                 }
             }
         };
@@ -392,7 +392,9 @@ public class ServerCall {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 Toast.makeText(mContext, "Error Occured", Toast.LENGTH_LONG).show();
-                resultsDetailed.release(null, null, 0, 0, "", false);
+                storeCookie(mContext, MainActivity.webView);
+                getOverallResult(type, electionId, stateCode, mContext, resultsDetailed);
+                //resultsDetailed.release(null, null, 0, 0, "", false);
             }
         };
 
@@ -452,12 +454,10 @@ public class ServerCall {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
                     Log.d("response error", response);
                     storeCookie(mContext, MainActivity.webView);
                     getOverallResult(type, electionId, stateCode, mContext, resultsDetailed);
                     //resultsDetailed.release(null, null, 0, 0, "", false);
-                    //Toast.makeText(mContext, response, Toast.LENGTH_LONG).show();
                 }
             }
         };
@@ -467,7 +467,9 @@ public class ServerCall {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 Toast.makeText(mContext, "Error Occured", Toast.LENGTH_LONG).show();
-                resultsDetailed.release(null, null, 0, 0, "", false);
+                storeCookie(mContext, MainActivity.webView);
+                getOverallResult(type, electionId, stateCode, mContext, resultsDetailed);
+                //resultsDetailed.release(null, null, 0, 0, "", false);
             }
         };
 
@@ -520,11 +522,9 @@ public class ServerCall {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
                     Log.d("response error", response);
                     storeCookie(mContext, MainActivity.webView);
                     getStatelist(electionId, type, mContext);
-                    //Toast.makeText(mContext, response, Toast.LENGTH_LONG).show();
                     WaitScreen.terminate = true;
                 }
             }
@@ -533,8 +533,11 @@ public class ServerCall {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
                 WaitScreen.terminate = true;
                 Toast.makeText(mContext, "Error Occured", Toast.LENGTH_LONG).show();
+                storeCookie(mContext, MainActivity.webView);
+                getStatelist(electionId, type, mContext);
             }
         };
 
@@ -590,20 +593,19 @@ public class ServerCall {
                         e.printStackTrace();
                         Thanks.success = false;
                         Thanks.threadStop = true;
-                        Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
                         Log.d("response error", response);
                         storeCookie(mContext, MainActivity.webView);
                         storeVote(boothId, candidateId, mContext);
-                        //Toast.makeText(mContext, response, Toast.LENGTH_LONG).show();
                     }
                 }
             };
             Response.ErrorListener errorListener = new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Thanks.success = false;
-                    Thanks.threadStop = true;
+                    error.printStackTrace();
                     Toast.makeText(mContext, "Error Occured", Toast.LENGTH_LONG).show();
+                    storeCookie(mContext, MainActivity.webView);
+                    storeVote(boothId, candidateId, mContext);
                 }
             };
             String url = mContext.getString(R.string.web_host) + "/StoreVote.php";
@@ -614,6 +616,7 @@ public class ServerCall {
             PostRequest postShowOptions = new PostRequest(mContext, url, params, listener, errorListener);
             RequestQueue queue = Volley.newRequestQueue(mContext);
             queue.add(postShowOptions);
+            Log.d("this was","called");
         }
     }
 
@@ -651,11 +654,9 @@ public class ServerCall {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
                     Log.d("response error", response);
                     storeCookie(mContext, MainActivity.webView);
                     getRandomKey(boothId, mContext, votingPage);
-                    //Toast.makeText(mContext, response, Toast.LENGTH_LONG).show();
                 } finally {
                     votingPage.release();
                 }
@@ -664,7 +665,10 @@ public class ServerCall {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
                 Toast.makeText(mContext, "Error Occured", Toast.LENGTH_LONG).show();
+                storeCookie(mContext, MainActivity.webView);
+                getRandomKey(boothId, mContext, votingPage);
             }
         };
         String url = mContext.getString(R.string.web_host) + "/GetRandomKey.php";

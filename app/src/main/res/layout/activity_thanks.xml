@@ -30,15 +30,6 @@
         app:layout_constraintVertical_bias="0.3"
         tools:layout_editor_absoluteX="0dp" />
 
-    <ImageView
-        android:id="@+id/voted"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="30dp"
-        android:scaleType="fitCenter"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@+id/textMessage" />
-
     <ProgressBar
         android:id="@+id/progressBar"
         style="@android:style/Widget.Holo.ProgressBar"

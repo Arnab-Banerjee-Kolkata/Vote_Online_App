@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -38,6 +39,7 @@ public class VotingPage extends AppCompatActivity {
     private ServerCall serverCall = new ServerCall();
     private ScreenControl screenControl = new ScreenControl();
     private RelativeLayout waitrel;
+    private static boolean changeDetected = false;
     private int themeId = MainActivity.TM.getThemeId(), themeId2, resid;
 
     @Override
@@ -137,24 +139,12 @@ public class VotingPage extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this, themeId).setTitle("Confirm Log Out")
-                .setMessage("\nYou cannot go back ! Your vote will be registered as 'NOTA'.\n\nAre you sure you want to log out ?\n")
-                .setPositiveButton("Yes, Logout !", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        logout();
-                    }
-                })
-                .setNegativeButton("No !", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        AlertDialog dialog = builder.create();
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
-        dialog.show();
+    }
+
+    @Override
+    protected void onUserLeaveHint() {
+        changeDetected = true;
+        super.onUserLeaveHint();
     }
 
     @Override

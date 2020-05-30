@@ -10,10 +10,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageButton;
+import android.widget.ListPopupWindow;
 
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.apiCalls.ServerCall;
+import com.example.voteonlinebruh.models.PublicCandidate;
 import com.example.voteonlinebruh.utility.ThemeManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 

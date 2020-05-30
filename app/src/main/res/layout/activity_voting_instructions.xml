@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"                
                 android:padding="15dp"
                 android:textStyle="normal"
-                android:text="1.  On tapping the 'Proceed' button you will be required to enter the booth ID and OTP. After that you will be taken to the voting area and you can vote there." />
+                android:text="1.  On tapping the 'Proceed' button you will be required to enter the Booth ID of your booth and an OTP that will be provided to you by the polling officer. After that you will be taken to the voting area and you can vote there." />
 
             <TextView
                 android:layout_width="match_parent"
@@ -52,15 +52,14 @@
                 android:layout_height="wrap_content"                
                 android:padding="15dp"
                 android:textStyle="normal"
-                android:text="3.  Pressing any navigation button while you are in the voting area will result in you getting logged out. Your vote will be registered as NOTA."
-                 />
+                android:text="3.  The back button will be disabled and you cannot go back once you are in the voting area. Pressing the other navigation buttons while you are in the voting area will result in you getting logged out. Your vote will be registered as NOTA." />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"                
                 android:padding="15dp"
                 android:textStyle="normal"
-                android:text="4.  Before you proceed, it is recommended that you watch the demo by tapping the 'Demo' button to get an experience of the voting area." />
+                android:text="4.  Before you proceed, it is recommended that you watch the demo of the voting process by tapping the 'Demo' button to get an experience of the voting area." />
 
             <TextView
                 android:layout_width="match_parent"
