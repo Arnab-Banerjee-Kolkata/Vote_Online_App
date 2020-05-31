@@ -36,7 +36,6 @@ public class VotingPage extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerViewAdapter adapter;
     private LinearLayoutManager layoutManager;
-    private ServerCall serverCall = new ServerCall();
     private ScreenControl screenControl = new ScreenControl();
     private RelativeLayout waitrel;
     private static boolean changeDetected = false;
@@ -57,6 +56,7 @@ public class VotingPage extends AppCompatActivity {
         mContext = getApplicationContext();
         waitrel = findViewById(R.id.waitRel3);
         final String boothId = getIntent().getStringExtra("boothId");
+        ServerCall serverCall=new ServerCall();
         serverCall.getRandomKey(boothId, mContext, VotingPage.this);
         waitrel.setVisibility(View.VISIBLE);
         screenControl.makeScreenUnresponsive(VotingPage.this.getWindow());
@@ -67,6 +67,7 @@ public class VotingPage extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String candidateId = publicCandidates.get(selected).getId();
+                        ServerCall serverCall=new ServerCall();
                         serverCall.storeVote(boothId, candidateId, mContext);
                         Intent intent = new Intent(mContext, Thanks.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
