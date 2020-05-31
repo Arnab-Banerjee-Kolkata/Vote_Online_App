@@ -1,14 +1,10 @@
 package com.example.voteonlinebruh.adapters;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +22,6 @@ import com.example.voteonlinebruh.activities.MainActivity;
 import com.example.voteonlinebruh.models.RecyclerViewItem;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.itemViewHolder> {
@@ -53,15 +48,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView textView1;
         TextView textView2;
         ImageView indicator;
+        ImageView candImage;
         ProgressBar progress;
 
         itemViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             imageView = itemView.findViewById(R.id.party_sym);
+            candImage = itemView.findViewById(R.id.cand_image);
             textView1 = itemView.findViewById(R.id.party_name);
             textView2 = itemView.findViewById(R.id.cand_name);
-            indicator = itemView.findViewById(R.id.selector);
-            progress=itemView.findViewById(R.id.votingImageProgress);
+            indicator = itemView.findViewById(R.id.indicator);
+            progress = itemView.findViewById(R.id.votingImageProgress);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -78,7 +75,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @NonNull
     @Override
     public itemViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.voing_info_card, viewGroup, false);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.voting_info_card, viewGroup, false);
         itemViewHolder ivh = new itemViewHolder(v, mListener);
         return ivh;
     }
@@ -86,34 +83,44 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull final itemViewHolder itemViewHolder, int i) {
         RecyclerViewItem currentRecyclerViewItem = recyclerViewItemArrayList.get(i);
-        String resUrl = currentRecyclerViewItem.getImgUrl();
-        final int themeId= MainActivity.TM.getThemeId();
+        String resUrl = currentRecyclerViewItem.getSymbol();
+        final int themeId = MainActivity.TM.getThemeId();
+        RequestListener listener = new RequestListener<Drawable>() {
+            @Override
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                itemViewHolder.progress.setVisibility(View.GONE);
+                itemViewHolder.imageView.setPadding(25, 25, 25, 25);
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                itemViewHolder.progress.setVisibility(View.GONE);
+                return false;
+            }
+        };
         Glide
                 .with(itemViewHolder.imageView.getContext())
                 .load(resUrl)
-                .error(themeId == R.style.AppTheme_Light?R.drawable.ic_error_outline_black_24dp:R.drawable.ic_error_outline_white_24dp)
-                .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        itemViewHolder.progress.setVisibility(View.GONE);
-                        itemViewHolder.imageView.setPadding(25,25,25,25);
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        itemViewHolder.progress.setVisibility(View.GONE);
-                        return false;
-                    }
-                })
+                .error(themeId == R.style.AppTheme_Light ? R.drawable.ic_error_outline_black_24dp :
+                        R.drawable.ic_error_outline_white_24dp)
+                .listener(listener)
                 .into(itemViewHolder.imageView);
-
+        resUrl = currentRecyclerViewItem.getImage();
+        Glide
+                .with(itemViewHolder.imageView.getContext())
+                .load(resUrl)
+                .error(themeId == R.style.AppTheme_Light ? R.drawable.ic_error_outline_black_24dp :
+                        R.drawable.ic_error_outline_white_24dp)
+                .listener(listener)
+                .into(itemViewHolder.candImage);
         itemViewHolder.textView1.setText(currentRecyclerViewItem.getPname());
         itemViewHolder.textView2.setText(currentRecyclerViewItem.getCname());
         int resid = currentRecyclerViewItem.getIndicator();
         Glide
                 .with(context)
-                .load(resid).into(itemViewHolder.indicator);
+                .load(resid)
+                .into(itemViewHolder.indicator);
     }
 
     @Override

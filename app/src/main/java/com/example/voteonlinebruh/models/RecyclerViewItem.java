@@ -3,21 +3,22 @@ package com.example.voteonlinebruh.models;
 import com.example.voteonlinebruh.utility.CaseConverter;
 
 public class RecyclerViewItem {
-    
-    private String pname,cname;
+
+    private String pname, cname;
     private int indicator;
-    private String imgUrl;
-    public RecyclerViewItem(String imgUrl, String pname, String cname, int indicator)
-    {
-        CaseConverter converter=new CaseConverter();
-        this.imgUrl=imgUrl;
-        this.cname=converter.toCamelCase(cname);
-        this.pname=pname;
-        this.indicator=indicator;
+    private String symbol, image;
+
+    public RecyclerViewItem(String symbol, String image, String pname, String cname, int indicator) {
+        this.image = image;
+        CaseConverter converter = new CaseConverter();
+        this.symbol = symbol;
+        this.cname = converter.toCamelCase(cname);
+        this.pname = pname;
+        this.indicator = indicator;
     }
 
-    public String getImgUrl() {
-        return imgUrl;
+    public String getSymbol() {
+        return symbol;
     }
 
     public String getPname() {
@@ -30,5 +31,9 @@ public class RecyclerViewItem {
 
     public int getIndicator() {
         return indicator;
+    }
+
+    public String getImage() {
+        return image;
     }
 }

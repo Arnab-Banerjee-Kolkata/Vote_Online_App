@@ -47,11 +47,10 @@ public class Demo extends AppCompatActivity {
     private ImageView tap1inner, tap1outer, tap2inner, tap2outer;
     private Context context;
     CardView view;
-    ConstraintLayout constraintLayout2;
-    LinearLayout linearLayout, linearLayout1;
+    ConstraintLayout constraintLayout1, constraintLayout2;
     TextView pname, cname;
     RelativeLayout pimg;
-    ImageView indicator;
+    ImageView indicator, candImg;
     private int themeId = MainActivity.TM.getThemeId(), resid, resid2;
 
     @Override
@@ -76,7 +75,13 @@ public class Demo extends AppCompatActivity {
         setContentView(R.layout.activity_demo);
         ArrayList<RecyclerViewItem> recyclerViewItem_list = new ArrayList<>();
         for (int i = 1; i < 9; i++)
-            recyclerViewItem_list.add(new RecyclerViewItem("", "Party " + i, "Candidate " + i, resid));
+            recyclerViewItem_list.add(
+                    new RecyclerViewItem("",
+                            themeId == R.style.AppTheme_Light ?
+                                    "https://www.pngitem.com/pimgs/m/421-4212617_person-placeholder-image-transparent-hd-png-download.png" :
+                                    "https://drive.google.com/uc?id=1ePbZVRIGkLZ5VzCzw1HqUzEEg8jwHW2-",
+                            "Party " + i,
+                            "Candidate " + i, resid));
         recyclerView = findViewById(R.id.rec2);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this) {
@@ -148,7 +153,7 @@ public class Demo extends AppCompatActivity {
                 try {
                     for (int i = 0; !threadstop; i++) {
                         Log.d("Animation thread", Integer.toString(i));
-                        switch (i % 19) {
+                        switch (i % 20) {
                             case 0:
                                 handler.post(new Runnable() {
                                     @Override
@@ -195,20 +200,20 @@ public class Demo extends AppCompatActivity {
                                 });
                                 break;
                             case 4:
+                                view = (CardView) recyclerView.getChildAt(1);
+                                constraintLayout1 = (ConstraintLayout) view.getChildAt(0);
+                                constraintLayout2 = (ConstraintLayout) constraintLayout1.getChildAt(1);
+                                pname = (TextView) constraintLayout2.getViewById(R.id.party_name);
+                                cname = (TextView) constraintLayout2.getViewById(R.id.cand_name);
+                                pimg = (RelativeLayout) constraintLayout2.getViewById(R.id.relativeLayout);
+                                indicator = (ImageView) constraintLayout2.getViewById(R.id.indicator);
+                                candImg = (ImageView) constraintLayout2.getViewById(R.id.cand_image);
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        view = (CardView) recyclerView.getChildAt(1);
-                                        constraintLayout2 = (ConstraintLayout) view.getChildAt(0);
-                                        linearLayout = (LinearLayout) constraintLayout2.getChildAt(1);
-                                        linearLayout1 = (LinearLayout) linearLayout.getChildAt(0);
-                                        pname = (TextView) linearLayout1.getChildAt(0);
-                                        cname = (TextView) linearLayout1.getChildAt(1);
-                                        pimg = (RelativeLayout) linearLayout.getChildAt(1);
-                                        indicator = (ImageView) linearLayout.getChildAt(2);
-                                        pname.setBackground(drawable);
+                                        candImg.setBackground(drawable);
                                         drawable.startTransition(1000);
-                                        message.setText("This line will contain the name of the party");
+                                        message.setText("This area will have the image of the candidate.");
                                         message.startAnimation(fadein);
                                     }
                                 });
@@ -222,12 +227,11 @@ public class Demo extends AppCompatActivity {
                                         message.startAnimation(fadeout);
                                     }
                                 });
-                                break;
-                            case 6:
+                                Thread.sleep(1000);
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        pname.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                                        candImg.setBackgroundColor(getResources().getColor(android.R.color.transparent));
                                         cname.setBackground(drawable);
                                         drawable.startTransition(1000);
                                         message.setText("This line will contain the name of the candidate.");
@@ -236,7 +240,7 @@ public class Demo extends AppCompatActivity {
                                 });
                                 Thread.sleep(2000);
                                 break;
-                            case 7:
+                            case 6:
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -245,11 +249,33 @@ public class Demo extends AppCompatActivity {
                                     }
                                 });
                                 break;
-                            case 8:
+                            case 7:
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
                                         cname.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                                        pname.setBackground(drawable);
+                                        drawable.startTransition(1000);
+                                        message.setText("This line will contain the name of the party.");
+                                        message.startAnimation(fadein);
+                                    }
+                                });
+                                Thread.sleep(2000);
+                                break;
+                            case 8:
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        drawable.reverseTransition(1000);
+                                        message.startAnimation(fadeout);
+                                    }
+                                });
+                                break;
+                            case 9:
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        pname.setBackgroundColor(getResources().getColor(android.R.color.transparent));
                                         pimg.setBackground(drawable);
                                         drawable.startTransition(1000);
                                         message.setText("This area will have the symbol of the party.");
@@ -258,7 +284,7 @@ public class Demo extends AppCompatActivity {
                                 });
                                 Thread.sleep(2000);
                                 break;
-                            case 9:
+                            case 10:
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -267,7 +293,7 @@ public class Demo extends AppCompatActivity {
                                     }
                                 });
                                 break;
-                            case 10:
+                            case 11:
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -280,7 +306,7 @@ public class Demo extends AppCompatActivity {
                                 });
                                 Thread.sleep(2000);
                                 break;
-                            case 11:
+                            case 12:
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -289,7 +315,7 @@ public class Demo extends AppCompatActivity {
                                     }
                                 });
                                 break;
-                            case 12:
+                            case 13:
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -299,7 +325,7 @@ public class Demo extends AppCompatActivity {
                                     }
                                 });
                                 break;
-                            case 13:
+                            case 14:
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -314,6 +340,10 @@ public class Demo extends AppCompatActivity {
                                     }
                                 });
                                 Thread.sleep(350);
+                                view = (CardView) recyclerView.getChildAt(0);
+                                constraintLayout1 = (ConstraintLayout) view.getChildAt(0);
+                                constraintLayout2 = (ConstraintLayout) constraintLayout1.getChildAt(1);
+                                indicator = (ImageView) constraintLayout2.getViewById(R.id.indicator);
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -321,7 +351,7 @@ public class Demo extends AppCompatActivity {
                                     }
                                 });
                                 break;
-                            case 14:
+                            case 15:
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -337,7 +367,7 @@ public class Demo extends AppCompatActivity {
                                     }
                                 });
                                 break;
-                            case 15:
+                            case 16:
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -352,25 +382,23 @@ public class Demo extends AppCompatActivity {
                                     }
                                 });
                                 Thread.sleep(350);
+                                view = (CardView) recyclerView.getChildAt(1);
+                                constraintLayout1 = (ConstraintLayout) view.getChildAt(0);
+                                constraintLayout2 = (ConstraintLayout) constraintLayout1.getChildAt(1);
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
                                         indicator.setImageResource(resid);
-                                        view = (CardView) recyclerView.getChildAt(2);
-                                        constraintLayout2 = (ConstraintLayout) view.getChildAt(0);
-                                        linearLayout = (LinearLayout) constraintLayout2.getChildAt(1);
-                                        indicator = (ImageView) linearLayout.getChildAt(2);
+                                        indicator = (ImageView) constraintLayout2.getViewById(R.id.indicator);
                                         indicator.setImageResource(resid2);
                                     }
                                 });
                                 break;
-                            case 16:
+                            case 17:
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
                                         rel1.startAnimation(fadeout);
-                                        rel2.startAnimation(fadein);
-                                        rel2.setVisibility(View.VISIBLE);
                                     }
                                 });
                                 Thread.sleep(1000);
@@ -379,11 +407,13 @@ public class Demo extends AppCompatActivity {
                                     public void run() {
                                         rel1.setVisibility(View.INVISIBLE);
                                         message.setVisibility(View.INVISIBLE);
+                                        rel2.startAnimation(fadein);
+                                        rel2.setVisibility(View.VISIBLE);
                                     }
                                 });
-                                Thread.sleep(3000);
+                                Thread.sleep(4000);
                                 break;
-                            case 17:
+                            case 18:
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -393,7 +423,7 @@ public class Demo extends AppCompatActivity {
                                     }
                                 });
                                 break;
-                            case 18:
+                            case 19:
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {

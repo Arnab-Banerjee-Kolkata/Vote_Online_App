@@ -88,7 +88,13 @@ public class VotingPage extends AppCompatActivity {
         recyclerViewItem_list = new ArrayList<>();
 
         for (int i = 0; i < len; i++) {
-            recyclerViewItem_list.add(new RecyclerViewItem(publicCandidates.get(i).getSymbol(), publicCandidates.get(i).getPartyName(), publicCandidates.get(i).getName(), resid));
+            PublicCandidate candidate = publicCandidates.get(i);
+            recyclerViewItem_list.add(
+                    new RecyclerViewItem(candidate.getSymbol(),
+                            candidate.getImage(),
+                            candidate.getPartyName(),
+                            candidate.getName(),
+                            resid));
         }
         recyclerView = findViewById(R.id.rec);
         recyclerView.setHasFixedSize(true);
@@ -105,8 +111,8 @@ public class VotingPage extends AppCompatActivity {
                     }
                     CardView view = (CardView) layoutManager.findViewByPosition(position);
                     ConstraintLayout constraintLayout = (ConstraintLayout) view.getChildAt(0);
-                    LinearLayout linearLayout = (LinearLayout) constraintLayout.getChildAt(1);
-                    ImageView indicator = (ImageView) linearLayout.getChildAt(2);
+                    ConstraintLayout constraintLayout1 = (ConstraintLayout) constraintLayout.getChildAt(1);
+                    ImageView indicator = (ImageView) constraintLayout1.getViewById(R.id.indicator);
                     if (resid == R.drawable.bulboff_white)
                         indicator.setImageResource(R.drawable.bulbon_white);
                     else
