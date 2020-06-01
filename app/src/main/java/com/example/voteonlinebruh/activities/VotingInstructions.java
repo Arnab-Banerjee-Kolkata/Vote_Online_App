@@ -9,23 +9,26 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.voteonlinebruh.R;
+import com.example.voteonlinebruh.utility.ThemeManager;
 
 public class VotingInstructions extends AppCompatActivity implements View.OnClickListener {
 
     private Toolbar toolbar;
     private Button proceed, demo;
     private Context mContext;
-    private int themeId = MainActivity.TM.getThemeId();
+    protected static VotingInstructions instance;
+    private int themeId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        themeId = ThemeManager.getThemeId();
         if (themeId == R.style.AppTheme_Light)
             setTheme(R.style.dTheme_Light);
         else
             setTheme(R.style.dTheme_Dark);
         setContentView(R.layout.activity_voting_instructions);
-
+        instance = this;
         toolbar = findViewById(R.id.toolbarIns);
         if (themeId == R.style.AppTheme_Light)
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
@@ -72,5 +75,11 @@ public class VotingInstructions extends AppCompatActivity implements View.OnClic
         demo.setEnabled(true);
         proceed.setEnabled(true);
         super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        instance = null;
+        super.onDestroy();
     }
 }

@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.apiCalls.ServerCall;
+import com.example.voteonlinebruh.utility.ThemeManager;
 
 public class OtpPage extends AppCompatActivity {
     private Context mContext;
@@ -26,11 +27,12 @@ public class OtpPage extends AppCompatActivity {
     private ImageView imageView;
     private EditText ets[], boothid;
     private Toolbar toolbar;
-    private int themeId = MainActivity.TM.getThemeId(), resid;
+    private int themeId, resid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        themeId = ThemeManager.getThemeId();
         setTheme(themeId);
         setContentView(R.layout.activity_otp_page);
         disclaimer = findViewById(R.id.textView4);

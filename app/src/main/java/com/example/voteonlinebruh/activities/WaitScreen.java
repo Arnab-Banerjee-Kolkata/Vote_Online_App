@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.voteonlinebruh.R;
+import com.example.voteonlinebruh.utility.ThemeManager;
 
 public class WaitScreen extends AppCompatActivity {
     private Handler dotHandler = new Handler();
@@ -26,7 +27,7 @@ public class WaitScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(MainActivity.TM.getThemeId());
+        setTheme(ThemeManager.getThemeId());
         setContentView(R.layout.activity_wait_screen);
         Intent intent = getIntent();
         String text = intent.getStringExtra("LABEL");

@@ -3,7 +3,7 @@ package com.example.voteonlinebruh.utility;
 import com.example.voteonlinebruh.R;
 
 public class ThemeManager {
-    private int themeId;
+    private static int themeId;
 
     public void change(int x) {
         if (x == 0)
@@ -12,7 +12,7 @@ public class ThemeManager {
             themeId = R.style.AppTheme_Light;
     }
 
-    public int getThemeId() {
+    public static int getThemeId() {
         return themeId;
     }
 }

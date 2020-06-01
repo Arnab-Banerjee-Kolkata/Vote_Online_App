@@ -21,6 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.voteonlinebruh.R;
+import com.example.voteonlinebruh.utility.ThemeManager;
 
 public class Thanks extends AppCompatActivity {
     public static boolean threadStop = false;
@@ -35,11 +36,12 @@ public class Thanks extends AppCompatActivity {
     private SoundPool soundPool;
     private Vibrator v;
     private AudioManager am;
-    private int themeId = MainActivity.TM.getThemeId(), alertToneS, alertToneF;
+    private int themeId, alertToneS, alertToneF;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        themeId = ThemeManager.getThemeId();
         setTheme(themeId);
         setContentView(R.layout.activity_thanks);
         checkView = findViewById(R.id.checkView);
@@ -147,6 +149,10 @@ public class Thanks extends AppCompatActivity {
         }
         myRunnable thread = new myRunnable();
         new Thread(thread).start();
+    }
+
+    public void goHome(View view){
+        super.onBackPressed();
     }
 
     @Override

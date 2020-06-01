@@ -17,6 +17,7 @@
         <item name="android:navigationBarColor">#7084AA</item>
         <item name="android:statusBarColor">#7084AA</item>
         <item name="android:textColor">@android:color/black</item>
+        <item name="colorPrimary">@android:color/white</item>
         <item name="colorSecondary">@color/lightBg</item>
         <item name="android:textColorPrimary">@android:color/black</item>
         <item name="android:textColorTertiary">@android:color/black</item>
@@ -44,6 +45,7 @@
         <item name="android:navigationBarColor">#010101</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="colorPrimary">@color/darkBg</item>
         <item name="colorSecondary">@android:color/black</item>
         <item name="android:textColorTertiary">@android:color/white</item>
         <item name="colorAccent">@android:color/white</item>

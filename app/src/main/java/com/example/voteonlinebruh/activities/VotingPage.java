@@ -24,6 +24,7 @@ import com.example.voteonlinebruh.adapters.RecyclerViewAdapter;
 import com.example.voteonlinebruh.models.RecyclerViewItem;
 import com.example.voteonlinebruh.models.PublicCandidate;
 import com.example.voteonlinebruh.utility.ScreenControl;
+import com.example.voteonlinebruh.utility.ThemeManager;
 
 import java.util.ArrayList;
 
@@ -39,11 +40,12 @@ public class VotingPage extends AppCompatActivity {
     private ScreenControl screenControl = new ScreenControl();
     private RelativeLayout waitrel;
     private static boolean changeDetected = false;
-    private int themeId = MainActivity.TM.getThemeId(), themeId2, resid;
+    private int themeId, themeId2, resid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        themeId = ThemeManager.getThemeId();
         setTheme(themeId);
         if (themeId == R.style.AppTheme_Light) {
             themeId2 = R.style.ConfirmTheme_Light;
@@ -136,7 +138,8 @@ public class VotingPage extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Please select your candidate !", Toast.LENGTH_SHORT).show();
             }
         });
-
+        VotingInstructions.instance.finish();
+        PublicElectionEntryPoint.instance.finish();
     }
 
     public void release() {
@@ -152,6 +155,12 @@ public class VotingPage extends AppCompatActivity {
     protected void onUserLeaveHint() {
         changeDetected = true;
         super.onUserLeaveHint();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        changeDetected = true;
+        super.onSaveInstanceState(outState);
     }
 
     @Override

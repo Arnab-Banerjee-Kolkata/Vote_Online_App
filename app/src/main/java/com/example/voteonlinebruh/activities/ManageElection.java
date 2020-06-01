@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.voteonlinebruh.R;
+import com.example.voteonlinebruh.utility.ThemeManager;
 
 public class ManageElection extends AppCompatActivity {
 
@@ -24,11 +25,12 @@ public class ManageElection extends AppCompatActivity {
     private TextView taptoreg, taptolog;
     private Button loginmanage, registermanage;
     private EditText userid, password, name, phone, email, pass1, pass2;
-    private int themeId = MainActivity.TM.getThemeId();
+    private int themeId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        themeId = ThemeManager.getThemeId();
         setTheme(themeId);
         setContentView(R.layout.activity_manage_election);
         toolbar = findViewById(R.id.toolbarman);

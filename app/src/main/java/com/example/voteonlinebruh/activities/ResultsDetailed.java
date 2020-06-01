@@ -23,6 +23,7 @@ import com.example.voteonlinebruh.apiCalls.ServerCall;
 import com.example.voteonlinebruh.models.ConstituencyWiseResultList;
 import com.example.voteonlinebruh.models.PartywiseResultList;
 import com.example.voteonlinebruh.models.StateListItem;
+import com.example.voteonlinebruh.utility.ThemeManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class ResultsDetailed extends FragmentActivity {
     private Bundle args, args2;
     private FragmentAdapter fragmentAdapter;
     private ScreenControl screenControl = new ScreenControl();
-    private int themeid = MainActivity.TM.getThemeId(), electionId;
+    private int themeid, electionId;
     private ArrayList<StateListItem> list;
     private SwipeRefreshLayout swipe;
     SwipeRefreshLayout.OnRefreshListener listener;
@@ -48,6 +49,7 @@ public class ResultsDetailed extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        themeid = ThemeManager.getThemeId();
         setTheme(themeid);
         setContentView(R.layout.activity_results_detailed);
         toolbar = findViewById(R.id.toolbarvres);
@@ -211,5 +213,11 @@ public class ResultsDetailed extends FragmentActivity {
             for (int i = 0; i < list.size(); i++)
                 getSupportFragmentManager().beginTransaction().remove(list.get(i)).commitNow();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        stopLoad = false;
+        super.onResume();
     }
 }

@@ -10,20 +10,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageButton;
-import android.widget.ListPopupWindow;
 
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.apiCalls.ServerCall;
-import com.example.voteonlinebruh.models.PublicCandidate;
 import com.example.voteonlinebruh.utility.ThemeManager;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private static boolean scheduledRestart = false;
-    public static ThemeManager TM = new ThemeManager();
+    private ThemeManager TM;
     private Toolbar toolbar;
     private ImageButton button;
     public static WebView webView;
@@ -35,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         final SharedPreferences pref = getSharedPreferences("Voter.Online.Theme", MODE_PRIVATE);
         final SharedPreferences.Editor edit = pref.edit();
+        TM = new ThemeManager();
         if (!pref.contains("themeLight")) {
             edit.putBoolean("themeLight", true);
             TM.change(1);
@@ -146,5 +142,11 @@ public class MainActivity extends AppCompatActivity {
         pri.setEnabled(true);
         man.setEnabled(true);
         res.setEnabled(true);
+    }
+
+    @Override
+    protected void onDestroy() {
+        webView = null;
+        super.onDestroy();
     }
 }

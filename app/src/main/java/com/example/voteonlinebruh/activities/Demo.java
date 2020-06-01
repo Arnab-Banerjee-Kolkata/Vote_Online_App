@@ -29,6 +29,7 @@ import com.bumptech.glide.Glide;
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.adapters.RecyclerViewAdapter;
 import com.example.voteonlinebruh.models.RecyclerViewItem;
+import com.example.voteonlinebruh.utility.ThemeManager;
 
 import java.util.ArrayList;
 
@@ -51,12 +52,13 @@ public class Demo extends AppCompatActivity {
     TextView pname, cname;
     RelativeLayout pimg;
     ImageView indicator, candImg;
-    private int themeId = MainActivity.TM.getThemeId(), resid, resid2;
+    private int themeId, resid, resid2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         int tapinnerRes, tapouterRes;
+        themeId = ThemeManager.getThemeId();
         if (themeId == R.style.AppTheme_Light) {
             setTheme(R.style.DialogTheme_Light);
             getWindow().setBackgroundDrawableResource(android.R.color.white);
@@ -74,11 +76,11 @@ public class Demo extends AppCompatActivity {
         }
         setContentView(R.layout.activity_demo);
         ArrayList<RecyclerViewItem> recyclerViewItem_list = new ArrayList<>();
-        for (int i = 1; i < 9; i++)
+        for (int i = 1; i < 7; i++)
             recyclerViewItem_list.add(
                     new RecyclerViewItem("",
                             themeId == R.style.AppTheme_Light ?
-                                    "https://www.pngitem.com/pimgs/m/421-4212617_person-placeholder-image-transparent-hd-png-download.png" :
+                                    "https://drive.google.com/uc?id=1-MdJtSoclXeSthHJccTAJvsyJCqgBuY-" :
                                     "https://drive.google.com/uc?id=1ePbZVRIGkLZ5VzCzw1HqUzEEg8jwHW2-",
                             "Party " + i,
                             "Candidate " + i, resid));

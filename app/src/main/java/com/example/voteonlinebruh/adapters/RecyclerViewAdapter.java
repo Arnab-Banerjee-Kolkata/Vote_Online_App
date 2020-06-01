@@ -20,6 +20,7 @@ import com.bumptech.glide.request.target.Target;
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.activities.MainActivity;
 import com.example.voteonlinebruh.models.RecyclerViewItem;
+import com.example.voteonlinebruh.utility.ThemeManager;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -84,7 +85,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(@NonNull final itemViewHolder itemViewHolder, int i) {
         RecyclerViewItem currentRecyclerViewItem = recyclerViewItemArrayList.get(i);
         String resUrl = currentRecyclerViewItem.getSymbol();
-        final int themeId = MainActivity.TM.getThemeId();
+        final int themeId = ThemeManager.getThemeId();
         RequestListener listener = new RequestListener<Drawable>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {

@@ -10,20 +10,23 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.voteonlinebruh.R;
+import com.example.voteonlinebruh.utility.ThemeManager;
 
 public class PublicElectionEntryPoint extends AppCompatActivity {
 
     private Button b;
     private Toolbar toolbar;
     private ImageView imageView1;
-    private int themeId = MainActivity.TM.getThemeId();
+    private int themeId;
+    protected static PublicElectionEntryPoint instance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        themeId = ThemeManager.getThemeId();
         setTheme(themeId);
         setContentView(R.layout.activity_public_election);
-
+        instance = this;
         toolbar = findViewById(R.id.toolbarpub);
         if (themeId == R.style.AppTheme_Light)
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
@@ -56,5 +59,11 @@ public class PublicElectionEntryPoint extends AppCompatActivity {
     protected void onResume() {
         b.setEnabled(true);
         super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        instance = null;
+        super.onDestroy();
     }
 }

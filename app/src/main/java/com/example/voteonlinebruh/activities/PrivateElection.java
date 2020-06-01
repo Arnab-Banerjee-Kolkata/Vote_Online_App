@@ -8,16 +8,18 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.voteonlinebruh.R;
+import com.example.voteonlinebruh.utility.ThemeManager;
 
 public class PrivateElection extends AppCompatActivity {
 
     private ImageView imageView1;
     private Toolbar toolbar;
-    private int themeId = MainActivity.TM.getThemeId();
+    private int themeId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        themeId = ThemeManager.getThemeId();
         setTheme(themeId);
         setContentView(R.layout.activity_private_election);
         toolbar = findViewById(R.id.toolbarpriv);

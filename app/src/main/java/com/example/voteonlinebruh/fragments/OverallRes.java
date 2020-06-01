@@ -26,6 +26,7 @@ import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.activities.MainActivity;
 import com.example.voteonlinebruh.activities.ResultsDetailed;
 import com.example.voteonlinebruh.apiCalls.ServerCall;
+import com.example.voteonlinebruh.utility.ThemeManager;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LegendEntry;
@@ -97,7 +98,7 @@ public class OverallRes extends Fragment {
         swipe = v.findViewById(R.id.swipeRefreshOverallFrag);
         swipe.setOnRefreshListener(listener);
         textView = v.findViewById(R.id.textView23);
-        final int themeId = MainActivity.TM.getThemeId();
+        final int themeId = ThemeManager.getThemeId();
         //CHART CODE
         chart = v.findViewById(R.id.chart);
         chart.setBackgroundColor(Color.TRANSPARENT);

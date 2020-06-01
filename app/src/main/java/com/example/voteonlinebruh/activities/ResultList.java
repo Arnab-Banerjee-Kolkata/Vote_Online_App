@@ -14,6 +14,7 @@ import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.adapters.ListViewForResultListAdapter;
 import com.example.voteonlinebruh.apiCalls.ServerCall;
 import com.example.voteonlinebruh.models.ResultListItem;
+import com.example.voteonlinebruh.utility.ThemeManager;
 
 import java.util.ArrayList;
 
@@ -25,11 +26,12 @@ public class ResultList extends AppCompatActivity {
     private ArrayList<ResultListItem> resultlist;
     private ListViewForResultListAdapter arrayAdapter;
     RelativeLayout listContainer;
-    private int themeId = MainActivity.TM.getThemeId();
+    private int themeId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        themeId = ThemeManager.getThemeId();
         setTheme(themeId);
         setContentView(R.layout.activity_election_result);
         toolbar = findViewById(R.id.toolbarres);

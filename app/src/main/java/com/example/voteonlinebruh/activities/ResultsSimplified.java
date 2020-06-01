@@ -27,6 +27,7 @@ import com.bumptech.glide.request.target.Target;
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.apiCalls.ServerCall;
 import com.example.voteonlinebruh.models.PartywiseResultList;
+import com.example.voteonlinebruh.utility.ThemeManager;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LegendEntry;
@@ -50,12 +51,13 @@ public class ResultsSimplified extends AppCompatActivity {
     private TableLayout tableLayout;
     SwipeRefreshLayout swipe;
     SwipeRefreshLayout.OnRefreshListener listener;
-    private int themeId = MainActivity.TM.getThemeId(), status, totalSeats;
+    private int themeId, status, totalSeats;
     private boolean oneTimeDataLoad = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        themeId = ThemeManager.getThemeId();
         setTheme(themeId);
         setContentView(R.layout.activity_results_simplified);
         toolbar = findViewById(R.id.toolbarResSim);

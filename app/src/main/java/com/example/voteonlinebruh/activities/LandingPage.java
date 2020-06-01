@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.voteonlinebruh.R;
+import com.example.voteonlinebruh.utility.ThemeManager;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -27,11 +28,12 @@ public class LandingPage extends AppCompatActivity {
     private Animation rotatemin, rotatehour;
     private DateFormat dateFormat;
     private String time;
-    private int themeId = MainActivity.TM.getThemeId();
+    private int themeId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        themeId = ThemeManager.getThemeId();
         setTheme(themeId);
         setContentView(R.layout.activity_landing_page);
         toolbar = findViewById(R.id.timertool);
