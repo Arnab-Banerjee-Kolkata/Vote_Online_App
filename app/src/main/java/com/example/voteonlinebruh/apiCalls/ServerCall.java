@@ -7,6 +7,9 @@ import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
@@ -43,26 +46,13 @@ import static android.content.Context.MODE_PRIVATE;
 public class ServerCall {
 
     private int TIMES = 0;
-    private boolean validateBoothOtp = false, getPublicResultListResponse = false, getOverallResultResponse1 = false, getOverallResultResponse2 = false,
-            getConstituencyResultResponse = false, getStateListResponse = false, storeVoteResponse = false, getRandomKeyResponse = false;
+    private boolean validateBoothOtpResponse, getPublicResultListResponse, getOverallResultResponse1, getOverallResultResponse2,
+            getConstituencyResultResponse, getStateListResponse, storeVoteResponse, getRandomKeyResponse;
 
-    private String boothId, otp;
-    private Context mContext;
-    private OtpPage otpPage;
-    private String type;
-    private int electionId;
-    private ResultsSimplified resultSimplified;
-    private boolean release;
-    private String stateCode;
-    private ResultsDetailed resultDetailed;
-    private ArrayList<PartywiseResultList> list;
-    private int totalSeats;
-    private String candidateId;
-    private VotingPage votingPage;
 
     public ServerCall(){
         TIMES=0;
-        validateBoothOtp = false;
+        validateBoothOtpResponse = false;
         getPublicResultListResponse = false;
         getOverallResultResponse1 = false;
         getOverallResultResponse2 = false;
@@ -93,7 +83,8 @@ public class ServerCall {
         }
     }
 
-    private void storeCookie(final Context mContext, WebView webView, final int methodCode) {
+    private void storeCookie(final Context mContext, WebView webView) {
+        Log.d("COOKIE: ", "CALLED");
         TIMES++;
         String url = "";
         final CookieManager cookieManager;
@@ -112,33 +103,17 @@ public class ServerCall {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("cookieStart", cookie);
                 editor.apply();
+                Log.d("COOKIE","RECEIEVED");
+            }
 
-                switch (methodCode) {
-                    case 1:     //validateBoothOtp
-                        ServerCall.this.validateBoothOtp(boothId, otp, mContext, otpPage);
-                        break;
-                    case 2:     //getPublicResultList
-                        ServerCall.this.getPublicResultList(mContext);
-                        break;
-                    case 3:     //getOverallResult
-                        ServerCall.this.getOverallResult(type, electionId, mContext, resultSimplified, release);
-                        break;
-                    case 4:     //getOverallResult2
-                        ServerCall.this.getOverallResult(type, electionId, stateCode, mContext, resultDetailed);
-                        break;
-                    case 5:     //getConstituencyResult
-                        ServerCall.this.getConstituencyResult(type, electionId, stateCode, mContext, resultDetailed, list, totalSeats);
-                        break;
-                    case 6:     //getStateList
-                        ServerCall.this.getStatelist(electionId, type, mContext);
-                        break;
-                    case 7:     //storeVote
-                        ServerCall.this.storeVote(boothId, candidateId, mContext);
-                        break;
-                    case 8:     //getRandomKey
-                        ServerCall.this.getRandomKey(boothId, mContext, votingPage);
-                        break;
-                }
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                Log.d("Web Error: ", error.toString());
+            }
+
+            @Override
+            public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
+                Log.d("Http error: ",errorResponse.toString());
             }
         });
         webView.setWebChromeClient(new WebChromeClient());
@@ -152,23 +127,19 @@ public class ServerCall {
 
     public void validateBoothOtp(final String boothId, final String otp, final Context mContext, final OtpPage otpPage) {
 
-        this.boothId = boothId;
-        this.otp = otp;
-        this.mContext = mContext;
-        this.otpPage = otpPage;
-
         final ArrayList<PublicCandidate> candidates = new ArrayList<PublicCandidate>();
         Response.Listener<String> listener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                if (!validateBoothOtp) {
+                Log.d("RESPONSE: ","RECEIVED");
+                if (!validateBoothOtpResponse) {
                     Map<String, String> params = new HashMap<>();
                     JSONObject jsonResponse = null;
 
                     try {
+                        if(response.trim().length()==0)
+                            throw new JSONException("ZERO LENGTH");
                         jsonResponse = new JSONObject(response);
-                        validateBoothOtp = true;
-                        TIMES = 0;
                         boolean validAuth = jsonResponse.getBoolean("validAuth");
                         boolean validBooth = jsonResponse.getBoolean("validBooth");
                         boolean validOtp = jsonResponse.getBoolean("validOtp");
@@ -217,14 +188,17 @@ public class ServerCall {
                                 otpPage.finish();
                             }
                         }
-
-                    } catch (JSONException e) {
+                        validateBoothOtpResponse = true;
+                        TIMES = 0;
+                    } catch (Exception e) {
                         e.printStackTrace();
-                        Log.d("response error", response);
+                        Log.d("RESPONSE EXCEPTION", response);
                         //Toast.makeText(mContext, "COOKIE. Try again: TIMES=" + (TIMES++), Toast.LENGTH_SHORT).show();
-                        if (TIMES < 100 && !validateBoothOtp)
-                            storeCookie(mContext, MainActivity.webView, 1);
-                        else if (TIMES >= 100 && !validateBoothOtp) {
+                        if (TIMES < 100 && !validateBoothOtpResponse) {
+                            ServerCall.this.storeCookie(mContext, MainActivity.webView);
+                            validateBoothOtp(boothId, otp,mContext,otpPage);
+                        }
+                        else if (TIMES >= 100 && !validateBoothOtpResponse) {
                             WaitScreen.terminate = true;
                             Toast.makeText(mContext, "Request timed out", Toast.LENGTH_LONG).show();
                             Log.d("FAILED", "FAILED");
@@ -244,10 +218,13 @@ public class ServerCall {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                Log.d("RESPONSE ERROR", error.toString());
                 //Toast.makeText(mContext, "Error occured. Try again " + TIMES, Toast.LENGTH_SHORT).show();
-                if (TIMES < 100 && !validateBoothOtp)
-                    storeCookie(mContext, MainActivity.webView, 1);
-                else if (TIMES >= 100 && !validateBoothOtp) {
+                if (TIMES < 100 && !validateBoothOtpResponse) {
+                    ServerCall.this.storeCookie(mContext, MainActivity.webView);
+                    validateBoothOtp(boothId, otp,mContext,otpPage);
+                }
+                else if (TIMES >= 100 && !validateBoothOtpResponse) {
                     WaitScreen.terminate = true;
                     Toast.makeText(mContext, "Request timed out", Toast.LENGTH_LONG).show();
                     Log.d("FAILED", "FAILED");
@@ -270,8 +247,6 @@ public class ServerCall {
     }
 
     public void getPublicResultList(final Context mContext) {
-
-        this.mContext = mContext;
 
         final ArrayList<ResultListItem> resultlist = new ArrayList<ResultListItem>();
 
@@ -316,8 +291,10 @@ public class ServerCall {
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Log.d("response error", response);
-                        if (TIMES < 100 && !getPublicResultListResponse)
-                            storeCookie(mContext, MainActivity.webView, 2);
+                        if (TIMES < 100 && !getPublicResultListResponse) {
+                            ServerCall.this.storeCookie(mContext, MainActivity.webView);
+                            getPublicResultList(mContext);
+                        }
                         else if (TIMES >= 100 && !getPublicResultListResponse) {
                             WaitScreen.terminate = true;
                             Toast.makeText(mContext, "Request timed out", Toast.LENGTH_LONG).show();
@@ -333,8 +310,10 @@ public class ServerCall {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                if (TIMES < 100 && !getPublicResultListResponse)
-                    storeCookie(mContext, MainActivity.webView, 2);
+                if (TIMES < 100 && !getPublicResultListResponse) {
+                    ServerCall.this.storeCookie(mContext, MainActivity.webView);
+                    getPublicResultList(mContext);
+                }
                 else if (TIMES >= 100 && !getPublicResultListResponse) {
                     WaitScreen.terminate = true;
                     Toast.makeText(mContext, "Request timed out", Toast.LENGTH_LONG).show();
@@ -357,12 +336,6 @@ public class ServerCall {
 
     public void getOverallResult(final String type, final int electionId, final Context mContext, final ResultsSimplified resultsSimplified,
                                  final boolean release) {
-
-        this.type = type;
-        this.electionId = electionId;
-        this.mContext = mContext;
-        this.resultSimplified = resultsSimplified;
-        this.release = release;
 
         final ArrayList<PartywiseResultList> partyresultlist = new ArrayList<PartywiseResultList>();
 
@@ -419,8 +392,10 @@ public class ServerCall {
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Log.d("response error", response);
-                        if (TIMES < 100 && !getOverallResultResponse1)
-                            storeCookie(mContext, MainActivity.webView, 3);
+                        if (TIMES < 100 && !getOverallResultResponse1) {
+                            ServerCall.this.storeCookie(mContext, MainActivity.webView);
+                            getOverallResult(type, electionId, mContext, resultsSimplified,release);
+                        }
                         else if (TIMES >= 100 && !getOverallResultResponse1) {
                             WaitScreen.terminate = true;
                             Toast.makeText(mContext, "Request timed out", Toast.LENGTH_LONG).show();
@@ -435,8 +410,10 @@ public class ServerCall {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                if (TIMES < 100 && !getOverallResultResponse1)
-                    storeCookie(mContext, MainActivity.webView, 3);
+                if (TIMES < 100 && !getOverallResultResponse1) {
+                    ServerCall.this.storeCookie(mContext, MainActivity.webView);
+                    getOverallResult(type, electionId, mContext, resultsSimplified,release);
+                }
                 else if (TIMES >= 100 && !getOverallResultResponse1) {
                     WaitScreen.terminate = true;
                     Toast.makeText(mContext, "Request timed out", Toast.LENGTH_LONG).show();
@@ -460,12 +437,6 @@ public class ServerCall {
     //Overloaded method for statewise results
     public void getOverallResult(final String type, final int electionId, final String stateCode, final Context mContext,
                                  final ResultsDetailed resultsDetailed) {
-
-        this.type = type;
-        this.electionId = electionId;
-        this.stateCode = stateCode;
-        this.mContext = mContext;
-        this.resultDetailed = resultsDetailed;
 
         final ArrayList<PartywiseResultList> partyresultlist = new ArrayList<PartywiseResultList>();
 
@@ -511,8 +482,10 @@ public class ServerCall {
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Log.d("response error", response);
-                        if (TIMES < 100 && !getOverallResultResponse2)
-                            storeCookie(mContext, MainActivity.webView, 4);
+                        if (TIMES < 100 && !getOverallResultResponse2) {
+                            ServerCall.this.storeCookie(mContext, MainActivity.webView);
+                            getOverallResult(type, electionId, stateCode, mContext, resultsDetailed);
+                        }
                         else if (TIMES >= 100 && !getOverallResultResponse2) {
                             Toast.makeText(mContext, "Request timed out", Toast.LENGTH_LONG).show();
                             Log.d("FAILED", "FAILED");
@@ -526,8 +499,10 @@ public class ServerCall {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                if (TIMES < 100 && !getOverallResultResponse2)
-                    storeCookie(mContext, MainActivity.webView, 4);
+                if (TIMES < 100 && !getOverallResultResponse2) {
+                    ServerCall.this.storeCookie(mContext, MainActivity.webView);
+                    getOverallResult(type, electionId, stateCode, mContext, resultsDetailed);
+                }
                 else if (TIMES >= 100 && !getOverallResultResponse2) {
                     Toast.makeText(mContext, "Request timed out", Toast.LENGTH_LONG).show();
                     Log.d("FAILED", "FAILED");
@@ -551,14 +526,6 @@ public class ServerCall {
     private void getConstituencyResult(final String type, final int electionId, final String stateCode, final Context mContext,
                                        final ResultsDetailed resultsDetailed, final ArrayList<PartywiseResultList> list,
                                        final int totalSeats) {
-
-        this.type = type;
-        this.electionId = electionId;
-        this.stateCode = stateCode;
-        this.mContext = mContext;
-        this.resultDetailed = resultsDetailed;
-        this.list = list;
-        this.totalSeats = totalSeats;
 
         final ArrayList<ConstituencyWiseResultList> constresultlist = new ArrayList<ConstituencyWiseResultList>();
 
@@ -605,8 +572,10 @@ public class ServerCall {
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Log.d("response error", response);
-                        if (TIMES < 100 && !getConstituencyResultResponse)
-                            storeCookie(mContext, MainActivity.webView, 5);
+                        if (TIMES < 100 && !getConstituencyResultResponse) {
+                            ServerCall.this.storeCookie(mContext, MainActivity.webView);
+                            getConstituencyResult(type, electionId, stateCode, mContext, resultsDetailed, list, totalSeats);
+                        }
                         else if (TIMES >= 100 && !getConstituencyResultResponse) {
                             Toast.makeText(mContext, "Request timed out", Toast.LENGTH_LONG).show();
                             Log.d("FAILED", "FAILED");
@@ -620,8 +589,10 @@ public class ServerCall {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                if (TIMES < 100 && !getConstituencyResultResponse)
-                    storeCookie(mContext, MainActivity.webView, 5);
+                if (TIMES < 100 && !getConstituencyResultResponse) {
+                    ServerCall.this.storeCookie(mContext, MainActivity.webView);
+                    getConstituencyResult(type, electionId, stateCode, mContext, resultsDetailed, list, totalSeats);
+                }
                 else if (TIMES >= 100 && !getConstituencyResultResponse) {
                     Toast.makeText(mContext, "Request timed out", Toast.LENGTH_LONG).show();
                     Log.d("FAILED", "FAILED");
@@ -643,9 +614,6 @@ public class ServerCall {
     }
 
     public void getStatelist(final int electionId, final String type, final Context mContext) {
-        this.electionId = electionId;
-        this.type = type;
-        this.mContext = mContext;
 
         final ArrayList<StateListItem> resultlist = new ArrayList<StateListItem>();
 
@@ -685,8 +653,10 @@ public class ServerCall {
 
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        if (TIMES < 100 && !getStateListResponse)
-                            storeCookie(mContext, MainActivity.webView, 6);
+                        if (TIMES < 100 && !getStateListResponse) {
+                            ServerCall.this.storeCookie(mContext, MainActivity.webView);
+                            getStatelist(electionId, type, mContext);
+                        }
                         else if (TIMES >= 100 && !getStateListResponse) {
                             WaitScreen.terminate = true;
                             Toast.makeText(mContext, "Request timed out", Toast.LENGTH_LONG).show();
@@ -701,8 +671,10 @@ public class ServerCall {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                if (TIMES < 100 && !getStateListResponse)
-                    storeCookie(mContext, MainActivity.webView, 6);
+                if (TIMES < 100 && !getStateListResponse) {
+                    ServerCall.this.storeCookie(mContext, MainActivity.webView);
+                    getStatelist(electionId, type, mContext);
+                }
                 else if (TIMES >= 100 && !getStateListResponse) {
                     WaitScreen.terminate = true;
                     Toast.makeText(mContext, "Request timed out", Toast.LENGTH_LONG).show();
@@ -726,9 +698,6 @@ public class ServerCall {
     private static HashMap<String, String> keySet;
 
     public void storeVote(final String boothId, final String candidateId, final Context mContext) {
-        this.boothId = boothId;
-        this.candidateId = candidateId;
-        this.mContext = mContext;
 
         if (!keyFound) {
             Thanks.success = false;
@@ -769,8 +738,10 @@ public class ServerCall {
                         } catch (JSONException e) {
                             e.printStackTrace();
 
-                            if (TIMES < 100 && !storeVoteResponse)
-                                storeCookie(mContext, MainActivity.webView, 7);
+                            if (TIMES < 100 && !storeVoteResponse) {
+                                ServerCall.this.storeCookie(mContext, MainActivity.webView);
+                                storeVote(boothId, candidateId, mContext);
+                            }
                             else if (TIMES >= 100 && !storeVoteResponse) {
                                 Toast.makeText(mContext, "Request timed out", Toast.LENGTH_LONG).show();
                                 Thanks.success = false;
@@ -785,8 +756,10 @@ public class ServerCall {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     error.printStackTrace();
-                    if (TIMES < 100 && !storeVoteResponse)
-                        storeCookie(mContext, MainActivity.webView, 7);
+                    if (TIMES < 100 && !storeVoteResponse) {
+                        ServerCall.this.storeCookie(mContext, MainActivity.webView);
+                        storeVote(boothId, candidateId, mContext);
+                    }
                     else if (TIMES >= 100 && !storeVoteResponse) {
                         Toast.makeText(mContext, "Request timed out", Toast.LENGTH_LONG).show();
                         Thanks.success = false;
@@ -808,9 +781,6 @@ public class ServerCall {
     }
 
     public void getRandomKey(final String boothId, final Context mContext, final VotingPage votingPage) {
-        this.boothId = boothId;
-        this.mContext = mContext;
-        this.votingPage = votingPage;
 
         keyFound = false;
 
@@ -849,8 +819,10 @@ public class ServerCall {
                         votingPage.release();
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        if (TIMES < 100 && !getRandomKeyResponse)
-                            storeCookie(mContext, MainActivity.webView, 8);
+                        if (TIMES < 100 && !getRandomKeyResponse) {
+                            ServerCall.this.storeCookie(mContext, MainActivity.webView);
+                            getRandomKey(boothId, mContext, votingPage);
+                        }
                         else if (TIMES >= 100 && !getRandomKeyResponse) {
                             Toast.makeText(mContext, "Request timed out", Toast.LENGTH_LONG).show();
                         }
@@ -862,8 +834,10 @@ public class ServerCall {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                if (TIMES < 100 && !getRandomKeyResponse)
-                    storeCookie(mContext, MainActivity.webView, 8);
+                if (TIMES < 100 && !getRandomKeyResponse) {
+                    ServerCall.this.storeCookie(mContext, MainActivity.webView);
+                    getRandomKey(boothId, mContext, votingPage);
+                }
                 else if (TIMES >= 100 && !getRandomKeyResponse) {
                     Toast.makeText(mContext, "Request timed out", Toast.LENGTH_LONG).show();
                 }
