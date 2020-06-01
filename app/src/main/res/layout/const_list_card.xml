@@ -18,7 +18,7 @@
             android:layout_gravity="center"
             android:layout_weight="0"
             android:background="@android:drawable/dialog_holo_dark_frame"
-            android:backgroundTint="@color/shade"
+            android:backgroundTint="#3387B1FF"
             android:gravity="center"
             android:orientation="vertical">
 
