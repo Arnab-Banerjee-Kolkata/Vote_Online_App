@@ -2,6 +2,7 @@ package com.example.voteonlinebruh.apiCalls;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -31,6 +32,7 @@ public class PostRequest extends StringRequest {
         SharedPreferences sharedPreferences = mContext.getSharedPreferences("CookieDetails", Context.MODE_PRIVATE);
         String cookieStart = sharedPreferences.getString("cookieStart", "");
         headers.put("Cookie", cookieStart + mContext.getString(R.string.cookie_end));
+        Log.d("REQUEST: ", "SENT");
         return headers;
     }
 
