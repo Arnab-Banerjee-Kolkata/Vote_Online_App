@@ -1,81 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:elevation="1dp"
-    android:background="@color/shade">
+    android:layout_height="wrap_content">
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1">
+        android:background="@android:drawable/dialog_holo_light_frame"
+        android:backgroundTint="@color/shade"
+        android:elevation="1dp">
 
-        <LinearLayout
-            android:layout_width="150dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_weight="0"
-            android:background="@android:drawable/dialog_holo_dark_frame"
-            android:backgroundTint="#3387B1FF"
-            android:gravity="center"
-            android:orientation="vertical">
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/consContainer"
+            android:layout_width="130dp"
+            android:layout_height="100dp"
+            android:background="@android:drawable/dialog_holo_light_frame"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/partySymbol"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha=".2"
+                android:padding="1dp"
+                android:scaleType="fitXY"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/conName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/conName"
-                android:gravity="center"
                 android:padding="5dp"
                 android:text="Constituency Name"
+                android:textAlignment="center"
                 android:textSize="15dp"
-                android:textStyle="bold" />
+                app:layout_constraintBottom_toTopOf="@id/stateName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/stateName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/stateName"
                 android:padding="5dp"
                 android:text="State Name"
-                android:textSize="13dp" />
-        </LinearLayout>
+                android:textSize="13dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/conName" />
+        </android.support.constraint.ConstraintLayout>
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/candName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:padding="5dp"
+            android:text="Candidate Name"
+            android:textSize="15dp"
+            android:textStyle="italic|bold"
+            app:layout_constraintEnd_toStartOf="@+id/relativeLayout3"
+            app:layout_constraintStart_toEndOf="@id/consContainer"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/partyName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:padding="5dp"
+            android:text="Party Name"
+            android:textSize="13dp"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toStartOf="@+id/relativeLayout3"
+            app:layout_constraintStart_toEndOf="@id/consContainer"
+            app:layout_constraintTop_toBottomOf="@id/candName" />
+
+        <TextView
+            android:id="@+id/votes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:padding="5dp"
+            android:text="Votes : "
+            android:textSize="14dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/relativeLayout3"
+            app:layout_constraintStart_toEndOf="@id/consContainer"
+            app:layout_constraintTop_toBottomOf="@id/partyName" />
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/relativeLayout3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:baselineAligned="false"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="5dp">
+            android:layout_margin="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/candName"
-                android:padding="5dp"
-                android:text="Candidate Name"
-                android:textSize="15dp"
-                android:textStyle="bold" />
+            <ImageView
+                android:id="@+id/candImage"
+                android:layout_width="60dp"
+                android:layout_height="90dp"
+                android:scaleType="fitXY"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/partyName"
-                android:padding="5dp"
-                android:text="Party Name"
-                android:textSize="13dp" />
+            <ProgressBar
+                android:id="@+id/candImageProgress"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:alpha=".5"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </android.support.constraint.ConstraintLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/votes"
-                android:padding="5dp"
-                android:text="Votes : "
-                android:textSize="14dp"
-                android:textStyle="bold" />
-        </LinearLayout>
-    </LinearLayout>
-
+    </android.support.constraint.ConstraintLayout>
 </RelativeLayout>

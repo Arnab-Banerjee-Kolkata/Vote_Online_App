@@ -25,14 +25,33 @@
             android:padding="2dp"
             app:layout_constraintTop_toBottomOf="@id/v">
 
-            <ImageView
-                android:id="@+id/cand_image"
-                android:layout_width="60dp"
-                android:layout_height="80dp"
-                android:padding="3dp"
-                android:scaleType="fitXY"
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/relativeLayout2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/cand_image"
+                    android:layout_width="60dp"
+                    android:layout_height="80dp"
+                    android:padding="3dp"
+                    android:scaleType="fitXY"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <ProgressBar
+                    android:id="@+id/votingImageProgress2"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:alpha=".5"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </android.support.constraint.ConstraintLayout>
 
             <TextView
                 android:id="@+id/cand_name"
@@ -44,7 +63,7 @@
                 android:textSize="18dp"
                 app:layout_constraintBottom_toTopOf="@id/party_name"
                 app:layout_constraintEnd_toStartOf="@+id/relativeLayout"
-                app:layout_constraintStart_toEndOf="@id/cand_image"
+                app:layout_constraintStart_toEndOf="@id/relativeLayout2"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -57,7 +76,7 @@
                 android:textStyle="italic"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/relativeLayout"
-                app:layout_constraintStart_toEndOf="@id/cand_image"
+                app:layout_constraintStart_toEndOf="@id/relativeLayout2"
                 app:layout_constraintTop_toBottomOf="@id/cand_name" />
 
             <RelativeLayout

@@ -43,192 +43,209 @@ import java.util.ArrayList;
 
 public class ResultsSimplified extends AppCompatActivity {
 
-    private PieChart chart;
-    private Toolbar toolbar;
-    private Button button;
-    private PieDataSet dataSet;
-    private LayoutInflater layoutInflater;
-    private TableLayout tableLayout;
-    SwipeRefreshLayout swipe;
-    SwipeRefreshLayout.OnRefreshListener listener;
-    private int themeId, status, totalSeats;
-    private boolean oneTimeDataLoad = false;
+  private PieChart chart;
+  private Toolbar toolbar;
+  private Button button;
+  private PieDataSet dataSet;
+  private LayoutInflater layoutInflater;
+  private TableLayout tableLayout;
+  SwipeRefreshLayout swipe;
+  SwipeRefreshLayout.OnRefreshListener listener;
+  private int themeId, status, totalSeats;
+  private boolean oneTimeDataLoad = false;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        themeId = ThemeManager.getThemeId();
-        setTheme(themeId);
-        setContentView(R.layout.activity_results_simplified);
-        toolbar = findViewById(R.id.toolbarResSim);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    themeId = ThemeManager.getThemeId();
+    setTheme(themeId);
+    setContentView(R.layout.activity_results_simplified);
+    toolbar = findViewById(R.id.toolbarResSim);
+    toolbar.setNavigationOnClickListener(
+        new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            onBackPressed();
+          }
         });
-        button = findViewById(R.id.detailBut);
-        final Intent intent = getIntent();
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                button.setEnabled(false);
-                ServerCall serverCall = new ServerCall();
-                serverCall.getStatelist(intent.getIntExtra("electionId", 0),
-                        intent.getStringExtra("type"), getApplicationContext());
-                Intent intent = new Intent(getBaseContext(), WaitScreen.class);
-                intent.putExtra("LABEL", "Hold on");
-                startActivity(intent);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-            }
+    button = findViewById(R.id.detailBut);
+    final Intent intent = getIntent();
+    button.setOnClickListener(
+        new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            button.setEnabled(false);
+            ServerCall serverCall = new ServerCall();
+            serverCall.getStatelist(
+                intent.getIntExtra("electionId", 0),
+                intent.getStringExtra("type"),
+                getApplicationContext());
+            Intent intent = new Intent(getBaseContext(), WaitScreen.class);
+            intent.putExtra("LABEL", "Hold on");
+            startActivity(intent);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+          }
         });
-        status = intent.getIntExtra("status", 0);
-        totalSeats = intent.getIntExtra("totalSeats", 0);
-        ImageView indicator = findViewById(R.id.indicator2);
-        switch (status) {
-            case 2:
-                indicator.setImageResource(R.drawable.pend_res);
-                break;
-            case 3:
-                indicator.setImageResource(R.drawable.complete);
-                break;
-        }
-        ArrayList<PartywiseResultList> resultlist =
-                (ArrayList<PartywiseResultList>) intent.getSerializableExtra("list");
+    status = intent.getIntExtra("status", 0);
+    totalSeats = intent.getIntExtra("totalSeats", 0);
+    ImageView indicator = findViewById(R.id.indicator2);
+    switch (status) {
+      case 2:
+        indicator.setImageResource(R.drawable.pend_res);
+        break;
+      case 3:
+        indicator.setImageResource(R.drawable.complete);
+        break;
+    }
+    ArrayList<PartywiseResultList> resultlist =
+        (ArrayList<PartywiseResultList>) intent.getSerializableExtra("list");
 
-        chart = findViewById(R.id.chartoverall);
-        tableLayout = findViewById(R.id.tableoverall);
-        swipe = findViewById(R.id.swipeRefreshSimplifiedPage);
-        listener = new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                ServerCall serverCall = new ServerCall();
-                serverCall.getOverallResult(intent.getStringExtra("type"),
-                        intent.getIntExtra("electionId", 0), getApplicationContext(),
-                        ResultsSimplified.this, true);
-            }
+    chart = findViewById(R.id.chartoverall);
+    tableLayout = findViewById(R.id.tableoverall);
+    swipe = findViewById(R.id.swipeRefreshSimplifiedPage);
+    listener =
+        new SwipeRefreshLayout.OnRefreshListener() {
+          @Override
+          public void onRefresh() {
+            ServerCall serverCall = new ServerCall();
+            serverCall.getOverallResult(
+                intent.getStringExtra("type"),
+                intent.getIntExtra("electionId", 0),
+                getApplicationContext(),
+                ResultsSimplified.this,
+                true);
+          }
         };
-        swipe.setOnRefreshListener(listener);
-        populate(resultlist);
-    }
+    swipe.setOnRefreshListener(listener);
+    populate(resultlist);
+  }
 
-    public void populate(ArrayList<PartywiseResultList> resultlist) {
-        chart.setBackgroundColor(Color.TRANSPARENT);
-        chart.setUsePercentValues(false);
-        chart.getDescription().setEnabled(false);
-        chart.setCenterTextTypeface(ResourcesCompat.getFont(chart.getContext(), R.font.azo));
-        chart.setDrawHoleEnabled(true);
-        chart.setRotationEnabled(false);
-        chart.setHoleColor(Color.TRANSPARENT);
-        chart.setTransparentCircleAlpha(0);
-        chart.setHoleRadius(45f);
-        chart.setMaxAngle(360f); // FULL CHART
-        chart.setRotationAngle(180f);
-        chart.setDrawEntryLabels(false);
-        chart.setUsePercentValues(false);
-        ArrayList<PieEntry> values = new ArrayList<>();
-        for (int i = 0; i < resultlist.size(); i++) {
-            values.add(new PieEntry(resultlist.get(i).getSeatsWon(), resultlist.get(i).getPartyname()));
-        }
-        dataSet = new PieDataSet(values, "");
-        dataSet.setSliceSpace(3f);
-        dataSet.setSelectionShift(6f);
-        dataSet.setColors(ColorTemplate.VORDIPLOM_COLORS);
-        dataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
-        dataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
-        dataSet.setValueLinePart1OffsetPercentage(100f);
-        dataSet.setValueLinePart1Length(0.6f);
-        dataSet.setValueLinePart2Length(0.6f);
-        PieData data = new PieData(dataSet);
-        chart.animateY(1000);
-        data.setValueTextSize(15f);
-        data.setValueTypeface(ResourcesCompat.getFont(chart.getContext(), R.font.azo));
-        data.setValueFormatter(new IValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, Entry entry,
-                                            int dataSetIndex, ViewPortHandler viewPortHandler) {
-                return "" + (int) value;
-            }
+  public void populate(ArrayList<PartywiseResultList> resultlist) {
+    chart.setBackgroundColor(Color.TRANSPARENT);
+    chart.setUsePercentValues(false);
+    chart.getDescription().setEnabled(false);
+    chart.setCenterTextTypeface(ResourcesCompat.getFont(chart.getContext(), R.font.azo));
+    chart.setDrawHoleEnabled(true);
+    chart.setRotationEnabled(false);
+    chart.setHoleColor(Color.TRANSPARENT);
+    chart.setTransparentCircleAlpha(0);
+    chart.setHoleRadius(45f);
+    chart.setMaxAngle(360f); // FULL CHART
+    chart.setRotationAngle(180f);
+    chart.setDrawEntryLabels(false);
+    chart.setUsePercentValues(false);
+    ArrayList<PieEntry> values = new ArrayList<>();
+    for (int i = 0; i < resultlist.size(); i++) {
+      values.add(new PieEntry(resultlist.get(i).getSeatsWon(), resultlist.get(i).getPartyname()));
+    }
+    dataSet = new PieDataSet(values, "");
+    dataSet.setSliceSpace(3f);
+    dataSet.setSelectionShift(6f);
+    dataSet.setColors(ColorTemplate.VORDIPLOM_COLORS);
+    dataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+    dataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+    dataSet.setValueLinePart1OffsetPercentage(100f);
+    dataSet.setValueLinePart1Length(0.6f);
+    dataSet.setValueLinePart2Length(0.6f);
+    PieData data = new PieData(dataSet);
+    chart.animateY(1000);
+    data.setValueTextSize(15f);
+    data.setValueTypeface(ResourcesCompat.getFont(chart.getContext(), R.font.azo));
+    data.setValueFormatter(
+        new IValueFormatter() {
+          @Override
+          public String getFormattedValue(
+              float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+            return "" + (int) value;
+          }
         });
-        chart.invalidate();
-        chart.setData(data);
-        chart.setCenterText((int) data.getYValueSum() + "/" + totalSeats);
-        chart.setCenterTextTypeface(ResourcesCompat.getFont(chart.getContext(), R.font.azo));
-        chart.setCenterTextSize(15f);
-        chart.getLegend().setEnabled(true);
-        chart.setExtraOffsets(0.f, 5.f, 0.f, 5.f);
-        Legend leg = chart.getLegend();
-        leg.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
-        LegendEntry[] legend = leg.getEntries();
-        layoutInflater = (LayoutInflater) this.getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        if (themeId == R.style.AppTheme_Light) {
-            dataSet.setValueLineColor(Color.BLACK);
-            chart.setCenterTextColor(Color.BLACK);
-            data.setValueTextColor(Color.BLACK);
-            leg.setTextColor(Color.BLACK);
-            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
-            tableLayout.setBackgroundResource(android.R.drawable.dialog_holo_light_frame);
-        } else {
-            dataSet.setValueLineColor(Color.WHITE);
-            chart.setCenterTextColor(Color.WHITE);
-            data.setValueTextColor(Color.WHITE);
-            leg.setTextColor(Color.WHITE);
-            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-            tableLayout.setBackgroundResource(android.R.drawable.dialog_holo_dark_frame);
-        }
-        tableLayout.removeViews(1, tableLayout.getChildCount() - 1);
-        for (int i = 0; i < resultlist.size(); i++) {
-            View view = layoutInflater.inflate(R.layout.row, tableLayout, false);
-            TableRow row = view.findViewById(R.id.rowwwww);
-            if (i % 2 == 1)
-                row.setBackgroundColor(getResources().getColor(R.color.shade));
-            View color = view.findViewById(R.id.color);
-            TextView names = view.findViewById(R.id.partynum),
-                    seats = view.findViewById(R.id.seatnum);
-            ImageView syms = view.findViewById(R.id.imnum);
-            final ProgressBar progress = view.findViewById(R.id.tableImageProgress);
-            String resUrl = resultlist.get(i).getPartySymbol();
-            names.setText(resultlist.get(i).getPartyname());
-            Glide.with(this)
-                    .load(resUrl)
-                    .listener(new RequestListener<Drawable>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model,
-                                                    Target<Drawable> target, boolean isFirstResource) {
-                            progress.setVisibility(View.GONE);
-                            if (themeId == R.style.AppTheme_Light)
-                                target.onLoadFailed(getDrawable(R.drawable.ic_error_outline_black_24dp));
-                            else
-                                target.onLoadFailed(getDrawable(R.drawable.ic_error_outline_white_24dp));
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
-                                                       DataSource dataSource, boolean isFirstResource) {
-                            progress.setVisibility(View.GONE);
-                            return false;
-                        }
-                    }).into(syms);
-            seats.setText(Integer.toString(resultlist.get(i).getSeatsWon()));
-            color.setBackgroundColor(legend[i].formColor);
-            tableLayout.addView(row);
-            swipe.setRefreshing(false);
-        }
+    chart.invalidate();
+    chart.setData(data);
+    chart.setCenterText((int) data.getYValueSum() + "/" + totalSeats);
+    chart.setCenterTextTypeface(ResourcesCompat.getFont(chart.getContext(), R.font.azo));
+    chart.setCenterTextSize(15f);
+    chart.getLegend().setEnabled(true);
+    chart.setExtraOffsets(0.f, 5.f, 0.f, 5.f);
+    Legend leg = chart.getLegend();
+    leg.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+    LegendEntry[] legend = leg.getEntries();
+    layoutInflater =
+        (LayoutInflater) this.getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    if (themeId == R.style.AppTheme_Light) {
+      dataSet.setValueLineColor(Color.BLACK);
+      chart.setCenterTextColor(Color.BLACK);
+      data.setValueTextColor(Color.BLACK);
+      leg.setTextColor(Color.BLACK);
+      toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+      tableLayout.setBackgroundResource(android.R.drawable.dialog_holo_light_frame);
+    } else {
+      dataSet.setValueLineColor(Color.WHITE);
+      chart.setCenterTextColor(Color.WHITE);
+      data.setValueTextColor(Color.WHITE);
+      leg.setTextColor(Color.WHITE);
+      toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+      tableLayout.setBackgroundResource(android.R.drawable.dialog_holo_dark_frame);
     }
-
-    @Override
-    protected void onResume() {
-        button.setEnabled(true);
-        if (oneTimeDataLoad)
-            swipe.post(new Runnable() {
+    tableLayout.removeViews(1, tableLayout.getChildCount() - 1);
+    for (int i = 0; i < resultlist.size(); i++) {
+      View view = layoutInflater.inflate(R.layout.row, tableLayout, false);
+      TableRow row = view.findViewById(R.id.rowwwww);
+      if (i % 2 == 1) row.setBackgroundColor(getResources().getColor(R.color.shade));
+      View color = view.findViewById(R.id.color);
+      TextView names = view.findViewById(R.id.partynum), seats = view.findViewById(R.id.seatnum);
+      ImageView syms = view.findViewById(R.id.imnum);
+      final ProgressBar progress = view.findViewById(R.id.tableImageProgress);
+      String resUrl = resultlist.get(i).getPartySymbol();
+      names.setText(resultlist.get(i).getPartyname());
+      Glide.with(this)
+          .load(resUrl)
+          .listener(
+              new RequestListener<Drawable>() {
                 @Override
-                public void run() {
-                    swipe.setRefreshing(true);
-                    listener.onRefresh();
+                public boolean onLoadFailed(
+                    @Nullable GlideException e,
+                    Object model,
+                    Target<Drawable> target,
+                    boolean isFirstResource) {
+                  progress.setVisibility(View.GONE);
+                  if (themeId == R.style.AppTheme_Light)
+                    target.onLoadFailed(getDrawable(R.drawable.ic_error_outline_black_24dp));
+                  else target.onLoadFailed(getDrawable(R.drawable.ic_error_outline_white_24dp));
+                  return false;
                 }
-            });
-        super.onResume();
-        oneTimeDataLoad=true;
+
+                @Override
+                public boolean onResourceReady(
+                    Drawable resource,
+                    Object model,
+                    Target<Drawable> target,
+                    DataSource dataSource,
+                    boolean isFirstResource) {
+                  progress.setVisibility(View.GONE);
+                  return false;
+                }
+              })
+          .into(syms);
+      seats.setText(Integer.toString(resultlist.get(i).getSeatsWon()));
+      color.setBackgroundColor(legend[i].formColor);
+      tableLayout.addView(row);
+      swipe.setRefreshing(false);
     }
+  }
+
+  @Override
+  protected void onResume() {
+    button.setEnabled(true);
+    if (oneTimeDataLoad)
+      swipe.post(
+          new Runnable() {
+            @Override
+            public void run() {
+              swipe.setRefreshing(true);
+              listener.onRefresh();
+            }
+          });
+    super.onResume();
+    oneTimeDataLoad = true;
+  }
 }

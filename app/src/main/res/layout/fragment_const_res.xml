@@ -57,10 +57,7 @@
                     android:id="@+id/list3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:divider="@android:color/transparent"
-                    android:dividerHeight="10dp"
-                    android:padding="5dp" />
-
+                    android:divider="@android:color/transparent" />
             </android.support.v4.widget.SwipeRefreshLayout>
         </ScrollView>
     </android.support.constraint.ConstraintLayout>
