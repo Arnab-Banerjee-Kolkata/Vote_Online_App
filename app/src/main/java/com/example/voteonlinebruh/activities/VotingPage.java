@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -21,6 +22,7 @@ import com.example.voteonlinebruh.apiCalls.ServerCall;
 import com.example.voteonlinebruh.adapters.RecyclerViewAdapter;
 import com.example.voteonlinebruh.models.RecyclerViewItem;
 import com.example.voteonlinebruh.models.PublicCandidate;
+import com.example.voteonlinebruh.utility.PostingService;
 import com.example.voteonlinebruh.utility.ScreenControl;
 import com.example.voteonlinebruh.utility.ThemeManager;
 
@@ -37,7 +39,7 @@ public class VotingPage extends AppCompatActivity {
   private LinearLayoutManager layoutManager;
   private ScreenControl screenControl = new ScreenControl();
   private RelativeLayout waitrel;
-  private static boolean changeDetected = false;
+  private Intent intent;
   private int themeId, themeId2, resid;
 
   @Override
@@ -56,6 +58,9 @@ public class VotingPage extends AppCompatActivity {
     mContext = getApplicationContext();
     waitrel = findViewById(R.id.waitRel3);
     final String boothId = getIntent().getStringExtra("boothId");
+    intent = new Intent(this, PostingService.class);
+    intent.putExtra("boothId", boothId);
+    intent.putExtra("action", PostingService.ACTION_START_SERVICE);
     ServerCall serverCall = new ServerCall();
     serverCall.getRandomKey(boothId, mContext, VotingPage.this);
     waitrel.setVisibility(View.VISIBLE);
@@ -73,7 +78,7 @@ public class VotingPage extends AppCompatActivity {
                   public void onClick(DialogInterface dialog, int which) {
                     String candidateId = publicCandidates.get(selected).getId();
                     ServerCall serverCall = new ServerCall();
-                    serverCall.storeVote(boothId, candidateId, mContext);
+                    serverCall.storeVote(boothId, candidateId, mContext, false);
                     Intent intent = new Intent(mContext, Thanks.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
@@ -162,14 +167,10 @@ public class VotingPage extends AppCompatActivity {
 
   @Override
   protected void onUserLeaveHint() {
-    changeDetected = true;
+    Log.d("Home", "pressed");
+    startService(intent);
+    finish();
     super.onUserLeaveHint();
-  }
-
-  @Override
-  protected void onSaveInstanceState(Bundle outState) {
-    changeDetected = true;
-    super.onSaveInstanceState(outState);
   }
 
   @Override

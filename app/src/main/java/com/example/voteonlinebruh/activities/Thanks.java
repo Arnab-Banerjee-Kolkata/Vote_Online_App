@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -24,9 +25,8 @@ import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.utility.ThemeManager;
 
 public class Thanks extends AppCompatActivity {
-  public static boolean threadStop = false;
-  public static boolean success = false;
-  private static boolean play = false;
+  private boolean threadStop, success, play;
+  public static Thanks instance;
   private ImageView checkView;
   private Handler handler = new Handler();
   private CardView cardView;
@@ -44,6 +44,10 @@ public class Thanks extends AppCompatActivity {
     themeId = ThemeManager.getThemeId();
     setTheme(themeId);
     setContentView(R.layout.activity_thanks);
+    threadStop = false;
+    success = false;
+    play = false;
+    instance = this;
     checkView = findViewById(R.id.checkView);
     cardView = findViewById(R.id.checkContainer);
     progressBar = findViewById(R.id.progressBar);
@@ -167,6 +171,18 @@ public class Thanks extends AppCompatActivity {
 
   public void goHome(View view) {
     super.onBackPressed();
+  }
+
+  public void release(boolean status) {
+    success = status;
+    threadStop = true;
+  }
+
+  @Override
+  protected void onDestroy() {
+    instance = null;
+    Log.d("Instance","destroyed");
+    super.onDestroy();
   }
 
   @Override

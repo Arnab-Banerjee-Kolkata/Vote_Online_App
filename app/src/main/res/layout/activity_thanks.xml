@@ -27,7 +27,7 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbarEnd"
-        app:layout_constraintVertical_bias="0.3"
+        app:layout_constraintVertical_bias="0.2"
         tools:layout_editor_absoluteX="0dp" />
 
     <ProgressBar
@@ -39,7 +39,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbarEnd"
-        app:layout_constraintVertical_bias="0.6" />
+        app:layout_constraintVertical_bias="0.55" />
 
     <android.support.v7.widget.CardView
         android:id="@+id/checkContainer"
@@ -48,7 +48,7 @@
         android:backgroundTint="@android:color/holo_green_dark"
         android:visibility="gone"
         app:cardCornerRadius="50dp"
-        app:layout_constraintVertical_bias="0.6"
+        app:layout_constraintVertical_bias="0.55"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
