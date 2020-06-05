@@ -1,9 +1,8 @@
-package com.example.voteonlinebruh.apiCalls;
+package com.example.voteonlinebruh.api;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Handler;
 import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -45,7 +44,7 @@ import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class ServerCall {
+public class PublicAPICall {
 
   private int TIMES = 0;
   private boolean validateBoothOtpResponse,
@@ -70,7 +69,7 @@ public class ServerCall {
   private String candidateId;
   private VotingPage votingPage;
 
-  public ServerCall() {
+  public PublicAPICall() {
     TIMES = 0;
     validateBoothOtpResponse = false;
     getPublicResultListResponse = false;
@@ -117,29 +116,29 @@ public class ServerCall {
 
         switch (methodCode) {
           case 1: // validateBoothOtp
-            ServerCall.this.validateBoothOtp(boothId, otp, mContext, otpPage);
+            PublicAPICall.this.validateBoothOtp(boothId, otp, mContext, otpPage);
             break;
           case 2: // getPublicResultList
-            ServerCall.this.getPublicResultList(mContext);
+            PublicAPICall.this.getPublicResultList(mContext);
             break;
           case 3: // getOverallResult
-            ServerCall.this.getOverallResult(type, electionId, mContext, resultSimplified, release);
+            PublicAPICall.this.getOverallResult(type, electionId, mContext, resultSimplified, release);
             break;
           case 4: // getOverallResult2
-            ServerCall.this.getOverallResult(type, electionId, stateCode, mContext, resultDetailed);
+            PublicAPICall.this.getOverallResult(type, electionId, stateCode, mContext, resultDetailed);
             break;
           case 5: // getConstituencyResult
-            ServerCall.this.getConstituencyResult(
+            PublicAPICall.this.getConstituencyResult(
                 type, electionId, stateCode, mContext, resultDetailed, list, totalSeats);
             break;
           case 6: // getStateList
-            ServerCall.this.getStatelist(electionId, type, mContext);
+            PublicAPICall.this.getStatelist(electionId, type, mContext);
             break;
           case 7: // storeVote
-            ServerCall.this.storeVote(boothId, candidateId, mContext, service);
+            PublicAPICall.this.storeVote(boothId, candidateId, mContext, service);
             break;
           case 8: // getRandomKey
-            ServerCall.this.getRandomKey(boothId, mContext, votingPage);
+            PublicAPICall.this.getRandomKey(boothId, mContext, votingPage);
             break;
         }
 
@@ -281,7 +280,7 @@ public class ServerCall {
                 // Toast.makeText(mContext, "COOKIE. Try again: TIMES=" + (TIMES++),
                 // Toast.LENGTH_SHORT).show();
                 if (TIMES < 100 && !validateBoothOtpResponse) {
-                  ServerCall.this.storeCookie(mContext, MainActivity.webView);
+                  PublicAPICall.this.storeCookie(mContext, MainActivity.webView);
                   RequestDelayRunnable requestDelayRunnable = new RequestDelayRunnable(1);
                   new Thread(requestDelayRunnable).start();
                 } else if (TIMES >= 100 && !validateBoothOtpResponse) {
@@ -307,7 +306,7 @@ public class ServerCall {
             // Toast.makeText(mContext, "Error occured. Try again " + TIMES,
             // Toast.LENGTH_SHORT).show();
             if (TIMES < 100 && !validateBoothOtpResponse) {
-              ServerCall.this.storeCookie(mContext, MainActivity.webView);
+              PublicAPICall.this.storeCookie(mContext, MainActivity.webView);
               RequestDelayRunnable requestDelayRunnable = new RequestDelayRunnable(1);
               new Thread(requestDelayRunnable).start();
             } else if (TIMES >= 100 && !validateBoothOtpResponse) {
@@ -379,7 +378,7 @@ public class ServerCall {
                 e.printStackTrace();
                 Log.d("response error", response);
                 if (TIMES < 100 && !getPublicResultListResponse) {
-                  ServerCall.this.storeCookie(mContext, MainActivity.webView);
+                  PublicAPICall.this.storeCookie(mContext, MainActivity.webView);
                   RequestDelayRunnable requestDelayRunnable = new RequestDelayRunnable(2);
                   new Thread(requestDelayRunnable).start();
                 } else if (TIMES >= 100 && !getPublicResultListResponse) {
@@ -398,7 +397,7 @@ public class ServerCall {
           public void onErrorResponse(VolleyError error) {
             error.printStackTrace();
             if (TIMES < 100 && !getPublicResultListResponse) {
-              ServerCall.this.storeCookie(mContext, MainActivity.webView);
+              PublicAPICall.this.storeCookie(mContext, MainActivity.webView);
               RequestDelayRunnable requestDelayRunnable = new RequestDelayRunnable(2);
               new Thread(requestDelayRunnable).start();
             } else if (TIMES >= 100 && !getPublicResultListResponse) {
@@ -491,7 +490,7 @@ public class ServerCall {
                 e.printStackTrace();
                 Log.d("response error", response);
                 if (TIMES < 100 && !getOverallResultResponse1) {
-                  ServerCall.this.storeCookie(mContext, MainActivity.webView);
+                  PublicAPICall.this.storeCookie(mContext, MainActivity.webView);
                   RequestDelayRunnable requestDelayRunnable = new RequestDelayRunnable(3);
                   new Thread(requestDelayRunnable).start();
                 } else if (TIMES >= 100 && !getOverallResultResponse1) {
@@ -510,7 +509,7 @@ public class ServerCall {
           public void onErrorResponse(VolleyError error) {
             error.printStackTrace();
             if (TIMES < 100 && !getOverallResultResponse1) {
-              ServerCall.this.storeCookie(mContext, MainActivity.webView);
+              PublicAPICall.this.storeCookie(mContext, MainActivity.webView);
               RequestDelayRunnable requestDelayRunnable = new RequestDelayRunnable(3);
               new Thread(requestDelayRunnable).start();
             } else if (TIMES >= 100 && !getOverallResultResponse1) {
@@ -600,7 +599,7 @@ public class ServerCall {
                 e.printStackTrace();
                 Log.d("response error", response);
                 if (TIMES < 100 && !getOverallResultResponse2) {
-                  ServerCall.this.storeCookie(mContext, MainActivity.webView);
+                  PublicAPICall.this.storeCookie(mContext, MainActivity.webView);
                   RequestDelayRunnable requestDelayRunnable = new RequestDelayRunnable(4);
                   new Thread(requestDelayRunnable).start();
                 } else if (TIMES >= 100 && !getOverallResultResponse2) {
@@ -618,7 +617,7 @@ public class ServerCall {
           public void onErrorResponse(VolleyError error) {
             error.printStackTrace();
             if (TIMES < 100 && !getOverallResultResponse2) {
-              ServerCall.this.storeCookie(mContext, MainActivity.webView);
+              PublicAPICall.this.storeCookie(mContext, MainActivity.webView);
               RequestDelayRunnable requestDelayRunnable = new RequestDelayRunnable(4);
               new Thread(requestDelayRunnable).start();
             } else if (TIMES >= 100 && !getOverallResultResponse2) {
@@ -708,7 +707,7 @@ public class ServerCall {
                 e.printStackTrace();
                 Log.d("response error", response);
                 if (TIMES < 100 && !getConstituencyResultResponse) {
-                  ServerCall.this.storeCookie(mContext, MainActivity.webView);
+                  PublicAPICall.this.storeCookie(mContext, MainActivity.webView);
                   RequestDelayRunnable requestDelayRunnable = new RequestDelayRunnable(5);
                   new Thread(requestDelayRunnable).start();
                 } else if (TIMES >= 100 && !getConstituencyResultResponse) {
@@ -726,7 +725,7 @@ public class ServerCall {
           public void onErrorResponse(VolleyError error) {
             error.printStackTrace();
             if (TIMES < 100 && !getConstituencyResultResponse) {
-              ServerCall.this.storeCookie(mContext, MainActivity.webView);
+              PublicAPICall.this.storeCookie(mContext, MainActivity.webView);
               RequestDelayRunnable requestDelayRunnable = new RequestDelayRunnable(5);
               new Thread(requestDelayRunnable).start();
             } else if (TIMES >= 100 && !getConstituencyResultResponse) {
@@ -794,7 +793,7 @@ public class ServerCall {
               } catch (JSONException e) {
                 e.printStackTrace();
                 if (TIMES < 100 && !getStateListResponse) {
-                  ServerCall.this.storeCookie(mContext, MainActivity.webView);
+                  PublicAPICall.this.storeCookie(mContext, MainActivity.webView);
                   RequestDelayRunnable requestDelayRunnable = new RequestDelayRunnable(6);
                   new Thread(requestDelayRunnable).start();
                 } else if (TIMES >= 100 && !getStateListResponse) {
@@ -813,7 +812,7 @@ public class ServerCall {
           public void onErrorResponse(VolleyError error) {
             error.printStackTrace();
             if (TIMES < 100 && !getStateListResponse) {
-              ServerCall.this.storeCookie(mContext, MainActivity.webView);
+              PublicAPICall.this.storeCookie(mContext, MainActivity.webView);
               RequestDelayRunnable requestDelayRunnable = new RequestDelayRunnable(6);
               new Thread(requestDelayRunnable).start();
             } else if (TIMES >= 100 && !getStateListResponse) {
@@ -901,7 +900,7 @@ public class ServerCall {
                   e.printStackTrace();
 
                   if (TIMES < 100 && !storeVoteResponse) {
-                    ServerCall.this.storeCookie(mContext, MainActivity.webView);
+                    PublicAPICall.this.storeCookie(mContext, MainActivity.webView);
                     RequestDelayRunnable requestDelayRunnable = new RequestDelayRunnable(7);
                     new Thread(requestDelayRunnable).start();
                   } else if (TIMES >= 100 && !storeVoteResponse) {
@@ -925,7 +924,7 @@ public class ServerCall {
             public void onErrorResponse(VolleyError error) {
               error.printStackTrace();
               if (TIMES < 100 && !storeVoteResponse) {
-                ServerCall.this.storeCookie(mContext, MainActivity.webView);
+                PublicAPICall.this.storeCookie(mContext, MainActivity.webView);
                 RequestDelayRunnable requestDelayRunnable = new RequestDelayRunnable(7);
                 new Thread(requestDelayRunnable).start();
               } else if (TIMES >= 100 && !storeVoteResponse) {
@@ -997,7 +996,7 @@ public class ServerCall {
               } catch (JSONException e) {
                 e.printStackTrace();
                 if (TIMES < 100 && !getRandomKeyResponse) {
-                  ServerCall.this.storeCookie(mContext, MainActivity.webView);
+                  PublicAPICall.this.storeCookie(mContext, MainActivity.webView);
                   RequestDelayRunnable requestDelayRunnable = new RequestDelayRunnable(8);
                   new Thread(requestDelayRunnable).start();
                 } else if (TIMES >= 100 && !getRandomKeyResponse) {
@@ -1013,7 +1012,7 @@ public class ServerCall {
           public void onErrorResponse(VolleyError error) {
             error.printStackTrace();
             if (TIMES < 100 && !getRandomKeyResponse) {
-              ServerCall.this.storeCookie(mContext, MainActivity.webView);
+              PublicAPICall.this.storeCookie(mContext, MainActivity.webView);
               RequestDelayRunnable requestDelayRunnable = new RequestDelayRunnable(8);
               new Thread(requestDelayRunnable).start();
             } else if (TIMES >= 100 && !getRandomKeyResponse) {

@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.voteonlinebruh.R;
-import com.example.voteonlinebruh.apiCalls.ServerCall;
+import com.example.voteonlinebruh.api.PublicAPICall;
 import com.example.voteonlinebruh.utility.ThemeManager;
 
 public class OtpPage extends AppCompatActivity {
@@ -173,8 +173,8 @@ public class OtpPage extends AppCompatActivity {
               }
               login.setEnabled(false);
               String OTP = otp;
-              ServerCall serverCall = new ServerCall();
-              serverCall.validateBoothOtp(boothId, OTP, mContext, OtpPage.this);
+              PublicAPICall publicAPICall = new PublicAPICall();
+              publicAPICall.validateBoothOtp(boothId, OTP, mContext, OtpPage.this);
 
               Intent intent = new Intent(getApplicationContext(), WaitScreen.class);
               intent.putExtra("LABEL", "Authenticating");

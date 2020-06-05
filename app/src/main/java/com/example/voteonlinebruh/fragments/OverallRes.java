@@ -24,7 +24,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.activities.ResultsDetailed;
-import com.example.voteonlinebruh.apiCalls.ServerCall;
+import com.example.voteonlinebruh.api.PublicAPICall;
 import com.example.voteonlinebruh.utility.ThemeManager;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -90,8 +90,8 @@ public class OverallRes extends Fragment {
         new SwipeRefreshLayout.OnRefreshListener() {
           @Override
           public void onRefresh() {
-            ServerCall serverCall = new ServerCall();
-            serverCall.getOverallResult(type, electionId, stateCode, getContext(), context);
+            PublicAPICall publicAPICall = new PublicAPICall();
+            publicAPICall.getOverallResult(type, electionId, stateCode, getContext(), context);
           }
         };
     swipe = v.findViewById(R.id.swipeRefreshOverallFrag);

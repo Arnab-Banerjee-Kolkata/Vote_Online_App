@@ -1,4 +1,4 @@
-package com.example.voteonlinebruh.apiCalls;
+package com.example.voteonlinebruh.api;
 
 import android.content.Context;
 import android.content.SharedPreferences;

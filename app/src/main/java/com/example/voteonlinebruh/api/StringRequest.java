@@ -1,4 +1,4 @@
-package com.example.voteonlinebruh.apiCalls;
+package com.example.voteonlinebruh.api;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;

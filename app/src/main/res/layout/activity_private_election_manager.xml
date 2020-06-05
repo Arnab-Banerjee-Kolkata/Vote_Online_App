@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.ManageElection">
+    tools:context=".activities.PrivateElectionManager">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/loginpart"
@@ -18,45 +18,44 @@
             android:id="@+id/loginmanage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="30dp"
             android:background="@drawable/buttonbg"
             android:paddingStart="50dp"
             android:paddingEnd="50dp"
             android:text="Sign-in"
-            android:textAllCaps="false"
             android:theme="@style/Widget.MaterialComponents.Button.OutlinedButton"
             app:backgroundTint="@color/button"
             app:layout_constraintBottom_toTopOf="@+id/textView10"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout5"
-            app:layout_constraintVertical_bias="0.35" />
+            app:layout_constraintVertical_bias="0.6" />
 
         <ImageView
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:layout_margin="5dp"
-            android:background="#303030"
-            android:elevation="1dp"
-            android:scaleType="fitCenter"
+            android:background="@android:drawable/dialog_holo_dark_frame"
+            android:scaleType="fitXY"
+            android:elevation="5dp"
+            android:padding="0dp"
+            android:layout_marginBottom="230dp"
             android:src="@mipmap/ic_launcher"
+            app:layout_constraintBottom_toBottomOf="@+id/linearLayout5"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView9" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <RelativeLayout
             android:id="@+id/linearLayout5"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="30dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
             android:background="@drawable/boxbg"
             android:gravity="center"
             android:padding="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView9">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias=".36">
 
             <EditText
                 android:id="@+id/userid"
@@ -66,19 +65,20 @@
                 android:layout_margin="10dp"
                 android:background="@drawable/boxbg"
                 android:inputType="textEmailAddress"
-                android:padding="7dp"
-                android:textSize="20dp" />
+                android:padding="10dp" />
 
             <EditText
                 android:id="@+id/pass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/uselessID2"
-                android:layout_margin="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/boxbg"
                 android:inputType="textPassword"
-                android:padding="7dp"
-                android:textSize="20dp" />
+                android:padding="10dp"/>
 
             <TextView
                 android:id="@+id/uselessID2"
@@ -89,15 +89,17 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
-                
                 android:text="Password :" />
 
             <TextView
                 android:id="@+id/uselessID1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="Email/Phone no. :" />
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="30dp"
+                android:text="Email ID :" />
 
         </RelativeLayout>
 
@@ -107,7 +109,6 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:text="Login to your @appname account to manage your polls."
-            android:textSize="16dp"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -134,66 +135,53 @@
             android:id="@+id/registermanage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="10dp"
             android:background="@drawable/buttonbg"
-            
             android:paddingStart="50dp"
             android:paddingEnd="50dp"
             android:text="Sign-up"
-            android:textAllCaps="false"
-            
-            
             android:theme="@style/Widget.MaterialComponents.Button.OutlinedButton"
             app:backgroundTint="@color/button"
+            app:layout_constraintVertical_bias=".4"
             app:layout_constraintBottom_toTopOf="@+id/textView11"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/scrollView3" />
+            app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
 
         <ImageView
+            android:id="@+id/imageView4"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:layout_margin="5dp"
-            android:background="#303030"
-            android:elevation="1dp"
-            android:scaleType="fitCenter"
+            android:background="@android:drawable/dialog_holo_dark_frame"
+            android:elevation="5dp"
+            android:padding="0dp"
+            android:scaleType="fitXY"
             android:src="@mipmap/ic_launcher"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView12" />
+            app:layout_constraintTop_toBottomOf="@id/textView12"/>
 
         <ScrollView
-            android:id="@+id/scrollView3"
+            android:id="@+id/scrollView2"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="30dp"
-            android:layout_marginTop="50dp"
             android:layout_marginEnd="30dp"
+            android:layout_marginTop="45dp"
+            android:layout_marginBottom="20dp"
             android:background="@drawable/boxbg"
-            android:paddingStart="2dp"
+            android:gravity="center"
             android:paddingTop="30dp"
-            android:paddingEnd="2dp"
-            app:layout_constraintBottom_toTopOf="@id/registermanage"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView12">
+            app:layout_constraintTop_toBottomOf="@id/textView12"
+            app:layout_constraintBottom_toTopOf="@id/registermanage">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="5dp">
-
-                <EditText
-                    android:id="@+id/user_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/uselessID3"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/boxbg"
-                    android:inputType="textPersonName"
-                    android:padding="7dp"
-                    android:textSize="20dp" />
 
                 <EditText
                     android:id="@+id/user_email"
@@ -203,19 +191,7 @@
                     android:layout_margin="10dp"
                     android:background="@drawable/boxbg"
                     android:inputType="textEmailAddress"
-                    android:padding="7dp"
-                    android:textSize="20dp" />
-
-                <EditText
-                    android:id="@+id/user_phone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/uselessID5"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/boxbg"
-                    android:inputType="phone"
-                    android:padding="7dp"
-                    android:textSize="20dp" />
+                    android:padding="10dp"/>
 
                 <EditText
                     android:id="@+id/password1"
@@ -225,56 +201,40 @@
                     android:layout_margin="10dp"
                     android:background="@drawable/boxbg"
                     android:inputType="textPassword"
-                    android:padding="7dp"
-                    android:textSize="20dp" />
+                    android:padding="10dp"/>
 
                 <EditText
                     android:id="@+id/password2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/uselessID7"
-                    android:layout_margin="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="20dp"
                     android:background="@drawable/boxbg"
                     android:inputType="textPassword"
-                    android:padding="7dp"
-                    android:textSize="20dp" />
+                    android:padding="10dp"/>
 
                 <TextView
                     android:id="@+id/uselessID4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/user_name"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="15dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginBottom="10dp"
                     android:text="Email :" />
 
                 <TextView
-                    android:id="@+id/uselessID3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:text="Your Name :" />
-
-                <TextView
                     android:id="@+id/uselessID6"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/user_phone"
+                    android:layout_below="@id/user_email"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginBottom="10dp"
                     android:text="Password :" />
-
-                <TextView
-                    android:id="@+id/uselessID5"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/user_email"
-                    android:layout_margin="10dp"
-                    android:text="Phone no. :" />
 
                 <TextView
                     android:id="@+id/uselessID7"
@@ -317,7 +277,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="Manage Election"
+        app:title="Host Election"
         app:titleTextAppearance="@style/azo" />
 
 </android.support.constraint.ConstraintLayout>

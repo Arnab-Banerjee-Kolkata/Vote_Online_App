@@ -18,7 +18,7 @@ import android.widget.Spinner;
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.adapters.FragmentAdapter;
 import com.example.voteonlinebruh.utility.ScreenControl;
-import com.example.voteonlinebruh.apiCalls.ServerCall;
+import com.example.voteonlinebruh.api.PublicAPICall;
 import com.example.voteonlinebruh.models.ConstituencyWiseResultList;
 import com.example.voteonlinebruh.models.PartywiseResultList;
 import com.example.voteonlinebruh.models.StateListItem;
@@ -84,8 +84,8 @@ public class ResultsDetailed extends FragmentActivity {
       viewPager.setPadding(0, 0, 0, 0);
       rel.setVisibility(View.VISIBLE);
       screenControl.makeScreenUnresponsive(ResultsDetailed.this.getWindow());
-      ServerCall serverCall = new ServerCall();
-      serverCall.getOverallResult(
+      PublicAPICall publicAPICall = new PublicAPICall();
+      publicAPICall.getOverallResult(
           type, electionId, "", getApplicationContext(), ResultsDetailed.this);
     } else {
       list = (ArrayList<StateListItem>) intent.getSerializableExtra("list");
@@ -102,8 +102,8 @@ public class ResultsDetailed extends FragmentActivity {
               screenControl.makeScreenUnresponsive(ResultsDetailed.this.getWindow());
               stateName = list.get(position).getStateName();
               stateCode = list.get(position).getStateCode();
-              ServerCall serverCall = new ServerCall();
-              serverCall.getOverallResult(
+              PublicAPICall publicAPICall = new PublicAPICall();
+              publicAPICall.getOverallResult(
                   type, electionId, stateCode, getApplicationContext(), ResultsDetailed.this);
             }
 
@@ -114,8 +114,8 @@ public class ResultsDetailed extends FragmentActivity {
           new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-              ServerCall serverCall = new ServerCall();
-              serverCall.getOverallResult(
+              PublicAPICall publicAPICall = new PublicAPICall();
+              publicAPICall.getOverallResult(
                   type, electionId, stateCode, getApplicationContext(), ResultsDetailed.this);
             }
           };

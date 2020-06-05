@@ -12,7 +12,7 @@ import android.widget.RelativeLayout;
 
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.adapters.ListViewForResultListAdapter;
-import com.example.voteonlinebruh.apiCalls.ServerCall;
+import com.example.voteonlinebruh.api.PublicAPICall;
 import com.example.voteonlinebruh.models.ResultListItem;
 import com.example.voteonlinebruh.utility.ThemeManager;
 
@@ -61,7 +61,7 @@ public class ResultList extends AppCompatActivity {
           @Override
           public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             listView.setEnabled(false);
-            ServerCall serverCall = new ServerCall();
+            PublicAPICall publicAPICall = new PublicAPICall();
             String type = resultlist.get(position).getType();
             if (type.equalsIgnoreCase("VIDHAN SABHA")) {
               Intent intent = new Intent(getBaseContext(), ResultsDetailed.class);
@@ -70,7 +70,7 @@ public class ResultList extends AppCompatActivity {
               intent.putExtra("stateName", resultlist.get(position).getStateName());
               startActivity(intent);
             } else {
-              serverCall.getOverallResult(
+              publicAPICall.getOverallResult(
                   type,
                   resultlist.get(position).getElectionId(),
                   getApplicationContext(),

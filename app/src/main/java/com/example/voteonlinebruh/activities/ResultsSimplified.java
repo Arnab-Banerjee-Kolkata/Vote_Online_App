@@ -25,7 +25,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.voteonlinebruh.R;
-import com.example.voteonlinebruh.apiCalls.ServerCall;
+import com.example.voteonlinebruh.api.PublicAPICall;
 import com.example.voteonlinebruh.models.PartywiseResultList;
 import com.example.voteonlinebruh.utility.ThemeManager;
 import com.github.mikephil.charting.charts.PieChart;
@@ -75,8 +75,8 @@ public class ResultsSimplified extends AppCompatActivity {
           @Override
           public void onClick(View v) {
             button.setEnabled(false);
-            ServerCall serverCall = new ServerCall();
-            serverCall.getStatelist(
+            PublicAPICall publicAPICall = new PublicAPICall();
+            publicAPICall.getStatelist(
                 intent.getIntExtra("electionId", 0),
                 intent.getStringExtra("type"),
                 getApplicationContext());
@@ -107,8 +107,8 @@ public class ResultsSimplified extends AppCompatActivity {
         new SwipeRefreshLayout.OnRefreshListener() {
           @Override
           public void onRefresh() {
-            ServerCall serverCall = new ServerCall();
-            serverCall.getOverallResult(
+            PublicAPICall publicAPICall = new PublicAPICall();
+            publicAPICall.getOverallResult(
                 intent.getStringExtra("type"),
                 intent.getIntExtra("electionId", 0),
                 getApplicationContext(),

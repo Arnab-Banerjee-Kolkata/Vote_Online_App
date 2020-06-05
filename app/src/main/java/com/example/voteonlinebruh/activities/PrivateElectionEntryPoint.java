@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide;
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.utility.ThemeManager;
 
-public class PrivateElection extends AppCompatActivity {
+public class PrivateElectionEntryPoint extends AppCompatActivity {
 
   private ImageView imageView1;
   private Toolbar toolbar;
@@ -21,7 +21,7 @@ public class PrivateElection extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     themeId = ThemeManager.getThemeId();
     setTheme(themeId);
-    setContentView(R.layout.activity_private_election);
+    setContentView(R.layout.activity_private_election_entry_point);
     toolbar = findViewById(R.id.toolbarpriv);
     if (themeId == R.style.AppTheme_Light)
       toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);

@@ -18,7 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.voteonlinebruh.R;
-import com.example.voteonlinebruh.apiCalls.ServerCall;
+import com.example.voteonlinebruh.api.PublicAPICall;
 import com.example.voteonlinebruh.adapters.RecyclerViewAdapter;
 import com.example.voteonlinebruh.models.RecyclerViewItem;
 import com.example.voteonlinebruh.models.PublicCandidate;
@@ -61,8 +61,8 @@ public class VotingPage extends AppCompatActivity {
     intent = new Intent(this, PostingService.class);
     intent.putExtra("boothId", boothId);
     intent.putExtra("action", PostingService.ACTION_START_SERVICE);
-    ServerCall serverCall = new ServerCall();
-    serverCall.getRandomKey(boothId, mContext, VotingPage.this);
+    PublicAPICall publicAPICall = new PublicAPICall();
+    publicAPICall.getRandomKey(boothId, mContext, VotingPage.this);
     waitrel.setVisibility(View.VISIBLE);
     screenControl.makeScreenUnresponsive(VotingPage.this.getWindow());
     // dialogbox
@@ -77,8 +77,8 @@ public class VotingPage extends AppCompatActivity {
                   @Override
                   public void onClick(DialogInterface dialog, int which) {
                     String candidateId = publicCandidates.get(selected).getId();
-                    ServerCall serverCall = new ServerCall();
-                    serverCall.storeVote(boothId, candidateId, mContext, false);
+                    PublicAPICall publicAPICall = new PublicAPICall();
+                    publicAPICall.storeVote(boothId, candidateId, mContext, false);
                     Intent intent = new Intent(mContext, Thanks.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);

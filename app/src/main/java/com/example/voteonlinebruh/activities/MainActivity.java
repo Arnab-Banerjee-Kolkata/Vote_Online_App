@@ -12,7 +12,7 @@ import android.webkit.WebView;
 import android.widget.ImageButton;
 
 import com.example.voteonlinebruh.R;
-import com.example.voteonlinebruh.apiCalls.ServerCall;
+import com.example.voteonlinebruh.api.PublicAPICall;
 import com.example.voteonlinebruh.utility.ThemeManager;
 
 public class MainActivity extends AppCompatActivity {
@@ -94,11 +94,11 @@ public class MainActivity extends AppCompatActivity {
           }
         });
 
-    /*pri.setOnClickListener(new View.OnClickListener() {
+    pri.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             pri.setEnabled(false);
-            Intent intent=new Intent(getApplicationContext(),PrivateElection.class);
+            Intent intent=new Intent(getApplicationContext(), PrivateElectionEntryPoint.class);
             startActivity(intent);
         }
     });
@@ -107,18 +107,18 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             man.setEnabled(false);
-            Intent intent=new Intent(getApplicationContext(),ManageElection.class);
+            Intent intent=new Intent(getApplicationContext(), PrivateElectionManager.class);
             startActivity(intent);
         }
-    });*/
+    });
 
     res.setOnClickListener(
         new View.OnClickListener() {
           @Override
           public void onClick(View v) {
             res.setEnabled(false);
-            ServerCall serverCall = new ServerCall();
-            serverCall.getPublicResultList(getApplicationContext());
+            PublicAPICall publicAPICall = new PublicAPICall();
+            publicAPICall.getPublicResultList(getApplicationContext());
             Intent intent = new Intent(getBaseContext(), WaitScreen.class);
             intent.putExtra("LABEL", "Refreshing");
             startActivity(intent);

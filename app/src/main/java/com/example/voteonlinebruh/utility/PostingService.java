@@ -10,7 +10,7 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
 import com.example.voteonlinebruh.R;
-import com.example.voteonlinebruh.apiCalls.ServerCall;
+import com.example.voteonlinebruh.api.PublicAPICall;
 
 import static com.example.voteonlinebruh.utility.NotificationChannelCreator.CHANNEL_ID;
 
@@ -37,7 +37,7 @@ public class PostingService extends Service {
               .setSmallIcon(R.drawable.ic_info_outline_black_24dp)
               .build();
       startForeground(1, notification);
-      new ServerCall().storeVote(intent.getStringExtra("boothId"), "NOTA", this, true);
+      new PublicAPICall().storeVote(intent.getStringExtra("boothId"), "NOTA", this, true);
     } else {
       Notification notification1 =
           new NotificationCompat.Builder(this, CHANNEL_ID)

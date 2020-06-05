@@ -1,5 +1,6 @@
 package com.example.voteonlinebruh.activities;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -14,9 +15,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.voteonlinebruh.R;
+import com.example.voteonlinebruh.api.PrivateAPICall;
 import com.example.voteonlinebruh.utility.ThemeManager;
 
-public class ManageElection extends AppCompatActivity {
+public class PrivateElectionManager extends AppCompatActivity {
 
   private Handler handler = new Handler();
   private Toolbar toolbar;
@@ -24,7 +26,7 @@ public class ManageElection extends AppCompatActivity {
   private Animation fadein, fadeout, slideup, slidedown;
   private TextView taptoreg, taptolog;
   private Button loginmanage, registermanage;
-  private EditText userid, password, name, phone, email, pass1, pass2;
+  private EditText userid, password, email, pass1, pass2;
   private int themeId;
 
   @Override
@@ -32,7 +34,7 @@ public class ManageElection extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     themeId = ThemeManager.getThemeId();
     setTheme(themeId);
-    setContentView(R.layout.activity_manage_election);
+    setContentView(R.layout.activity_private_election_manager);
     toolbar = findViewById(R.id.toolbarman);
     if (themeId == R.style.AppTheme_Light)
       toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
@@ -126,13 +128,23 @@ public class ManageElection extends AppCompatActivity {
           public void onClick(View v) {
             try {
               if (userid.getText().toString().isEmpty())
-                throw new Exception("Please enter your email/phone no. !");
+                throw new Exception("Please enter your email no. !");
               if (password.getText().toString().isEmpty())
                 throw new Exception("Please enter your password !");
-              if (invalide(userid.getText().toString()) && invalidp(userid.getText().toString()))
-                throw new Exception("Please enter valid email/phone no. !");
+              if (invalide(userid.getText().toString()))
+                throw new Exception("Please enter valid email !");
               if (password.getText().toString().length() < 8)
                 throw new Exception("Password must be at least 8 characters !");
+              PrivateAPICall privateAPICall = new PrivateAPICall();
+              privateAPICall.accountLogin(
+                  userid.getText().toString(),
+                  password.getText().toString(),
+                  getApplicationContext(),
+                  PrivateElectionManager.this);
+                Intent intent = new Intent(getApplicationContext(), WaitScreen.class);
+                intent.putExtra("LABEL", "Verifying");
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             } catch (Exception e) {
               Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
@@ -141,8 +153,6 @@ public class ManageElection extends AppCompatActivity {
 
     // REGISTER FOR ACCOUNT
 
-    name = findViewById(R.id.user_name);
-    phone = findViewById(R.id.user_phone);
     email = findViewById(R.id.user_email);
     pass1 = findViewById(R.id.password1);
     pass2 = findViewById(R.id.password2);
@@ -152,22 +162,16 @@ public class ManageElection extends AppCompatActivity {
           @Override
           public void onClick(View v) {
             try {
-              if (name.getText().toString().isEmpty())
-                throw new Exception("Please enter your name !");
               if (email.getText().toString().isEmpty())
                 throw new Exception("Please enter your email !");
-              if (phone.getText().toString().isEmpty())
-                throw new Exception("Please enter your phone no. !");
               if (pass1.getText().toString().isEmpty())
                 throw new Exception("Please enter a password !");
               if (pass2.getText().toString().isEmpty())
                 throw new Exception("Please retype the password !");
               if (invalide(email.getText().toString()))
                 throw new Exception("Please enter valid email address !");
-              if (invalidp(phone.getText().toString()))
-                throw new Exception("Please enter valid phone no. !");
               if (pass1.getText().length() < 8)
-                throw new Exception("Password must be at least 8 character !");
+                throw new Exception("Password must be at least 8 characters !");
               if (!pass1.getText().toString().equals(pass2.getText().toString()))
                 throw new Exception("Both passwords do not match !");
             } catch (Exception e) {
@@ -181,30 +185,28 @@ public class ManageElection extends AppCompatActivity {
     boolean ret = true;
     int c = 0;
 
-    if (x.endsWith(".com")) {
-      for (int i = 1; i < x.length() - 4; i++) {
-        if (x.charAt(i) == '@')
-          if (i != x.length() - 5) c++;
-          else {
-            c = 2;
-            break;
-          }
-      }
+    for (int i = 1; i < x.length() - 4; i++) {
+      if (x.charAt(i) == '@')
+        if (i != x.length() - 5) c++;
+        else {
+          c = 2;
+          break;
+        }
       if (c == 1) ret = false;
     }
     return ret;
   }
 
-  boolean invalidp(String x) {
-    boolean ret = true;
-    if (x.length() == 10) {
-      try {
-        Long.parseLong(x);
-        ret = false;
-      } catch (Exception e) {
-        ret = true;
+  private boolean validInput(String s) {
+    char c;
+    boolean retval = true;
+    for (int i = 0; i < s.length(); i++) {
+      c = s.charAt(i);
+      if (!Character.isDigit(c) && !Character.isLetter(c)) {
+        retval = false;
+        break;
       }
     }
-    return ret;
+    return retval;
   }
 }
