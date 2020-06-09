@@ -1,6 +1,7 @@
 package com.example.voteonlinebruh.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -116,6 +117,8 @@ public class PrivateElectionManager extends AppCompatActivity {
 
     loginmanage = findViewById(R.id.loginmanage);
     registermanage = findViewById(R.id.registermanage);
+    final SharedPreferences preferences = getSharedPreferences("Vote.Online.Account", MODE_PRIVATE);
+    final SharedPreferences.Editor editor = preferences.edit();
 
     // LOGIN TO ACCOUNT
 
@@ -140,11 +143,12 @@ public class PrivateElectionManager extends AppCompatActivity {
                   userid.getText().toString(),
                   password.getText().toString(),
                   getApplicationContext(),
-                  PrivateElectionManager.this);
-                Intent intent = new Intent(getApplicationContext(), WaitScreen.class);
-                intent.putExtra("LABEL", "Verifying");
-                startActivity(intent);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                  PrivateElectionManager.this,
+                  editor);
+              Intent intent = new Intent(getApplicationContext(), WaitScreen.class);
+              intent.putExtra("LABEL", "Logging you in");
+              startActivity(intent);
+              overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             } catch (Exception e) {
               Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
@@ -174,6 +178,20 @@ public class PrivateElectionManager extends AppCompatActivity {
                 throw new Exception("Password must be at least 8 characters !");
               if (!pass1.getText().toString().equals(pass2.getText().toString()))
                 throw new Exception("Both passwords do not match !");
+              if (invalidp(pass1.getText().toString()))
+                throw new Exception(
+                    "Passwords must contain atleast a lowercase, an uppercase,a special character and a digit.");
+              PrivateAPICall privateAPICall = new PrivateAPICall();
+              privateAPICall.register(
+                  email.getText().toString(),
+                  pass1.getText().toString(),
+                  getApplicationContext(),
+                  PrivateElectionManager.this,
+                  editor);
+              Intent intent = new Intent(getApplicationContext(), WaitScreen.class);
+              intent.putExtra("LABEL", "Setting up your account");
+              startActivity(intent);
+              overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             } catch (Exception e) {
               Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
@@ -197,16 +215,17 @@ public class PrivateElectionManager extends AppCompatActivity {
     return ret;
   }
 
-  private boolean validInput(String s) {
-    char c;
-    boolean retval = true;
+  private boolean invalidp(String s) {
+    String specialChars = " !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
+    boolean flagUp = false, flagLo = false, flagDi = false, flagSp = false;
     for (int i = 0; i < s.length(); i++) {
-      c = s.charAt(i);
-      if (!Character.isDigit(c) && !Character.isLetter(c)) {
-        retval = false;
-        break;
-      }
+      final char c = s.charAt(i);
+      if (Character.isUpperCase(c)) flagUp = true;
+      else if (Character.isLowerCase(c)) flagLo = true;
+      else if (Character.isDigit(c)) flagDi = true;
+      else if (specialChars.indexOf(c) >= 0) flagSp = true;
     }
-    return retval;
+    if (flagDi && flagLo && flagSp && flagUp) return false;
+    else return true;
   }
 }

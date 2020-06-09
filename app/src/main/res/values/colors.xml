@@ -5,4 +5,5 @@
     <color name="shade">#1A000000</color>
     <color name="button">#59699EFF</color>
     <color name="redBg">#59FF6C6C</color>
+    <color name="darkerShade">#4D000000</color>
 </resources>

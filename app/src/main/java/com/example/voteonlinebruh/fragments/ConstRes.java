@@ -2,6 +2,7 @@ package com.example.voteonlinebruh.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +13,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -27,6 +29,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.activities.ResultsDetailed;
+import com.example.voteonlinebruh.activities.WaitScreen;
 import com.example.voteonlinebruh.api.PublicAPICall;
 import com.example.voteonlinebruh.utility.ThemeManager;
 
@@ -38,7 +41,7 @@ public class ConstRes extends Fragment {
   private static ArrayList cons_name, cand_name, par_name, p_img, c_img, votes;
   private static HashSet<Integer> ties;
   private static String state_name, stateCode, type;
-  private static int rows, electionId;
+  private static int rows, electionId, stateElectionId;
   private static ResultsDetailed context;
   private static ListView listView;
   private static SwipeRefreshLayout swipe;
@@ -74,6 +77,7 @@ public class ConstRes extends Fragment {
     type = args.getString("type");
     stateCode = args.getString("stateCode");
     electionId = args.getInt("ID");
+    stateElectionId = args.getInt("stateElectionId");
     int prev = 0;
     ties = new HashSet<>();
     for (int i = 1; i < cons_name.size(); i++) {
@@ -193,6 +197,21 @@ public class ConstRes extends Fragment {
     }
     final MyAdapter arrayAdapter = new MyAdapter(cons_name, view.getContext());
     listView.setAdapter(arrayAdapter);
+    listView.setOnItemClickListener(
+        new AdapterView.OnItemClickListener() {
+          @Override
+          public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            listView.setEnabled(false);
+            PublicAPICall apiCall = new PublicAPICall();
+            apiCall.getConstituencyDetails(
+                stateElectionId, (String) cons_name.get(position), getContext());
+            Intent intent = new Intent(getContext(), WaitScreen.class);
+            intent.putExtra("LABEL", "Fetching detailed result");
+            startActivity(intent);
+            getActivity()
+                .overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+          }
+        });
     swipe.setRefreshing(false);
     oneTimeDataLoad = false;
     return view;
@@ -210,6 +229,7 @@ public class ConstRes extends Fragment {
             }
           });
     super.onStart();
+    listView.setEnabled(true);
     oneTimeDataLoad = true;
   }
 }

@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
   private Toolbar toolbar;
   private ImageButton button;
   public static WebView webView;
-  private CollapsingToolbarLayout collapsingToolbarLayout;
   private ConstraintLayout pri, man, pub, res;
 
   @Override
@@ -50,16 +49,13 @@ public class MainActivity extends AppCompatActivity {
             onBackPressed();
           }
         });
-    collapsingToolbarLayout = findViewById(R.id.collapsingToolbarLayout);
     button = findViewById(R.id.themeToggle);
     if (TM.getThemeId() == R.style.AppTheme_Light) {
       button.setImageDrawable(getDrawable(R.drawable.ic_moon_black_24dp));
       toolbar.setNavigationIcon(R.drawable.ic_close_black_24dp);
-      collapsingToolbarLayout.setContentScrimColor(getResources().getColor(R.color.lightBg));
     } else {
       button.setImageDrawable(getDrawable(R.drawable.ic_wb_sunny_black_24dp));
       toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
-      collapsingToolbarLayout.setContentScrimColor(getResources().getColor(android.R.color.black));
     }
 
     button.setOnClickListener(
@@ -94,23 +90,34 @@ public class MainActivity extends AppCompatActivity {
           }
         });
 
-    pri.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
+    pri.setOnClickListener(
+        new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
             pri.setEnabled(false);
-            Intent intent=new Intent(getApplicationContext(), PrivateElectionEntryPoint.class);
+            Intent intent = new Intent(getApplicationContext(), PrivateElectionEntryPoint.class);
             startActivity(intent);
-        }
-    });
-
-    man.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
+          }
+        });
+    final SharedPreferences preferences = getSharedPreferences("Vote.Online.Account", MODE_PRIVATE);
+    SharedPreferences.Editor editor = preferences.edit();
+    if (!preferences.contains("loginStatus")) editor.putBoolean("loginStatus", false);
+    editor.apply();
+    man.setOnClickListener(
+        new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
             man.setEnabled(false);
-            Intent intent=new Intent(getApplicationContext(), PrivateElectionManager.class);
-            startActivity(intent);
-        }
-    });
+            if (preferences.getBoolean("loginStatus", false)) {
+              Intent intent = new Intent(getApplicationContext(), ManageOptions.class);
+              intent.putExtra("email", preferences.getString("email", ""));
+              startActivity(intent);
+            } else {
+              Intent intent = new Intent(getApplicationContext(), PrivateElectionManager.class);
+              startActivity(intent);
+            }
+          }
+        });
 
     res.setOnClickListener(
         new View.OnClickListener() {

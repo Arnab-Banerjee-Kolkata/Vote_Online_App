@@ -128,6 +128,8 @@ public class ResultsDetailed extends FragmentActivity {
       ArrayList<ConstituencyWiseResultList> constresultlist,
       int status,
       int totalSeats,
+      int tieCount,
+      int stateElectionId,
       String type,
       boolean requestStatus) {
     if (!requestStatus) {
@@ -179,6 +181,7 @@ public class ResultsDetailed extends FragmentActivity {
       args2.putString("STATE_NAME", stateName);
       args2.putString("type", type);
       args2.putInt("ID", electionId);
+      args2.putInt("stateElectionId", stateElectionId);
       args2.putString("stateCode", stateCode);
       args2.putInt("ROWS", constresultlist.size());
       removeFragments();

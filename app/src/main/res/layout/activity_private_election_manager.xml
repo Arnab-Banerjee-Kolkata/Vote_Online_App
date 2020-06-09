@@ -76,6 +76,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="20dp"
+                android:maxLength="20"
                 android:background="@drawable/boxbg"
                 android:inputType="textPassword"
                 android:padding="10dp"/>
@@ -199,6 +200,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/uselessID6"
                     android:layout_margin="10dp"
+                    android:maxLength="20"
                     android:background="@drawable/boxbg"
                     android:inputType="textPassword"
                     android:padding="10dp"/>
@@ -212,6 +214,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginBottom="20dp"
+                    android:maxLength="20"
                     android:background="@drawable/boxbg"
                     android:inputType="textPassword"
                     android:padding="10dp"/>

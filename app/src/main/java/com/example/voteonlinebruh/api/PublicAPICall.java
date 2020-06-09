@@ -19,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.example.voteonlinebruh.R;
+import com.example.voteonlinebruh.activities.ConstituencyDetailsActivity;
 import com.example.voteonlinebruh.activities.MainActivity;
 import com.example.voteonlinebruh.activities.ResultList;
 import com.example.voteonlinebruh.activities.OtpPage;
@@ -27,11 +28,7 @@ import com.example.voteonlinebruh.activities.ResultsSimplified;
 import com.example.voteonlinebruh.activities.Thanks;
 import com.example.voteonlinebruh.activities.VotingPage;
 import com.example.voteonlinebruh.activities.WaitScreen;
-import com.example.voteonlinebruh.models.ConstituencyWiseResultList;
-import com.example.voteonlinebruh.models.PartywiseResultList;
-import com.example.voteonlinebruh.models.PublicCandidate;
-import com.example.voteonlinebruh.models.ResultListItem;
-import com.example.voteonlinebruh.models.StateListItem;
+import com.example.voteonlinebruh.models.*;
 import com.example.voteonlinebruh.utility.PostingService;
 
 import org.json.JSONArray;
@@ -54,7 +51,8 @@ public class PublicAPICall {
       getConstituencyResultResponse,
       getStateListResponse,
       storeVoteResponse,
-      getRandomKeyResponse;
+      getRandomKeyResponse,
+      getConstituencyDetailsResponse;
   private String boothId, otp;
   private Context mContext;
   private OtpPage otpPage;
@@ -65,9 +63,10 @@ public class PublicAPICall {
   private String stateCode;
   private ResultsDetailed resultDetailed;
   private ArrayList<PartywiseResultList> list;
-  private int totalSeats;
+  private int totalSeats, stateElectionId, tieCount;
   private String candidateId;
   private VotingPage votingPage;
+  private String constituencyName;
 
   public PublicAPICall() {
     TIMES = 0;
@@ -79,6 +78,7 @@ public class PublicAPICall {
     getStateListResponse = false;
     storeVoteResponse = false;
     getRandomKeyResponse = false;
+    getConstituencyDetailsResponse = false;
   }
 
   class myRunnable implements Runnable {
@@ -122,14 +122,24 @@ public class PublicAPICall {
             PublicAPICall.this.getPublicResultList(mContext);
             break;
           case 3: // getOverallResult
-            PublicAPICall.this.getOverallResult(type, electionId, mContext, resultSimplified, release);
+            PublicAPICall.this.getOverallResult(
+                type, electionId, mContext, resultSimplified, release);
             break;
           case 4: // getOverallResult2
-            PublicAPICall.this.getOverallResult(type, electionId, stateCode, mContext, resultDetailed);
+            PublicAPICall.this.getOverallResult(
+                type, electionId, stateCode, mContext, resultDetailed);
             break;
           case 5: // getConstituencyResult
             PublicAPICall.this.getConstituencyResult(
-                type, electionId, stateCode, mContext, resultDetailed, list, totalSeats);
+                type,
+                electionId,
+                stateCode,
+                mContext,
+                resultDetailed,
+                list,
+                totalSeats,
+                tieCount,
+                stateElectionId);
             break;
           case 6: // getStateList
             PublicAPICall.this.getStatelist(electionId, type, mContext);
@@ -140,6 +150,8 @@ public class PublicAPICall {
           case 8: // getRandomKey
             PublicAPICall.this.getRandomKey(boothId, mContext, votingPage);
             break;
+          case 9:
+            PublicAPICall.this.getConstituencyDetails(electionId, constituencyName, mContext);
         }
 
       } catch (InterruptedException e) {
@@ -572,10 +584,12 @@ public class PublicAPICall {
                     Toast.makeText(mContext, "Invalid state code !", Toast.LENGTH_SHORT).show();
                   else if (!validType)
                     Toast.makeText(mContext, "Invalid election type !", Toast.LENGTH_SHORT).show();
-                  else if (!validElection) resultsDetailed.release(null, null, 0, 0, "", false);
+                  else if (!validElection) resultsDetailed.release(null, null, 0, 0, tieCount, stateElectionId, "", false);
                 } else {
                   int status = jsonResponse.getInt("status");
                   int totalSeats = jsonResponse.getInt("totalSeats");
+                  int stateElectionId = jsonResponse.getInt("stateElectionId");
+                  int tieCount = jsonResponse.getInt("tieCount");
                   JSONArray array = jsonResponse.getJSONArray("results");
                   int len = array.length();
                   for (int i = 0; i < len; i++) {
@@ -593,7 +607,9 @@ public class PublicAPICall {
                       mContext,
                       resultsDetailed,
                       partyresultlist,
-                      totalSeats);
+                      totalSeats,
+                      tieCount,
+                      stateElectionId);
                 }
               } catch (JSONException e) {
                 e.printStackTrace();
@@ -646,7 +662,9 @@ public class PublicAPICall {
       final Context mContext,
       final ResultsDetailed resultsDetailed,
       final ArrayList<PartywiseResultList> list,
-      final int totalSeats) {
+      final int totalSeats,
+      final int tieCount,
+      final int stateElectionId) {
     this.type = type;
     this.electionId = electionId;
     this.stateCode = stateCode;
@@ -654,6 +672,8 @@ public class PublicAPICall {
     this.resultDetailed = resultsDetailed;
     this.list = list;
     this.totalSeats = totalSeats;
+    this.tieCount = tieCount;
+    this.stateElectionId = stateElectionId;
 
     final ArrayList<ConstituencyWiseResultList> constresultlist =
         new ArrayList<ConstituencyWiseResultList>();
@@ -683,7 +703,7 @@ public class PublicAPICall {
                     Toast.makeText(mContext, "Invalid state code !", Toast.LENGTH_SHORT).show();
                   else if (!validType)
                     Toast.makeText(mContext, "Invalid election type !", Toast.LENGTH_SHORT).show();
-                  else if (!validElection) resultsDetailed.release(null, null, 0, 0, "", false);
+                  else if (!validElection) resultsDetailed.release(null, null, 0, 0, tieCount, stateElectionId, "", false);
                 } else {
                   int status = jsonResponse.getInt("status");
                   JSONArray array = jsonResponse.getJSONArray("results");
@@ -701,7 +721,15 @@ public class PublicAPICall {
                             elections.getInt("voteCount")));
                   }
                   if (!resultsDetailed.isDestroyed())
-                    resultsDetailed.release(list, constresultlist, status, totalSeats, type, true);
+                    resultsDetailed.release(
+                        list,
+                        constresultlist,
+                        status,
+                        totalSeats,
+                        tieCount,
+                        stateElectionId,
+                        type,
+                        true);
                 }
               } catch (JSONException e) {
                 e.printStackTrace();
@@ -828,6 +856,92 @@ public class PublicAPICall {
     params.put("postAuthKey", mContext.getString(R.string.post_auth_key));
 
     PostRequest postShowOptions = new PostRequest(mContext, url, params, listener, errorListener);
+    RequestQueue queue = Volley.newRequestQueue(mContext);
+    queue.add(postShowOptions);
+  }
+
+  public void getConstituencyDetails(
+      final int electionId, final String constituencyName, final Context mContext) {
+    this.electionId = electionId;
+    this.mContext = mContext;
+    this.constituencyName = constituencyName;
+    final ArrayList<ConstituencyDetailResult> detailResults = new ArrayList<>();
+    Response.Listener<String> listener =
+        new Response.Listener<String>() {
+          @Override
+          public void onResponse(String response) {
+
+            if (!getConstituencyDetailsResponse) {
+              JSONObject jsonResponse = null;
+              try {
+                jsonResponse = new JSONObject(response);
+                getConstituencyDetailsResponse = true;
+                TIMES = 0;
+                Log.d("response", response);
+                boolean success = jsonResponse.getBoolean("success");
+                boolean valid = jsonResponse.getBoolean("validAuth");
+                boolean validElection = jsonResponse.getBoolean("validElection");
+                boolean validConstituency = jsonResponse.getBoolean("validConstituency");
+                if (!success || !valid) {
+                  if (!validElection)
+                    Toast.makeText(mContext, "Invalid election ID !", Toast.LENGTH_SHORT).show();
+                  else if (!validConstituency)
+                    Toast.makeText(mContext, "Invalid constituency !", Toast.LENGTH_SHORT).show();
+                  WaitScreen.terminate = true;
+                } else {
+                  JSONArray array = jsonResponse.getJSONArray("detailResult");
+                  int len = array.length();
+
+                  for (int i = 0; i < len; i++) {
+                    JSONObject result = array.getJSONObject(i);
+                    detailResults.add(
+                        new ConstituencyDetailResult(
+                            result.getString("name"),
+                            result.getString("image"),
+                            result.getString("partyName"),
+                            result.getString("partySymbol"),
+                            result.getInt("noOfVotes")));
+                  }
+                  final Intent intent = new Intent(mContext, ConstituencyDetailsActivity.class);
+                  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                  intent.putExtra("list", detailResults);
+                  myRunnable thread = new myRunnable(intent, mContext);
+                  new Thread(thread).start();
+                }
+              } catch (JSONException e) {
+                e.printStackTrace();
+                if (TIMES < 100 && !getConstituencyDetailsResponse) {
+                  PublicAPICall.this.storeCookie(mContext, MainActivity.webView);
+                  RequestDelayRunnable requestDelayRunnable = new RequestDelayRunnable(9);
+                  new Thread(requestDelayRunnable).start();
+                } else if (TIMES >= 100 && !getConstituencyDetailsResponse) {
+                  Toast.makeText(mContext, "Request timed out", Toast.LENGTH_LONG).show();
+                }
+              }
+            }
+          }
+        };
+    Response.ErrorListener errorListener =
+        new Response.ErrorListener() {
+          @Override
+          public void onErrorResponse(VolleyError error) {
+            error.printStackTrace();
+            if (TIMES < 100 && !getRandomKeyResponse) {
+              PublicAPICall.this.storeCookie(mContext, MainActivity.webView);
+              RequestDelayRunnable requestDelayRunnable = new RequestDelayRunnable(9);
+              new Thread(requestDelayRunnable).start();
+            } else if (TIMES >= 100 && !getConstituencyDetailsResponse) {
+              Toast.makeText(mContext, "Request timed out", Toast.LENGTH_LONG).show();
+            }
+          }
+        };
+    String url = mContext.getString(R.string.web_host) + "/ConstituencyResultDetails.php";
+    Map<String, String> params = new HashMap<>();
+    params.put("postAuthKey", mContext.getString(R.string.post_auth_key));
+    params.put("stateElectionId", Integer.toString(electionId));
+    params.put("constituencyName", constituencyName);
+    PostRequest postShowOptions = new PostRequest(mContext, url, params, listener, errorListener);
+    Log.d("request", postShowOptions.getParams().toString());
     RequestQueue queue = Volley.newRequestQueue(mContext);
     queue.add(postShowOptions);
   }
@@ -974,7 +1088,7 @@ public class PublicAPICall {
                 boolean success = jsonResponse.getBoolean("success");
                 boolean valid = jsonResponse.getBoolean("validAuth");
                 boolean validBooth = jsonResponse.getBoolean("validBooth");
-                if (!success | !valid) {
+                if (!success || !valid) {
                   if (!validBooth)
                     Toast.makeText(mContext, "Invalid booth ID !", Toast.LENGTH_SHORT).show();
                 } else {

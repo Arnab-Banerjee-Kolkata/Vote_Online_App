@@ -28,7 +28,7 @@ public class PostingService extends Service {
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
     String action = intent.getStringExtra("action");
-    Log.d("action",action);
+    Log.d("action", action);
     if (ACTION_START_SERVICE.equalsIgnoreCase(action)) {
       Notification notification =
           new NotificationCompat.Builder(this, CHANNEL_ID)
