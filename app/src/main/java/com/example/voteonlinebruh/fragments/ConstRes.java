@@ -48,7 +48,6 @@ public class ConstRes extends Fragment {
   private static ConstraintLayout constraintLayout;
   private static ImageButton close;
   public static ImageView infoIcon;
-  private static boolean oneTimeDataLoad = false;
   private static SwipeRefreshLayout.OnRefreshListener listener;
 
   public static ConstRes newInstance(Bundle args) {
@@ -213,23 +212,12 @@ public class ConstRes extends Fragment {
           }
         });
     swipe.setRefreshing(false);
-    oneTimeDataLoad = false;
     return view;
   }
 
   @Override
   public void onStart() {
-    if (oneTimeDataLoad)
-      swipe.post(
-          new Runnable() {
-            @Override
-            public void run() {
-              swipe.setRefreshing(true);
-              listener.onRefresh();
-            }
-          });
     super.onStart();
     listView.setEnabled(true);
-    oneTimeDataLoad = true;
   }
 }

@@ -2,23 +2,24 @@ package com.example.voteonlinebruh.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ListView;
 
 import com.example.voteonlinebruh.R;
-import com.example.voteonlinebruh.adapters.ListViewForConstituencyDetailsAdapter;
+import com.example.voteonlinebruh.adapters.RecyclerViewForConstituencyDetailsAdapter;
 import com.example.voteonlinebruh.models.ConstituencyDetailResult;
 import com.example.voteonlinebruh.utility.ThemeManager;
 
 import java.util.ArrayList;
 
 public class ConstituencyDetailsActivity extends AppCompatActivity {
-  private ListView listView;
-  private ImageView partySymbol;
+  private RecyclerView recyclerView;
+  private ImageView partySymbol, background;
   private Toolbar toolbar;
+  private RecyclerView.LayoutManager layoutManager;
   private int themeId;
 
   @Override
@@ -34,20 +35,31 @@ public class ConstituencyDetailsActivity extends AppCompatActivity {
       toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
     }
     toolbar.setNavigationOnClickListener(
-            new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
-                onBackPressed();
-              }
-            });
+        new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            onBackPressed();
+          }
+        });
     ArrayList<ConstituencyDetailResult> list =
         (ArrayList<ConstituencyDetailResult>) getIntent().getSerializableExtra("list");
-    Log.d("list", list.toString());
-    listView = findViewById(R.id.detailResultListView);
+    boolean tie = false;
+    if (list.get(0).getVotes() == list.get(1).getVotes()){
+      tie = true;
+    }
+    else
+    {
+      background=findViewById(R.id.imageViewCollapsing2);
+      background.setImageResource(R.drawable.winner_bg);
+    }
+    recyclerView = findViewById(R.id.recyclerView);
     partySymbol = findViewById(R.id.winningPartySym);
-    ListViewForConstituencyDetailsAdapter adapter =
-        new ListViewForConstituencyDetailsAdapter(list, partySymbol, this.getBaseContext());
-    listView.setAdapter(adapter);
-    listView.setEnabled(false);
+    RecyclerViewForConstituencyDetailsAdapter adapter =
+        new RecyclerViewForConstituencyDetailsAdapter(
+            list, partySymbol,tie, this.getApplicationContext());
+    recyclerView.setHasFixedSize(true);
+    layoutManager = new LinearLayoutManager(this);
+    recyclerView.setLayoutManager(layoutManager);
+    recyclerView.setAdapter(adapter);
   }
 }

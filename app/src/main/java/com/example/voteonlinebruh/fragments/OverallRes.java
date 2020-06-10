@@ -44,7 +44,6 @@ public class OverallRes extends Fragment {
   private static ArrayList name, sym, seat;
   private static int rows, totalSeats, electionId;
   private static String type, stateCode;
-  private static boolean oneTimeDataLoad = false;
   private static ResultsDetailed context;
   private PieChart chart;
   private ArrayList<PieEntry> values;
@@ -228,22 +227,6 @@ public class OverallRes extends Fragment {
       tableLayout.setBackgroundResource(android.R.drawable.dialog_holo_dark_frame);
     }
     swipe.setRefreshing(false);
-    oneTimeDataLoad = false;
     return v;
-  }
-
-  @Override
-  public void onStart() {
-    if (oneTimeDataLoad)
-      swipe.post(
-          new Runnable() {
-            @Override
-            public void run() {
-              swipe.setRefreshing(true);
-              listener.onRefresh();
-            }
-          });
-    super.onStart();
-    oneTimeDataLoad = true;
   }
 }

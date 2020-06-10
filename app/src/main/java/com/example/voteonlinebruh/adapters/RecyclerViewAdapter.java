@@ -20,7 +20,6 @@ import com.bumptech.glide.request.target.Target;
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.models.RecyclerViewItem;
 import com.example.voteonlinebruh.utility.ThemeManager;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 
@@ -28,7 +27,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
   private ArrayList<RecyclerViewItem> recyclerViewItemArrayList;
   private OnItemClickListener mListener;
   private Context context;
-  private ImageLoader imageLoader;
 
   public RecyclerViewAdapter(ArrayList<RecyclerViewItem> recyclerViewItem_list, Context context) {
     recyclerViewItemArrayList = recyclerViewItem_list;

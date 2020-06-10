@@ -877,7 +877,6 @@ public class PublicAPICall {
                 jsonResponse = new JSONObject(response);
                 getConstituencyDetailsResponse = true;
                 TIMES = 0;
-                Log.d("response", response);
                 boolean success = jsonResponse.getBoolean("success");
                 boolean valid = jsonResponse.getBoolean("validAuth");
                 boolean validElection = jsonResponse.getBoolean("validElection");
@@ -941,7 +940,6 @@ public class PublicAPICall {
     params.put("stateElectionId", Integer.toString(electionId));
     params.put("constituencyName", constituencyName);
     PostRequest postShowOptions = new PostRequest(mContext, url, params, listener, errorListener);
-    Log.d("request", postShowOptions.getParams().toString());
     RequestQueue queue = Volley.newRequestQueue(mContext);
     queue.add(postShowOptions);
   }
