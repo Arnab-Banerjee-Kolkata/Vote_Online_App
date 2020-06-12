@@ -3,7 +3,6 @@ package com.example.voteonlinebruh.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -85,8 +84,12 @@ public class MainActivity extends AppCompatActivity {
           @Override
           public void onClick(View v) {
             pub.setEnabled(false);
-            Intent intent = new Intent(getBaseContext(), PublicElectionEntryPoint.class);
+            PublicAPICall publicAPICall = new PublicAPICall();
+            publicAPICall.getBoothCities(getApplicationContext());
+            Intent intent = new Intent(getBaseContext(), WaitScreen.class);
+            intent.putExtra("LABEL", "Please wait");
             startActivity(intent);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
           }
         });
 

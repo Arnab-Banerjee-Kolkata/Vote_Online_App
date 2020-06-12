@@ -21,7 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Light"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.ConstituencyDetailsActivity"></activity>
+        <activity android:name=".activities.ConstituencyDetailsActivity" />
         <activity
             android:name=".activities.ResultsSimplified"
             android:launchMode="singleTask"

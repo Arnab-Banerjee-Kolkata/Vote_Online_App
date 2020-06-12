@@ -5,18 +5,25 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 
 import com.bumptech.glide.Glide;
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.utility.ThemeManager;
+
+import java.util.HashMap;
 
 public class PublicElectionEntryPoint extends AppCompatActivity {
 
   private Button b;
   private Toolbar toolbar;
   private ImageView imageView1;
+  private ListView listView;
+  private View view;
+  private ArrayAdapter<Object> adapter;
   private int themeId;
   protected static PublicElectionEntryPoint instance;
 
@@ -28,9 +35,15 @@ public class PublicElectionEntryPoint extends AppCompatActivity {
     setContentView(R.layout.activity_public_election);
     instance = this;
     toolbar = findViewById(R.id.toolbarpub);
-    if (themeId == R.style.AppTheme_Light)
+    listView = findViewById(R.id.list);
+    view = findViewById(R.id.bgContainer);
+    if (themeId == R.style.AppTheme_Light) {
       toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
-    else toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+      view.setBackground(getDrawable(android.R.drawable.dialog_holo_light_frame));
+    } else {
+      toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+      view.setBackground(getDrawable(android.R.drawable.dialog_holo_dark_frame));
+    }
     toolbar.setNavigationOnClickListener(
         new View.OnClickListener() {
           @Override
@@ -51,6 +64,9 @@ public class PublicElectionEntryPoint extends AppCompatActivity {
             startActivity(intent);
           }
         });
+    HashMap<String,String> cities= (HashMap<String,String>)getIntent().getSerializableExtra("map");
+    adapter = new ArrayAdapter<>(this, android.R.layout.simple_selectable_list_item,cities.keySet().toArray());
+    listView.setAdapter(adapter);
   }
 
   @Override

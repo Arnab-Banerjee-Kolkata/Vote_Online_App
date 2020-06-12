@@ -46,7 +46,7 @@
             android:paddingEnd="5dp"
             android:divider="#6F6F6F"
             android:dividerHeight="2dp"
-            android:footerDividersEnabled="true"/>
+            android:overScrollFooter="@android:color/transparent"/>
 
     </RelativeLayout>
 
