@@ -1,6 +1,6 @@
 package com.example.voteonlinebruh.models;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.example.voteonlinebruh.utility.CaseConverter;
 

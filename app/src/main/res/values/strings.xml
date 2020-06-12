@@ -13,5 +13,6 @@
 
 
     <string name="cookie_end">; expires=Friday, 1 January 2038 at 05:25:55; path=/</string>
+    <string name="title_activity_booth_details_map">Map</string>
 
 </resources>

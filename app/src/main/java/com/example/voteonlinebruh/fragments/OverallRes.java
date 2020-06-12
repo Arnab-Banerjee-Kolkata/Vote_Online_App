@@ -4,10 +4,10 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -174,7 +174,7 @@ public class OverallRes extends Fragment {
     // TABLE CODE
     tableLayout = v.findViewById(R.id.table);
     for (int i = 0; i < rows; i++) {
-      View view = inflater.inflate(R.layout.row, container, false);
+      View view = inflater.inflate(R.layout.table_row, container, false);
       TableRow row = view.findViewById(R.id.rowwwww);
       if (i % 2 == 1) row.setBackgroundColor(getResources().getColor(R.color.shade));
       View color = view.findViewById(R.id.color);
