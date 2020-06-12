@@ -156,7 +156,6 @@
         android:background="@drawable/buttonbg"
         android:text="Verify"
         android:textAllCaps="false"
-        android:theme="@style/Widget.MaterialComponents.Button.OutlinedButton"
         app:backgroundTint="@color/button"
         app:layout_constraintBottom_toBottomOf="@+id/otpbg"
         app:layout_constraintEnd_toEndOf="parent"

@@ -51,7 +51,6 @@
         android:background="@drawable/buttonbg"
         android:text="Proceed"
         android:textAllCaps="false"
-        android:theme="@style/Widget.MaterialComponents.Button.OutlinedButton"
         app:backgroundTint="@color/button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -86,6 +85,7 @@
         android:divider="#6F6F6F"
         android:dividerHeight="2dp"
         android:elevation="6dp"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
         android:overScrollFooter="@android:color/transparent"
         app:layout_constraintTop_toBottomOf="@id/textView7"
         app:layout_constraintBottom_toBottomOf="parent"/>

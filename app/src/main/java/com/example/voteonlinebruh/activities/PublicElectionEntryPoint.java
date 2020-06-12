@@ -5,10 +5,12 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.voteonlinebruh.R;
@@ -64,14 +66,27 @@ public class PublicElectionEntryPoint extends AppCompatActivity {
             startActivity(intent);
           }
         });
-    HashMap<String,String> cities= (HashMap<String,String>)getIntent().getSerializableExtra("map");
-    adapter = new ArrayAdapter<>(this, android.R.layout.simple_selectable_list_item,cities.keySet().toArray());
+    HashMap<String, String> cities =
+        (HashMap<String, String>) getIntent().getSerializableExtra("map");
+    adapter =
+        new ArrayAdapter<>(
+            this, android.R.layout.simple_list_item_1, cities.keySet().toArray());
     listView.setAdapter(adapter);
+    listView.setOnItemClickListener(
+        new AdapterView.OnItemClickListener() {
+          @Override
+          public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            listView.setEnabled(false);
+            Intent intent = new Intent(getApplicationContext(), BoothList.class);
+            startActivity(intent);
+          }
+        });
   }
 
   @Override
   protected void onResume() {
     b.setEnabled(true);
+    listView.setEnabled(true);
     super.onResume();
   }
 

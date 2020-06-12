@@ -34,7 +34,6 @@
                     android:background="@drawable/buttonbg"
                     android:text="State-wise Results"
                     android:textAllCaps="false"
-                    android:theme="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     app:backgroundTint="@color/button"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"

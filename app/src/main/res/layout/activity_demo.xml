@@ -99,7 +99,6 @@
                 android:background="@drawable/buttonbg"
                 android:text="Done"
                 android:textAllCaps="false"
-                android:theme="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 app:backgroundTint="@color/button" />
         </RelativeLayout>
 

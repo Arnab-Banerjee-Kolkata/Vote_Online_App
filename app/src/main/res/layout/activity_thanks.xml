@@ -68,7 +68,6 @@
         android:background="@drawable/buttonbg"
         android:text="Go back to home screen"
         android:onClick="goHome"
-        android:theme="@style/Widget.MaterialComponents.Button.OutlinedButton"
         app:backgroundTint="@color/button"
         app:layout_constraintBottom_toBottomOf="parent"/>
 

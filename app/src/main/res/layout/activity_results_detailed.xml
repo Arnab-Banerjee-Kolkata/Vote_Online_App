@@ -87,7 +87,6 @@
         android:id="@+id/toolbarvres"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:elevation="0dp"
         app:layout_constraintTop_toTopOf="parent"
         app:title="Result"
         app:titleTextAppearance="@style/azo" />
