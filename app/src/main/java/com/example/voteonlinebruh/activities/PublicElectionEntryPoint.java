@@ -2,6 +2,8 @@ package com.example.voteonlinebruh.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.View;
@@ -10,10 +12,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.voteonlinebruh.R;
+import com.example.voteonlinebruh.api.PublicAPICall;
 import com.example.voteonlinebruh.utility.ThemeManager;
 
 import java.util.HashMap;
@@ -25,6 +29,7 @@ public class PublicElectionEntryPoint extends AppCompatActivity {
   private ImageView imageView1;
   private ListView listView;
   private View view;
+  private ProgressBar progressBar;
   private ArrayAdapter<Object> adapter;
   private int themeId;
   protected static PublicElectionEntryPoint instance;
@@ -66,21 +71,32 @@ public class PublicElectionEntryPoint extends AppCompatActivity {
             startActivity(intent);
           }
         });
-    HashMap<String, String> cities =
-        (HashMap<String, String>) getIntent().getSerializableExtra("map");
-    adapter =
-        new ArrayAdapter<>(
-            this, android.R.layout.simple_list_item_1, cities.keySet().toArray());
-    listView.setAdapter(adapter);
-    listView.setOnItemClickListener(
-        new AdapterView.OnItemClickListener() {
-          @Override
-          public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            listView.setEnabled(false);
-            Intent intent = new Intent(getApplicationContext(), BoothList.class);
-            startActivity(intent);
-          }
-        });
+    progressBar = findViewById(R.id.cityListLoadProgress);
+    PublicAPICall publicAPICall = new PublicAPICall();
+    publicAPICall.getBoothCities(getApplicationContext(), PublicElectionEntryPoint.this);
+  }
+
+  public void release(@Nullable HashMap<String, String> cities) {
+    if (null != cities) {
+      final Object[] places = cities.keySet().toArray();
+      adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, places);
+      listView.setAdapter(adapter);
+      listView.setOnItemClickListener(
+          new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+              listView.setEnabled(false);
+              PublicAPICall apiCall = new PublicAPICall();
+              apiCall.getBoothLocations(places[position].toString(), getApplicationContext());
+              Intent intent = new Intent(getBaseContext(), WaitScreen.class);
+              intent.putExtra(
+                  "LABEL", "Please wait while we find booths in " + places[position].toString());
+              startActivity(intent);
+              overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            }
+          });
+    }
+    progressBar.setVisibility(View.GONE);
   }
 
   @Override

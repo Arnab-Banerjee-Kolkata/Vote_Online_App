@@ -22,6 +22,7 @@ public class RecyclerViewForBoothListAdapter
 
   private NamedLocation[] namedLocations;
   private Context context;
+  private RecyclerViewForBoothListAdapter.OnItemClickListener mListener;
 
   public RecyclerViewForBoothListAdapter(NamedLocation[] locations, Context context) {
     super();
@@ -29,10 +30,19 @@ public class RecyclerViewForBoothListAdapter
     this.context = context;
   }
 
+  public interface OnItemClickListener {
+    void onItemClick(int position);
+  }
+
+  public void setOnItemClickListener(RecyclerViewForBoothListAdapter.OnItemClickListener listener) {
+    mListener = listener;
+  }
+
   @Override
   public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     return new ViewHolder(
-        LayoutInflater.from(parent.getContext()).inflate(R.layout.booth_list_row, parent, false));
+        LayoutInflater.from(parent.getContext()).inflate(R.layout.booth_list_row, parent, false),
+        mListener);
   }
   /**
    * This function is called when the user scrolls through the screen and a new item needs to be
@@ -54,21 +64,32 @@ public class RecyclerViewForBoothListAdapter
   class ViewHolder extends RecyclerView.ViewHolder implements OnMapReadyCallback {
 
     MapView mapView;
-    TextView title,subtitle;
+    TextView title, subtitle;
     GoogleMap map;
     View layout;
 
-    private ViewHolder(View itemView) {
+    private ViewHolder(
+            View itemView, final RecyclerViewForBoothListAdapter.OnItemClickListener listener) {
       super(itemView);
       layout = itemView;
       mapView = layout.findViewById(R.id.lite_listrow_map);
       title = layout.findViewById(R.id.lite_listrow_text1);
-      subtitle=layout.findViewById(R.id.lite_listrow_text2);
+      subtitle = layout.findViewById(R.id.lite_listrow_text2);
       if (mapView != null) {
         // Initialise the MapView
         mapView.onCreate(null);
         // Set the map ready callback to receive the GoogleMap object
         mapView.getMapAsync(this);
+        itemView.setOnClickListener(
+                new View.OnClickListener() {
+                  @Override
+                  public void onClick(View v) {
+                    if (listener != null) {
+                      int position = getAdapterPosition();
+                      if (position != RecyclerView.NO_POSITION) listener.onItemClick(position);
+                    }
+                  }
+                });
       }
     }
 
@@ -91,6 +112,16 @@ public class RecyclerViewForBoothListAdapter
 
       // Set the map type back to normal.
       map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+      map.getUiSettings().setMapToolbarEnabled(false);
+      map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+        @Override
+        public void onMapClick(LatLng latLng) {
+          if (mListener != null) {
+            int position = getAdapterPosition();
+            if (position != RecyclerView.NO_POSITION) mListener.onItemClick(position);
+          }
+        }
+      });
     }
 
     private void bindView(int pos) {
@@ -102,17 +133,19 @@ public class RecyclerViewForBoothListAdapter
       mapView.setTag(item);
       setMapLocation();
       title.setText(item.name);
-      subtitle.setText("Subtitle");
+      subtitle.setText(item.landmark);
     }
   }
 
   public static class NamedLocation {
 
     public final String name;
+    public final String landmark;
     public final LatLng location;
 
-    public NamedLocation(String name, LatLng location) {
+    public NamedLocation(String name, String landmark, LatLng location) {
       this.name = name;
+      this.landmark = landmark;
       this.location = location;
     }
   }

@@ -4,38 +4,65 @@
     xmlns:map="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="5dp">
+    android:background="@android:drawable/dialog_holo_light_frame"
+    android:backgroundTint="@color/shade"
+    android:elevation="2dp"
+    android:padding="12dp">
 
     <TextView
         android:id="@+id/lite_listrow_text1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:padding="5dp"
-        android:textSize="19dp"
+        android:textSize="18dp"
         map:layout_constraintTop_toTopOf="parent"
         map:layout_constraintStart_toStartOf="parent"
-        map:layout_constraintBottom_toTopOf="@id/lite_listrow_text2"
-        map:layout_constraintEnd_toStartOf="@id/lite_listrow_map"/>
+        map:layout_constraintEnd_toStartOf="@id/mapContainer"/>
+
+    <ImageView
+        android:id="@+id/uselessID3"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_pin_drop_black_24dp"
+        map:layout_constraintBottom_toBottomOf="parent"
+        map:layout_constraintTop_toBottomOf="@id/lite_listrow_text1"
+        map:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
         android:id="@+id/lite_listrow_text2"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:textStyle="italic"
-        map:layout_constraintBottom_toBottomOf="parent"
-        map:layout_constraintStart_toStartOf="parent"
-        map:layout_constraintEnd_toStartOf="@id/lite_listrow_map"/>
+        android:layout_height="50dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:paddingTop="5dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:layout_marginTop="5dp"
+        android:textStyle="normal"
+        android:textSize="15dp"
+        map:layout_constraintStart_toEndOf="@id/uselessID3"
+        map:layout_constraintTop_toBottomOf="@id/lite_listrow_text1"
+        map:layout_constraintEnd_toStartOf="@id/mapContainer"/>
 
     <!-- MapView in lite mode. Note that it needs to be initialised
          programmatically before it can be used. -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/mapContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@android:color/transparent"
+        map:cardCornerRadius="5dp"
+        android:elevation="5dp"
+        android:layout_margin="2dp"
+        map:layout_constraintTop_toTopOf="parent"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintBottom_toBottomOf="parent">
     <com.google.android.gms.maps.MapView
         android:id="@+id/lite_listrow_map"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
         map:liteMode="true"
-        map:mapType="none"
-        map:layout_constraintTop_toTopOf="parent"
-        map:layout_constraintEnd_toEndOf="parent"/>
+        map:mapType="none"/>
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

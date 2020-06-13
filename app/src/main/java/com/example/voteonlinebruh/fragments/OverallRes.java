@@ -41,6 +41,7 @@ import java.util.ArrayList;
 
 public class OverallRes extends Fragment {
 
+  private static Bundle args;
   private static ArrayList name, sym, seat;
   private static int rows, totalSeats, electionId;
   private static String type, stateCode;
@@ -58,7 +59,8 @@ public class OverallRes extends Fragment {
 
   public static OverallRes newInstance(Bundle args) {
     OverallRes overallRes = new OverallRes();
-    overallRes.setArguments(args);
+    OverallRes.args=args;
+    overallRes.setArguments();
     return overallRes;
   }
 
@@ -68,17 +70,15 @@ public class OverallRes extends Fragment {
     context = (ResultsDetailed) activity;
   }
 
-  @Override
-  public void setArguments(@Nullable Bundle args) {
-
-    this.name = args.getStringArrayList("NAMES");
-    this.sym = args.getIntegerArrayList("SYMS");
-    this.seat = args.getStringArrayList("SEATS");
-    this.rows = args.getInt("ROWS");
-    this.type = args.getString("type");
-    this.totalSeats = args.getInt("totalSeats");
-    this.stateCode = args.getString("stateCode");
-    this.electionId = args.getInt("ID");
+  private void setArguments() {
+    name = args.getStringArrayList("NAMES");
+    sym = args.getIntegerArrayList("SYMS");
+    seat = args.getStringArrayList("SEATS");
+    rows = args.getInt("ROWS");
+    type = args.getString("type");
+    totalSeats = args.getInt("totalSeats");
+    stateCode = args.getString("stateCode");
+    electionId = args.getInt("ID");
   }
 
   @Override

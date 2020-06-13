@@ -20,6 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.example.voteonlinebruh.BuildConfig;
 import com.example.voteonlinebruh.R;
+import com.example.voteonlinebruh.activities.BoothList;
 import com.example.voteonlinebruh.activities.ConstituencyDetailsActivity;
 import com.example.voteonlinebruh.activities.MainActivity;
 import com.example.voteonlinebruh.activities.PublicElectionEntryPoint;
@@ -37,7 +38,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -56,21 +56,18 @@ public class PublicAPICall {
       storeVoteResponse,
       getRandomKeyResponse,
       getConstituencyDetailsResponse,
-      getBoothCitiesResponse;
-  private String boothId, otp;
+      getBoothCitiesResponse,
+      getBoothLocationsResponse;
+  private String boothId, otp, type, candidateId, place, constituencyName, stateCode;
+  private int totalSeats, stateElectionId, tieCount, electionId;
+  private boolean release, service;
+  private ArrayList<PartywiseResultList> list;
   private Context mContext;
   private OtpPage otpPage;
-  private String type;
-  private int electionId;
   private ResultsSimplified resultSimplified;
-  private boolean release, service;
-  private String stateCode;
   private ResultsDetailed resultDetailed;
-  private ArrayList<PartywiseResultList> list;
-  private int totalSeats, stateElectionId, tieCount;
-  private String candidateId;
   private VotingPage votingPage;
-  private String constituencyName;
+  private PublicElectionEntryPoint activity;
 
   public PublicAPICall() {
     TIMES = 0;
@@ -83,6 +80,8 @@ public class PublicAPICall {
     storeVoteResponse = false;
     getRandomKeyResponse = false;
     getConstituencyDetailsResponse = false;
+    getBoothCitiesResponse = false;
+    getBoothLocationsResponse = false;
   }
 
   class myRunnable implements Runnable {
@@ -158,7 +157,10 @@ public class PublicAPICall {
             PublicAPICall.this.getConstituencyDetails(electionId, constituencyName, mContext);
             break;
           case 10:
-            PublicAPICall.this.getBoothCities(mContext);
+            PublicAPICall.this.getBoothCities(mContext, activity);
+            break;
+          case 11:
+            PublicAPICall.this.getBoothLocations(place, mContext);
         }
 
       } catch (InterruptedException e) {
@@ -297,7 +299,7 @@ public class PublicAPICall {
                 e.printStackTrace();
                 Log.d("RESPONSE EXCEPTION", response);
                 // Toast.makeText(mContext, "COOKIE. Try again: TIMES=" + (TIMES++),
-                // Toast.LENGTH_SHORT).show();
+                // Toast.LENGTH_LONG).show();
                 if (TIMES < 100 && !validateBoothOtpResponse) {
                   PublicAPICall.this.storeCookie(mContext, MainActivity.webView);
                   RequestDelayRunnable requestDelayRunnable = new RequestDelayRunnable(1);
@@ -323,7 +325,7 @@ public class PublicAPICall {
             error.printStackTrace();
             Log.d("RESPONSE ERROR", error.toString());
             // Toast.makeText(mContext, "Error occured. Try again " + TIMES,
-            // Toast.LENGTH_SHORT).show();
+            // Toast.LENGTH_LONG).show();
             if (TIMES < 100 && !validateBoothOtpResponse) {
               PublicAPICall.this.storeCookie(mContext, MainActivity.webView);
               RequestDelayRunnable requestDelayRunnable = new RequestDelayRunnable(1);
@@ -368,7 +370,7 @@ public class PublicAPICall {
                 boolean success = jsonResponse.getBoolean("success");
                 boolean valid = jsonResponse.getBoolean("validAuth");
                 if (!success | !valid) {
-                  Toast.makeText(mContext, "Server rejected request !", Toast.LENGTH_SHORT).show();
+                  Toast.makeText(mContext, "Server rejected request !", Toast.LENGTH_LONG).show();
                   WaitScreen.terminate = true;
                 } else {
                   JSONArray array = jsonResponse.getJSONArray("elections");
@@ -469,12 +471,11 @@ public class PublicAPICall {
 
                 if (!success) {
                   if (!valid)
-                    Toast.makeText(mContext, "Server rejected request !", Toast.LENGTH_SHORT)
-                        .show();
+                    Toast.makeText(mContext, "Server rejected request !", Toast.LENGTH_LONG).show();
                   else if (!validElection)
-                    Toast.makeText(mContext, "Invalid election ID !", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Invalid election ID !", Toast.LENGTH_LONG).show();
                   else if (!validType)
-                    Toast.makeText(mContext, "Invalid election type !", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Invalid election type !", Toast.LENGTH_LONG).show();
                   WaitScreen.terminate = true;
                 } else {
                   int status = jsonResponse.getInt("status");
@@ -585,12 +586,11 @@ public class PublicAPICall {
 
                 if (!success) {
                   if (!valid)
-                    Toast.makeText(mContext, "Server rejected request !", Toast.LENGTH_SHORT)
-                        .show();
+                    Toast.makeText(mContext, "Server rejected request !", Toast.LENGTH_LONG).show();
                   else if (!validState)
-                    Toast.makeText(mContext, "Invalid state code !", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Invalid state code !", Toast.LENGTH_LONG).show();
                   else if (!validType)
-                    Toast.makeText(mContext, "Invalid election type !", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Invalid election type !", Toast.LENGTH_LONG).show();
                   else if (!validElection)
                     resultsDetailed.release(null, null, 0, 0, tieCount, stateElectionId, "", false);
                 } else {
@@ -705,12 +705,11 @@ public class PublicAPICall {
                 boolean validType = jsonResponse.getBoolean("validType");
                 if (!success) {
                   if (!valid)
-                    Toast.makeText(mContext, "Server rejected request !", Toast.LENGTH_SHORT)
-                        .show();
+                    Toast.makeText(mContext, "Server rejected request !", Toast.LENGTH_LONG).show();
                   else if (!validState)
-                    Toast.makeText(mContext, "Invalid state code !", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Invalid state code !", Toast.LENGTH_LONG).show();
                   else if (!validType)
-                    Toast.makeText(mContext, "Invalid election type !", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Invalid election type !", Toast.LENGTH_LONG).show();
                   else if (!validElection)
                     resultsDetailed.release(null, null, 0, 0, tieCount, stateElectionId, "", false);
                 } else {
@@ -806,7 +805,7 @@ public class PublicAPICall {
                 boolean success = jsonResponse.getBoolean("success");
                 boolean valid = jsonResponse.getBoolean("validAuth");
                 if (!success | !valid) {
-                  Toast.makeText(mContext, "Server rejected request !", Toast.LENGTH_SHORT).show();
+                  Toast.makeText(mContext, "Server rejected request !", Toast.LENGTH_LONG).show();
                   WaitScreen.terminate = true;
                 } else {
                   JSONArray array = jsonResponse.getJSONArray("stateList");
@@ -892,9 +891,9 @@ public class PublicAPICall {
                 boolean validConstituency = jsonResponse.getBoolean("validConstituency");
                 if (!success || !valid) {
                   if (!validElection)
-                    Toast.makeText(mContext, "Invalid election ID !", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Invalid election ID !", Toast.LENGTH_LONG).show();
                   else if (!validConstituency)
-                    Toast.makeText(mContext, "Invalid constituency !", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Invalid constituency !", Toast.LENGTH_LONG).show();
                   WaitScreen.terminate = true;
                 } else {
                   JSONArray array = jsonResponse.getJSONArray("detailResult");
@@ -953,9 +952,10 @@ public class PublicAPICall {
     queue.add(postShowOptions);
   }
 
-  public void getBoothCities(final Context mContext) {
+  public void getBoothCities(final Context mContext, final PublicElectionEntryPoint activity) {
     this.mContext = mContext;
-    final Map<String, String> cities = new HashMap<>();
+    this.activity = activity;
+    final HashMap<String, String> cities = new HashMap<>();
     Response.Listener<String> listener =
         new Response.Listener<String>() {
           @Override
@@ -970,8 +970,8 @@ public class PublicAPICall {
                 boolean success = jsonResponse.getBoolean("success");
                 boolean valid = jsonResponse.getBoolean("validAuth");
                 if (!success || !valid) {
-                  Toast.makeText(mContext, "Server rejected request !", Toast.LENGTH_SHORT).show();
-                  WaitScreen.terminate = true;
+                  Toast.makeText(mContext, "Server rejected request !", Toast.LENGTH_LONG).show();
+                  activity.release(null);
                 } else {
                   JSONArray array = jsonResponse.getJSONArray("listOfPlaces");
                   int len = array.length();
@@ -979,11 +979,7 @@ public class PublicAPICall {
                     JSONObject result = array.getJSONObject(i);
                     cities.put(result.getString("place"), result.getString("state"));
                   }
-                  final Intent intent = new Intent(mContext, PublicElectionEntryPoint.class);
-                  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                  intent.putExtra("map", (Serializable) cities);
-                  myRunnable thread = new myRunnable(intent, mContext);
-                  new Thread(thread).start();
+                  activity.release(cities);
                 }
               } catch (JSONException e) {
                 e.printStackTrace();
@@ -993,6 +989,7 @@ public class PublicAPICall {
                   new Thread(requestDelayRunnable).start();
                 } else if (TIMES >= 100 && !getBoothCitiesResponse) {
                   Toast.makeText(mContext, "Request timed out", Toast.LENGTH_LONG).show();
+                  activity.release(null);
                 }
               }
             }
@@ -1009,6 +1006,7 @@ public class PublicAPICall {
               new Thread(requestDelayRunnable).start();
             } else if (TIMES >= 100 && !getBoothCitiesResponse) {
               Toast.makeText(mContext, "Request timed out", Toast.LENGTH_LONG).show();
+              activity.release(null);
             }
           }
         };
@@ -1164,7 +1162,7 @@ public class PublicAPICall {
                 boolean validBooth = jsonResponse.getBoolean("validBooth");
                 if (!success || !valid) {
                   if (!validBooth)
-                    Toast.makeText(mContext, "Invalid booth ID !", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Invalid booth ID !", Toast.LENGTH_LONG).show();
                 } else {
                   setNo = jsonResponse.getString("setNo");
                   keySet = new HashMap<>();
@@ -1212,6 +1210,86 @@ public class PublicAPICall {
     Map<String, String> params = new HashMap<>();
     params.put("postAuthKey", BuildConfig.POST_AUTH_KEY);
     params.put("boothId", boothId);
+    PostRequest postShowOptions = new PostRequest(mContext, url, params, listener, errorListener);
+    RequestQueue queue = Volley.newRequestQueue(mContext);
+    queue.add(postShowOptions);
+  }
+
+  public void getBoothLocations(final String place, final Context mContext) {
+    this.place = place;
+    this.mContext = mContext;
+    final ArrayList<BoothDetailItem> cityDetails = new ArrayList<>();
+    Response.Listener<String> listener =
+        new Response.Listener<String>() {
+          @Override
+          public void onResponse(String response) {
+
+            if (!getBoothLocationsResponse) {
+              JSONObject jsonResponse = null;
+              try {
+                jsonResponse = new JSONObject(response);
+                getBoothCitiesResponse = true;
+                TIMES = 0;
+                boolean success = jsonResponse.getBoolean("success");
+                boolean valid = jsonResponse.getBoolean("validAuth");
+                boolean validPlace = jsonResponse.getBoolean("validPlace");
+                if (!success) {
+                  if (!valid)
+                    Toast.makeText(mContext, "Server rejected request !", Toast.LENGTH_LONG).show();
+                  else if (!validPlace)
+                    Toast.makeText(mContext, "Invalid City !", Toast.LENGTH_LONG).show();
+                  WaitScreen.terminate = true;
+                } else {
+                  JSONArray array = jsonResponse.getJSONArray("allBoothsInPlace");
+                  int len = array.length();
+                  for (int i = 0; i < len; i++) {
+                    JSONObject result = array.getJSONObject(i);
+                    cityDetails.add(
+                        new BoothDetailItem(
+                            result.getString("area"),
+                            result.getString("address"),
+                            result.getString("landmark"),
+                            result.getString("mapLink"),
+                            result.getString("coordinates")));
+                  }
+                  final Intent intent = new Intent(mContext, BoothList.class);
+                  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                  intent.putExtra("list", cityDetails);
+                  intent.putExtra("city", place);
+                  myRunnable thread = new myRunnable(intent, mContext);
+                  new Thread(thread).start();
+                }
+              } catch (JSONException e) {
+                e.printStackTrace();
+                if (TIMES < 100 && !getBoothLocationsResponse) {
+                  PublicAPICall.this.storeCookie(mContext, MainActivity.webView);
+                  RequestDelayRunnable requestDelayRunnable = new RequestDelayRunnable(11);
+                  new Thread(requestDelayRunnable).start();
+                } else if (TIMES >= 100 && !getBoothLocationsResponse) {
+                  Toast.makeText(mContext, "Request timed out", Toast.LENGTH_LONG).show();
+                }
+              }
+            }
+          }
+        };
+    Response.ErrorListener errorListener =
+        new Response.ErrorListener() {
+          @Override
+          public void onErrorResponse(VolleyError error) {
+            error.printStackTrace();
+            if (TIMES < 100 && !getBoothLocationsResponse) {
+              PublicAPICall.this.storeCookie(mContext, MainActivity.webView);
+              RequestDelayRunnable requestDelayRunnable = new RequestDelayRunnable(11);
+              new Thread(requestDelayRunnable).start();
+            } else if (TIMES >= 100 && !getBoothLocationsResponse) {
+              Toast.makeText(mContext, "Request timed out", Toast.LENGTH_LONG).show();
+            }
+          }
+        };
+    String url = mContext.getString(R.string.web_host) + "/BoothAddress.php";
+    Map<String, String> params = new HashMap<>();
+    params.put("postAuthKey", BuildConfig.POST_AUTH_KEY);
+    params.put("place", place);
     PostRequest postShowOptions = new PostRequest(mContext, url, params, listener, errorListener);
     RequestQueue queue = Volley.newRequestQueue(mContext);
     queue.add(postShowOptions);

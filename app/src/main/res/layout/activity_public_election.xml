@@ -76,6 +76,15 @@
         android:elevation="5dp"
         app:layout_constraintTop_toBottomOf="@id/textView7"
         app:layout_constraintBottom_toBottomOf="parent"/>
+    <ProgressBar
+        android:id="@+id/cityListLoadProgress"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:elevation="10dp"
+        app:layout_constraintTop_toTopOf="@id/bgContainer"
+        app:layout_constraintBottom_toBottomOf="@id/bgContainer"
+        app:layout_constraintStart_toStartOf="@id/bgContainer"
+        app:layout_constraintEnd_toEndOf="@id/bgContainer"/>
     <ListView
         android:id="@+id/list"
         android:layout_width="match_parent"

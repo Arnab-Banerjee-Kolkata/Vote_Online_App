@@ -84,12 +84,8 @@ public class MainActivity extends AppCompatActivity {
           @Override
           public void onClick(View v) {
             pub.setEnabled(false);
-            PublicAPICall publicAPICall = new PublicAPICall();
-            publicAPICall.getBoothCities(getApplicationContext());
-            Intent intent = new Intent(getBaseContext(), WaitScreen.class);
-            intent.putExtra("LABEL", "Please wait");
+            Intent intent = new Intent(getApplicationContext(), PublicElectionEntryPoint.class);
             startActivity(intent);
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
           }
         });
 
