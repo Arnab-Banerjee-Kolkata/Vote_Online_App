@@ -1,18 +1,9 @@
 <resources>
     <string name="app_name">VoteOnlineBruh</string>
     <string name="title_activity_login_page">LoginPage</string>
-
     <string name="web_host">http://www.remote-voting.rf.gd</string>
     <string name="private_web_host">http://private-poll.epizy.com</string>
     <!--    <string name="web_host">https://www.remote-voting.xyz</string>-->
-
-    <string name="sms_auth_key">lkmfledkcmkmKJGMMFPVMDFPOJD5654565V6FD6DC5D665gf6v2ff6gf5vf6f6</string>
-    <string name="get_auth_key">uiygkfdwuhieefd46484d5f4sd5f4ds5f4ds5DFSDFDSFSFSDF454D5FF4D6F5G4Y5J4U5JGSD5DW5D66fgf6g5f</string>
-    <string name="post_auth_key">RGGFGF54GR5G4GF5H4U5K4UK5IK5hgj4tyfffdh6hj1d5ffgg5hj4yg5FGG6SR5GH6JHK2HG6HF</string>
-    <string name="private_auth_key">e841d4e5yj3b2t4cx25e4f3t4bj2bjb5h4vd3x2fer2vt3hvg40cvtg4f3f4fdcg23s</string>
-
-
     <string name="cookie_end">; expires=Friday, 1 January 2038 at 05:25:55; path=/</string>
     <string name="title_activity_booth_details_map">Map</string>
-
 </resources>

@@ -18,6 +18,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.example.voteonlinebruh.BuildConfig;
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.activities.ConstituencyDetailsActivity;
 import com.example.voteonlinebruh.activities.MainActivity;
@@ -55,7 +56,7 @@ public class PublicAPICall {
       storeVoteResponse,
       getRandomKeyResponse,
       getConstituencyDetailsResponse,
-          getBoothCitiesResponse;
+      getBoothCitiesResponse;
   private String boothId, otp;
   private Context mContext;
   private OtpPage otpPage;
@@ -339,7 +340,7 @@ public class PublicAPICall {
     Map<String, String> params = new HashMap<>();
     params.put("boothId", boothId);
     params.put("otp", otp);
-    params.put("postAuthKey", mContext.getString(R.string.post_auth_key));
+    params.put("postAuthKey", BuildConfig.POST_AUTH_KEY);
 
     PostRequest postValidateOtp = new PostRequest(mContext, url, params, listener, errorListener);
     RequestQueue queue = Volley.newRequestQueue(mContext);
@@ -428,7 +429,7 @@ public class PublicAPICall {
 
     String url = mContext.getString(R.string.web_host) + "/ShowCompletedElectionList.php";
     Map<String, String> params = new HashMap<>();
-    params.put("postAuthKey", mContext.getString(R.string.post_auth_key));
+    params.put("postAuthKey", BuildConfig.POST_AUTH_KEY);
 
     PostRequest postShowOptions = new PostRequest(mContext, url, params, listener, errorListener);
     RequestQueue queue = Volley.newRequestQueue(mContext);
@@ -540,7 +541,7 @@ public class PublicAPICall {
 
     String url = mContext.getString(R.string.web_host) + "/OverallElectionResult.php";
     Map<String, String> params = new HashMap<>();
-    params.put("postAuthKey", mContext.getString(R.string.post_auth_key));
+    params.put("postAuthKey", BuildConfig.POST_AUTH_KEY);
     params.put("electionId", Integer.toString(electionId));
     params.put("type", type);
 
@@ -652,7 +653,7 @@ public class PublicAPICall {
 
     String url = mContext.getString(R.string.web_host) + "/OverallElectionResult.php";
     Map<String, String> params = new HashMap<>();
-    params.put("postAuthKey", mContext.getString(R.string.post_auth_key));
+    params.put("postAuthKey", BuildConfig.POST_AUTH_KEY);
     params.put("electionId", Integer.toString(electionId));
     params.put("type", type);
     params.put("stateCode", stateCode);
@@ -773,7 +774,7 @@ public class PublicAPICall {
 
     String url = mContext.getString(R.string.web_host) + "/ConstituencyWiseResult.php";
     Map<String, String> params = new HashMap<>();
-    params.put("postAuthKey", mContext.getString(R.string.post_auth_key));
+    params.put("postAuthKey", BuildConfig.POST_AUTH_KEY);
     params.put("electionId", Integer.toString(electionId));
     params.put("type", type);
     params.put("stateCode", stateCode);
@@ -861,7 +862,7 @@ public class PublicAPICall {
 
     String url = mContext.getString(R.string.web_host) + "/ShowStateList.php";
     Map<String, String> params = new HashMap<>();
-    params.put("postAuthKey", mContext.getString(R.string.post_auth_key));
+    params.put("postAuthKey", BuildConfig.POST_AUTH_KEY);
 
     PostRequest postShowOptions = new PostRequest(mContext, url, params, listener, errorListener);
     RequestQueue queue = Volley.newRequestQueue(mContext);
@@ -944,7 +945,7 @@ public class PublicAPICall {
         };
     String url = mContext.getString(R.string.web_host) + "/ConstituencyResultDetails.php";
     Map<String, String> params = new HashMap<>();
-    params.put("postAuthKey", mContext.getString(R.string.post_auth_key));
+    params.put("postAuthKey", BuildConfig.POST_AUTH_KEY);
     params.put("stateElectionId", Integer.toString(electionId));
     params.put("constituencyName", constituencyName);
     PostRequest postShowOptions = new PostRequest(mContext, url, params, listener, errorListener);
@@ -969,15 +970,14 @@ public class PublicAPICall {
                 boolean success = jsonResponse.getBoolean("success");
                 boolean valid = jsonResponse.getBoolean("validAuth");
                 if (!success || !valid) {
-                    Toast.makeText(mContext, "Server rejected request !", Toast.LENGTH_SHORT).show();
+                  Toast.makeText(mContext, "Server rejected request !", Toast.LENGTH_SHORT).show();
                   WaitScreen.terminate = true;
                 } else {
                   JSONArray array = jsonResponse.getJSONArray("listOfPlaces");
                   int len = array.length();
                   for (int i = 0; i < len; i++) {
                     JSONObject result = array.getJSONObject(i);
-                    cities.put(result.getString("place"),
-                            result.getString("state"));
+                    cities.put(result.getString("place"), result.getString("state"));
                   }
                   final Intent intent = new Intent(mContext, PublicElectionEntryPoint.class);
                   intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -1014,7 +1014,7 @@ public class PublicAPICall {
         };
     String url = mContext.getString(R.string.web_host) + "/BoothPlaces.php";
     Map<String, String> params = new HashMap<>();
-    params.put("postAuthKey", mContext.getString(R.string.post_auth_key));
+    params.put("postAuthKey", BuildConfig.POST_AUTH_KEY);
     PostRequest postShowOptions = new PostRequest(mContext, url, params, listener, errorListener);
     RequestQueue queue = Volley.newRequestQueue(mContext);
     queue.add(postShowOptions);
@@ -1129,7 +1129,7 @@ public class PublicAPICall {
           };
       String url = mContext.getString(R.string.web_host) + "/StoreVote.php";
       Map<String, String> params = new HashMap<>();
-      params.put("postAuthKey", mContext.getString(R.string.post_auth_key));
+      params.put("postAuthKey", BuildConfig.POST_AUTH_KEY);
       params.put("boothId", boothId);
       params.put("enVote", enVote.toString());
       PostRequest postShowOptions = new PostRequest(mContext, url, params, listener, errorListener);
@@ -1210,7 +1210,7 @@ public class PublicAPICall {
         };
     String url = mContext.getString(R.string.web_host) + "/GetRandomKey.php";
     Map<String, String> params = new HashMap<>();
-    params.put("postAuthKey", mContext.getString(R.string.post_auth_key));
+    params.put("postAuthKey", BuildConfig.POST_AUTH_KEY);
     params.put("boothId", boothId);
     PostRequest postShowOptions = new PostRequest(mContext, url, params, listener, errorListener);
     RequestQueue queue = Volley.newRequestQueue(mContext);

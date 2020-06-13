@@ -1,5 +1,8 @@
 apply plugin: 'com.android.application'
 
+def propertiesFile=rootProject.file('apikey.properties')
+def properties=new Properties()
+properties.load(new FileInputStream(propertiesFile))
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -9,10 +12,12 @@ android {
         versionCode 5
         versionName "Beta 3.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String","POST_AUTH_KEY",properties.getProperty('POST_AUTH_KEY'))
+        buildConfigField("String","PRIVATE_AUTH_KEY",properties.getProperty('PRIVATE_AUTH_KEY'))
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
