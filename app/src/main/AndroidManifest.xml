@@ -26,7 +26,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Light"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.BoothList"></activity>
+        <activity android:name=".activities.BoothList"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustNothing"/>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -41,16 +44,24 @@
 
         <activity
             android:name=".activities.BoothDetailsMap"
-            android:label="@string/title_activity_booth_details_map" />
-        <activity android:name=".activities.ConstituencyDetailsActivity" />
+            android:label="@string/title_activity_booth_details_map"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity android:name=".activities.ConstituencyDetailsActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing"/>
         <activity
             android:name=".activities.ResultsSimplified"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".activities.Splash"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -60,11 +71,13 @@
         <activity
             android:name=".activities.ResultsDetailed"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing"/>
         <activity
             android:name=".activities.ResultList"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing"/>
         <activity
             android:name=".activities.ManageOptions"
             android:launchMode="singleTask"
@@ -81,15 +94,18 @@
         <activity
             android:name=".activities.PublicElectionEntryPoint"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing"/>
         <activity
             android:name=".activities.Thanks"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing"/>
         <activity
             android:name=".activities.Demo"
             android:launchMode="singleTask"
-            android:theme="@style/DialogTheme" />
+            android:theme="@style/DialogTheme"
+            android:windowSoftInputMode="adjustNothing"/>
         <activity
             android:name=".activities.OtpPage"
             android:launchMode="singleTask"
@@ -98,23 +114,28 @@
         <activity
             android:name=".activities.VotingPage"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing"/>
         <activity
             android:name=".activities.VotingInstructions"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing"/>
         <activity
             android:name=".activities.LandingPage"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing"/>
         <activity
             android:name=".activities.WaitScreen"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing"/>
         <activity
             android:name=".activities.MainActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing"/>
 
         <service android:name=".utility.PostingService">
             <intent-filter>

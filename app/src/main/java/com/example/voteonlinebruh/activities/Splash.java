@@ -180,4 +180,7 @@ public class Splash extends AppCompatActivity {
     _instance = null;
     super.onDestroy();
   }
+
+  @Override
+  public void onBackPressed() {}
 }

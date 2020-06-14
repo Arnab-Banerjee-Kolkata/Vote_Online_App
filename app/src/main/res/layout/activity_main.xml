@@ -108,7 +108,8 @@
                     android:layout_height="wrap_content"
                     android:scaleType="centerCrop"
                     android:alpha=".7"
-                    android:src="@drawable/home_button_bg" />
+                    android:src="@drawable/home_button_bg"
+                    android:background="@drawable/ripple"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -167,7 +168,8 @@
                     android:layout_height="wrap_content"
                     android:scaleType="centerCrop"
                     android:alpha=".7"
-                    android:src="@drawable/home_button_bg_2" />
+                    android:src="@drawable/home_button_bg_2"
+                    android:background="@drawable/ripple"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -226,7 +228,8 @@
                     android:layout_height="wrap_content"
                     android:scaleType="centerCrop"
                     android:alpha=".7"
-                    android:src="@drawable/home_button_bg" />
+                    android:src="@drawable/home_button_bg"
+                    android:background="@drawable/ripple"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -285,7 +288,8 @@
                     android:layout_height="wrap_content"
                     android:scaleType="centerCrop"
                     android:alpha=".7"
-                    android:src="@drawable/home_button_bg_2" />
+                    android:src="@drawable/home_button_bg_2"
+                    android:background="@drawable/ripple"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
