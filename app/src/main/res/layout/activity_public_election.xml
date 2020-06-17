@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.PublicElectionEntryPoint">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarpub"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -51,7 +51,6 @@
         android:background="@drawable/buttonbg"
         android:text="Proceed"
         android:textAllCaps="false"
-        android:theme="@style/Widget.MaterialComponents.Button.OutlinedButton"
         app:backgroundTint="@color/button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -77,6 +76,15 @@
         android:elevation="5dp"
         app:layout_constraintTop_toBottomOf="@id/textView7"
         app:layout_constraintBottom_toBottomOf="parent"/>
+    <ProgressBar
+        android:id="@+id/cityListLoadProgress"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:elevation="10dp"
+        app:layout_constraintTop_toTopOf="@id/bgContainer"
+        app:layout_constraintBottom_toBottomOf="@id/bgContainer"
+        app:layout_constraintStart_toStartOf="@id/bgContainer"
+        app:layout_constraintEnd_toEndOf="@id/bgContainer"/>
     <ListView
         android:id="@+id/list"
         android:layout_width="match_parent"
@@ -86,7 +94,8 @@
         android:divider="#6F6F6F"
         android:dividerHeight="2dp"
         android:elevation="6dp"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
         android:overScrollFooter="@android:color/transparent"
         app:layout_constraintTop_toBottomOf="@id/textView7"
         app:layout_constraintBottom_toBottomOf="parent"/>
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

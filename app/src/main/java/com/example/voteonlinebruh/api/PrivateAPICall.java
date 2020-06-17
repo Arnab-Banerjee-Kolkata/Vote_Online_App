@@ -18,6 +18,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.example.voteonlinebruh.BuildConfig;
 import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.activities.MainActivity;
 import com.example.voteonlinebruh.activities.ManageOptions;
@@ -216,7 +217,7 @@ public class PrivateAPICall {
         };
     String url = context.getString(R.string.private_web_host) + "/AccountLogin.php";
     Map<String, String> params = new HashMap<>();
-    params.put("postAuthKey", context.getString(R.string.private_auth_key));
+    params.put("postAuthKey", BuildConfig.PRIVATE_AUTH_KEY);
     params.put("emailId", email);
     params.put("password", password);
     PostRequest postShowOptions = new PostRequest(context, url, params, listener, errorListener);
@@ -280,7 +281,7 @@ public class PrivateAPICall {
             };
     String url = context.getString(R.string.private_web_host) + "/CreateAccount.php";
     Map<String, String> params = new HashMap<>();
-    params.put("postAuthKey", context.getString(R.string.private_auth_key));
+    params.put("postAuthKey", BuildConfig.PRIVATE_AUTH_KEY);
     params.put("emailId", email);
     params.put("password", password);
     PostRequest postShowOptions = new PostRequest(context, url, params, listener, errorListener);

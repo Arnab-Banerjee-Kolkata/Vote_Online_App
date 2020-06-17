@@ -4,10 +4,10 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +41,7 @@ import java.util.ArrayList;
 
 public class OverallRes extends Fragment {
 
+  private static Bundle args;
   private static ArrayList name, sym, seat;
   private static int rows, totalSeats, electionId;
   private static String type, stateCode;
@@ -58,7 +59,8 @@ public class OverallRes extends Fragment {
 
   public static OverallRes newInstance(Bundle args) {
     OverallRes overallRes = new OverallRes();
-    overallRes.setArguments(args);
+    OverallRes.args=args;
+    overallRes.setArguments();
     return overallRes;
   }
 
@@ -68,17 +70,15 @@ public class OverallRes extends Fragment {
     context = (ResultsDetailed) activity;
   }
 
-  @Override
-  public void setArguments(@Nullable Bundle args) {
-
-    this.name = args.getStringArrayList("NAMES");
-    this.sym = args.getIntegerArrayList("SYMS");
-    this.seat = args.getStringArrayList("SEATS");
-    this.rows = args.getInt("ROWS");
-    this.type = args.getString("type");
-    this.totalSeats = args.getInt("totalSeats");
-    this.stateCode = args.getString("stateCode");
-    this.electionId = args.getInt("ID");
+  private void setArguments() {
+    name = args.getStringArrayList("NAMES");
+    sym = args.getIntegerArrayList("SYMS");
+    seat = args.getStringArrayList("SEATS");
+    rows = args.getInt("ROWS");
+    type = args.getString("type");
+    totalSeats = args.getInt("totalSeats");
+    stateCode = args.getString("stateCode");
+    electionId = args.getInt("ID");
   }
 
   @Override
@@ -174,7 +174,7 @@ public class OverallRes extends Fragment {
     // TABLE CODE
     tableLayout = v.findViewById(R.id.table);
     for (int i = 0; i < rows; i++) {
-      View view = inflater.inflate(R.layout.row, container, false);
+      View view = inflater.inflate(R.layout.table_row, container, false);
       TableRow row = view.findViewById(R.id.rowwwww);
       if (i % 2 == 1) row.setBackgroundColor(getResources().getColor(R.color.shade));
       View color = view.findViewById(R.id.color);
