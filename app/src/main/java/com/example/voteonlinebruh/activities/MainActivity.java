@@ -2,10 +2,10 @@ package com.example.voteonlinebruh.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.constraint.ConstraintLayout;
-import android.support.v7.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageButton;
@@ -84,12 +84,8 @@ public class MainActivity extends AppCompatActivity {
           @Override
           public void onClick(View v) {
             pub.setEnabled(false);
-            PublicAPICall publicAPICall = new PublicAPICall();
-            publicAPICall.getBoothCities(getApplicationContext());
-            Intent intent = new Intent(getBaseContext(), WaitScreen.class);
-            intent.putExtra("LABEL", "Please wait");
+            Intent intent = new Intent(getApplicationContext(), PublicElectionEntryPoint.class);
             startActivity(intent);
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
           }
         });
 

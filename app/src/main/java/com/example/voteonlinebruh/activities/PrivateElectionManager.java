@@ -3,10 +3,13 @@ package com.example.voteonlinebruh.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
-import android.support.constraint.ConstraintLayout;
-import android.support.v7.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
+
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -61,6 +64,12 @@ public class PrivateElectionManager extends AppCompatActivity {
 
     taptoreg = findViewById(R.id.textView10);
     taptolog = findViewById(R.id.textView11);
+    SpannableString content = new SpannableString(taptoreg.getText());
+    content.setSpan(new UnderlineSpan(), 24, content.length()-1, 0);
+    taptoreg.setText(content);
+    content=new SpannableString(taptolog.getText());
+    content.setSpan(new UnderlineSpan(), 26, content.length()-1, 0);
+    taptolog.setText(content);
 
     taptoreg.setOnClickListener(
         new View.OnClickListener() {

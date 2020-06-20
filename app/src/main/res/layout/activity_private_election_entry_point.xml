@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.PrivateElectionEntryPoint">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarpriv"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -30,7 +30,6 @@
         android:text="Register for Upcoming Election"
         android:textAllCaps="false"
         android:layout_marginTop="30dp"
-        android:theme="@style/Widget.MaterialComponents.Button.OutlinedButton"
         app:backgroundTint="@color/button"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -44,7 +43,6 @@
         android:background="@drawable/buttonbg"
         android:text="Vote in Ongoing Election"
         android:textAllCaps="false"
-        android:theme="@style/Widget.MaterialComponents.Button.OutlinedButton"
         app:backgroundTint="@color/button"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -59,4 +57,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:id="@+id/privBg"/>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

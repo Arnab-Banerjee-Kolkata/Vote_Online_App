@@ -5,11 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +38,7 @@ import java.util.HashSet;
 
 public class ConstRes extends Fragment {
 
+  private static Bundle args;
   private static ArrayList cons_name, cand_name, par_name, p_img, c_img, votes;
   private static HashSet<Integer> ties;
   private static String state_name, stateCode, type;
@@ -52,7 +53,8 @@ public class ConstRes extends Fragment {
 
   public static ConstRes newInstance(Bundle args) {
     ConstRes constRes = new ConstRes();
-    constRes.setArguments(args);
+    ConstRes.args=args;
+    constRes.setArguments();
     return constRes;
   }
 
@@ -62,9 +64,7 @@ public class ConstRes extends Fragment {
     context = (ResultsDetailed) activity;
   }
 
-  @Override
-  public void setArguments(@Nullable Bundle args) {
-
+  private void setArguments() {
     cons_name = args.getStringArrayList("CON_NAME");
     state_name = args.getString("STATE_NAME");
     cand_name = args.getStringArrayList("CAND_NAME");
@@ -132,8 +132,8 @@ public class ConstRes extends Fragment {
       public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater layoutInflater =
             (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        RelativeLayout v =
-            (RelativeLayout) layoutInflater.inflate(R.layout.const_list_card, parent, false);
+        ConstraintLayout v =
+            (ConstraintLayout) layoutInflater.inflate(R.layout.const_list_card, parent, false);
         TextView con = v.findViewById(R.id.conName),
             sta = v.findViewById(R.id.stateName),
             can = v.findViewById(R.id.candName),

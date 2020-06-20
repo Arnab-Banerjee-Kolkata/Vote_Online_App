@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:drawable/dialog_holo_light_frame"
+    android:backgroundTint="@color/shade"
+    android:elevation="2dp">
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/ripple"
+        map:layout_constraintTop_toTopOf="parent"
+        map:layout_constraintBottom_toBottomOf="parent"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/lite_listrow_text1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginStart="6dp"
+        android:textSize="18dp"
+        map:layout_constraintTop_toTopOf="parent"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintEnd_toStartOf="@id/mapContainer"/>
+
+    <ImageView
+        android:id="@+id/uselessID3"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginBottom="6dp"
+        android:src="@drawable/ic_pin_drop_black_24dp"
+        map:layout_constraintBottom_toBottomOf="parent"
+        map:layout_constraintTop_toBottomOf="@id/lite_listrow_text1"
+        map:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/lite_listrow_text2"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:paddingTop="5dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="6dp"
+        android:textStyle="normal"
+        android:textSize="15dp"
+        map:layout_constraintBottom_toBottomOf="parent"
+        map:layout_constraintStart_toEndOf="@id/uselessID3"
+        map:layout_constraintTop_toBottomOf="@id/lite_listrow_text1"
+        map:layout_constraintEnd_toStartOf="@id/mapContainer"/>
+
+    <!-- MapView in lite mode. Note that it needs to be initialised
+         programmatically before it can be used. -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/mapContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@android:color/transparent"
+        map:cardCornerRadius="5dp"
+        android:elevation="5dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginEnd="6dp"
+        map:layout_constraintTop_toTopOf="parent"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintBottom_toBottomOf="parent">
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/lite_listrow_map"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        map:liteMode="true"
+        map:mapType="none"/>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
