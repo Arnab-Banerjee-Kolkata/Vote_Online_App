@@ -58,7 +58,7 @@ public class PublicAPICall {
       getConstituencyDetailsResponse,
       getBoothCitiesResponse,
       getBoothLocationsResponse;
-  private String boothId, otp, type, candidateId, place, constituencyName, stateCode;
+  private String boothId, otp, type, candidateId, place, constituencyName, stateCode, voteCode;
   private int totalSeats, stateElectionId, tieCount, electionId;
   private boolean release, service;
   private ArrayList<PartywiseResultList> list;
@@ -148,7 +148,7 @@ public class PublicAPICall {
             PublicAPICall.this.getStatelist(electionId, type, mContext);
             break;
           case 7: // storeVote
-            PublicAPICall.this.storeVote(boothId, candidateId, mContext, service);
+            PublicAPICall.this.storeVote(boothId, candidateId, voteCode, mContext, service);
             break;
           case 8: // getRandomKey
             PublicAPICall.this.getRandomKey(boothId, mContext, votingPage);
@@ -264,6 +264,7 @@ public class PublicAPICall {
                           .show();
                     WaitScreen.terminate = true;
                   } else {
+                    String voteCode = parameters.getString("voteCode");
                     JSONArray array2 = parameters.getJSONArray("candidates");
                     int len2 = array2.length();
 
@@ -288,6 +289,7 @@ public class PublicAPICall {
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("list", candidates);
                     intent.putExtra("boothId", boothId);
+                    intent.putExtra("code", voteCode);
                     myRunnable thread = new myRunnable(intent, mContext);
                     new Thread(thread).start();
                     otpPage.finish();
@@ -342,7 +344,7 @@ public class PublicAPICall {
     Map<String, String> params = new HashMap<>();
     params.put("boothId", boothId);
     params.put("otp", otp);
-    params.put("postAuthKey", BuildConfig.POST_AUTH_KEY);
+    params.put("voteAuthKey", BuildConfig.VOTE_AUTH_KEY);
 
     PostRequest postValidateOtp = new PostRequest(mContext, url, params, listener, errorListener);
     RequestQueue queue = Volley.newRequestQueue(mContext);
@@ -480,6 +482,7 @@ public class PublicAPICall {
                 } else {
                   int status = jsonResponse.getInt("status");
                   int totalSeats = jsonResponse.getInt("totalSeats");
+                  int tieCount = jsonResponse.getInt("tieCount");
                   JSONArray array = jsonResponse.getJSONArray("results");
                   int len = array.length();
 
@@ -502,6 +505,7 @@ public class PublicAPICall {
                     intent.putExtra("type", type);
                     intent.putExtra("status", status);
                     intent.putExtra("totalSeats", totalSeats);
+                    intent.putExtra("tieCount",tieCount);
                     myRunnable thread = new myRunnable(intent, mContext);
                     new Thread(thread).start();
                   }
@@ -1025,10 +1029,12 @@ public class PublicAPICall {
   public void storeVote(
       final String boothId,
       final String candidateId,
+      final String voteCode,
       final Context mContext,
       final boolean service) {
     this.boothId = boothId;
     this.candidateId = candidateId;
+    this.voteCode = voteCode;
     this.mContext = mContext;
     this.service = service;
 
@@ -1127,8 +1133,9 @@ public class PublicAPICall {
           };
       String url = mContext.getString(R.string.web_host) + "/StoreVote.php";
       Map<String, String> params = new HashMap<>();
-      params.put("postAuthKey", BuildConfig.POST_AUTH_KEY);
+      params.put("voteAuthKey", BuildConfig.VOTE_AUTH_KEY);
       params.put("boothId", boothId);
+      params.put("voteCode", voteCode);
       params.put("enVote", enVote.toString());
       PostRequest postShowOptions = new PostRequest(mContext, url, params, listener, errorListener);
       RequestQueue queue = Volley.newRequestQueue(mContext);

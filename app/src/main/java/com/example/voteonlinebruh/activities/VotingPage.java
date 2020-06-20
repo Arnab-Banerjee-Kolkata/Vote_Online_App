@@ -58,8 +58,10 @@ public class VotingPage extends AppCompatActivity {
     mContext = getApplicationContext();
     waitrel = findViewById(R.id.waitRel3);
     final String boothId = getIntent().getStringExtra("boothId");
+    final String voteCode = getIntent().getStringExtra("code");
     intent = new Intent(this, PostingService.class);
     intent.putExtra("boothId", boothId);
+    intent.putExtra("code", voteCode);
     intent.putExtra("action", PostingService.ACTION_START_SERVICE);
     PublicAPICall publicAPICall = new PublicAPICall();
     publicAPICall.getRandomKey(boothId, mContext, VotingPage.this);
@@ -78,7 +80,7 @@ public class VotingPage extends AppCompatActivity {
                   public void onClick(DialogInterface dialog, int which) {
                     String candidateId = publicCandidates.get(selected).getId();
                     PublicAPICall publicAPICall = new PublicAPICall();
-                    publicAPICall.storeVote(boothId, candidateId, mContext, false);
+                    publicAPICall.storeVote(boothId, candidateId, voteCode, mContext, false);
                     Intent intent = new Intent(mContext, Thanks.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);

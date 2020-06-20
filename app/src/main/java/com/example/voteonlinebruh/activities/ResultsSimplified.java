@@ -51,7 +51,7 @@ public class ResultsSimplified extends AppCompatActivity {
   private TableLayout tableLayout;
   SwipeRefreshLayout swipe;
   SwipeRefreshLayout.OnRefreshListener listener;
-  private int themeId, status, totalSeats;
+  private int themeId, status, totalSeats, tieCount;
   private boolean oneTimeDataLoad = false;
 
   @Override
@@ -88,6 +88,7 @@ public class ResultsSimplified extends AppCompatActivity {
         });
     status = intent.getIntExtra("status", 0);
     totalSeats = intent.getIntExtra("totalSeats", 0);
+    tieCount = intent.getIntExtra("tieCount", 0);
     ImageView indicator = findViewById(R.id.indicator2);
     switch (status) {
       case 2:
@@ -138,6 +139,7 @@ public class ResultsSimplified extends AppCompatActivity {
     for (int i = 0; i < resultlist.size(); i++) {
       values.add(new PieEntry(resultlist.get(i).getSeatsWon(), resultlist.get(i).getPartyname()));
     }
+    values.add(new PieEntry(tieCount,"Ties"));
     dataSet = new PieDataSet(values, "");
     dataSet.setSliceSpace(3f);
     dataSet.setSelectionShift(6f);
@@ -187,7 +189,7 @@ public class ResultsSimplified extends AppCompatActivity {
       tableLayout.setBackgroundResource(android.R.drawable.dialog_holo_dark_frame);
     }
     tableLayout.removeViews(1, tableLayout.getChildCount() - 1);
-    for (int i = 0; i < resultlist.size(); i++) {
+    for (int i = 0; i <= resultlist.size(); i++) {
       View view = layoutInflater.inflate(R.layout.table_row, tableLayout, false);
       TableRow row = view.findViewById(R.id.rowwwww);
       if (i % 2 == 1) row.setBackgroundColor(getResources().getColor(R.color.shade));
@@ -195,8 +197,15 @@ public class ResultsSimplified extends AppCompatActivity {
       TextView names = view.findViewById(R.id.partynum), seats = view.findViewById(R.id.seatnum);
       ImageView syms = view.findViewById(R.id.imnum);
       final ProgressBar progress = view.findViewById(R.id.tableImageProgress);
-      String resUrl = resultlist.get(i).getPartySymbol();
-      names.setText(resultlist.get(i).getPartyname());
+      String resUrl="";
+      if (i == resultlist.size()) {
+        names.setText("Tied Constituency");
+        seats.setText(Integer.toString(tieCount));
+      } else {
+        resUrl = resultlist.get(i).getPartySymbol();
+        names.setText(resultlist.get(i).getPartyname());
+        seats.setText(Integer.toString(resultlist.get(i).getSeatsWon()));
+      }
       Glide.with(this)
           .load(resUrl)
           .listener(
@@ -226,7 +235,6 @@ public class ResultsSimplified extends AppCompatActivity {
                 }
               })
           .into(syms);
-      seats.setText(Integer.toString(resultlist.get(i).getSeatsWon()));
       color.setBackgroundColor(legend[i].formColor);
       tableLayout.addView(row);
       swipe.setRefreshing(false);

@@ -37,7 +37,13 @@ public class PostingService extends Service {
               .setSmallIcon(R.drawable.ic_info_outline_black_24dp)
               .build();
       startForeground(1, notification);
-      new PublicAPICall().storeVote(intent.getStringExtra("boothId"), "NOTA", this, true);
+      new PublicAPICall()
+          .storeVote(
+              intent.getStringExtra("boothId"),
+              "NOTA",
+              intent.getStringExtra("code"),
+              this,
+              true);
     } else {
       Notification notification1 =
           new NotificationCompat.Builder(this, CHANNEL_ID)
