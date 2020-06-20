@@ -172,6 +172,7 @@ public class ResultsDetailed extends FragmentActivity {
       args.putString("type", type);
       args.putString("stateCode", stateCode);
       args.putInt("ID", electionId);
+      args.putInt("tieCount", tieCount);
       args2.putStringArrayList("CON_NAME", con_name);
       args2.putStringArrayList("CAND_NAME", can_name);
       args2.putStringArrayList("PAR_NAME", p_name);

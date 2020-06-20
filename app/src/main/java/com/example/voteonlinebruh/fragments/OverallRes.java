@@ -43,7 +43,7 @@ public class OverallRes extends Fragment {
 
   private static Bundle args;
   private static ArrayList name, sym, seat;
-  private static int rows, totalSeats, electionId;
+  private static int rows, totalSeats, electionId, tieCount;
   private static String type, stateCode;
   private static ResultsDetailed context;
   private PieChart chart;
@@ -59,7 +59,7 @@ public class OverallRes extends Fragment {
 
   public static OverallRes newInstance(Bundle args) {
     OverallRes overallRes = new OverallRes();
-    OverallRes.args=args;
+    OverallRes.args = args;
     overallRes.setArguments();
     return overallRes;
   }
@@ -79,6 +79,7 @@ public class OverallRes extends Fragment {
     totalSeats = args.getInt("totalSeats");
     stateCode = args.getString("stateCode");
     electionId = args.getInt("ID");
+    tieCount = args.getInt("tieCount");
   }
 
   @Override
@@ -130,9 +131,10 @@ public class OverallRes extends Fragment {
             return "" + (int) value;
           }
         });
+    if (tieCount > 0) values.add(new PieEntry(tieCount, "Ties"));
     chart.invalidate();
     chart.setData(data);
-    chart.setCenterText((int) data.getYValueSum() + "/" + totalSeats);
+    chart.setCenterText((int) data.getYValueSum()-tieCount + "/" + totalSeats);
     chart.setCenterTextTypeface(ResourcesCompat.getFont(chart.getContext(), R.font.azo));
     chart.setCenterTextSize(15f);
     leg = chart.getLegend();
@@ -173,17 +175,33 @@ public class OverallRes extends Fragment {
 
     // TABLE CODE
     tableLayout = v.findViewById(R.id.table);
-    for (int i = 0; i < rows; i++) {
+    for (int i = 0; i <= rows; i++) {
       View view = inflater.inflate(R.layout.table_row, container, false);
       TableRow row = view.findViewById(R.id.rowwwww);
       if (i % 2 == 1) row.setBackgroundColor(getResources().getColor(R.color.shade));
       View color = view.findViewById(R.id.color);
       TextView names = view.findViewById(R.id.partynum), seats = view.findViewById(R.id.seatnum);
-      ImageView syms = view.findViewById(R.id.imnum);
+      final ImageView syms = view.findViewById(R.id.imnum);
       final ProgressBar progress = view.findViewById(R.id.tableImageProgress);
-      names.setText((String) name.get(i));
+      String resurl="";
+      if (i == rows) {
+        if (tieCount > 0) {
+          names.setText("Tied Constituency");
+          seats.setText(Integer.toString(tieCount));
+        } else {
+          break;
+        }
+      } else {
+        names.setText((String) name.get(i));
+        seats.setText((String) seat.get(i));
+        resurl= (String) sym.get(i);
+      }
       Glide.with(this)
-          .load(sym.get(i))
+          .load(resurl)
+          .error(
+              themeId == R.style.AppTheme_Light
+                  ? R.drawable.ic_error_outline_black_24dp
+                  : R.drawable.ic_error_outline_white_24dp)
           .listener(
               new RequestListener<Drawable>() {
                 @Override
@@ -193,13 +211,7 @@ public class OverallRes extends Fragment {
                     Target<Drawable> target,
                     boolean isFirstResource) {
                   progress.setVisibility(View.GONE);
-                  if (themeId == R.style.AppTheme_Light) {
-                    target.onLoadFailed(
-                        getResources().getDrawable(R.drawable.ic_error_outline_black_24dp));
-                  } else {
-                    target.onLoadFailed(
-                        getResources().getDrawable(R.drawable.ic_error_outline_white_24dp));
-                  }
+                  syms.setPadding(10, 20, 10, 10);
                   return false;
                 }
 
@@ -215,7 +227,6 @@ public class OverallRes extends Fragment {
                 }
               })
           .into(syms);
-      seats.setText((String) seat.get(i));
       color.setBackgroundColor(legend[i].formColor);
       tableLayout.addView(row);
     }

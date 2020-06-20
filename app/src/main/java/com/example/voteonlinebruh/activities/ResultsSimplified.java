@@ -139,7 +139,7 @@ public class ResultsSimplified extends AppCompatActivity {
     for (int i = 0; i < resultlist.size(); i++) {
       values.add(new PieEntry(resultlist.get(i).getSeatsWon(), resultlist.get(i).getPartyname()));
     }
-    values.add(new PieEntry(tieCount,"Ties"));
+    if (tieCount > 0) values.add(new PieEntry(tieCount, "Ties"));
     dataSet = new PieDataSet(values, "");
     dataSet.setSliceSpace(3f);
     dataSet.setSelectionShift(6f);
@@ -163,7 +163,7 @@ public class ResultsSimplified extends AppCompatActivity {
         });
     chart.invalidate();
     chart.setData(data);
-    chart.setCenterText((int) data.getYValueSum() + "/" + totalSeats);
+    chart.setCenterText((int) data.getYValueSum() - tieCount + "/" + totalSeats);
     chart.setCenterTextTypeface(ResourcesCompat.getFont(chart.getContext(), R.font.azo));
     chart.setCenterTextSize(15f);
     chart.getLegend().setEnabled(true);
@@ -195,12 +195,16 @@ public class ResultsSimplified extends AppCompatActivity {
       if (i % 2 == 1) row.setBackgroundColor(getResources().getColor(R.color.shade));
       View color = view.findViewById(R.id.color);
       TextView names = view.findViewById(R.id.partynum), seats = view.findViewById(R.id.seatnum);
-      ImageView syms = view.findViewById(R.id.imnum);
+      final ImageView syms = view.findViewById(R.id.imnum);
       final ProgressBar progress = view.findViewById(R.id.tableImageProgress);
-      String resUrl="";
+      String resUrl = "";
       if (i == resultlist.size()) {
-        names.setText("Tied Constituency");
-        seats.setText(Integer.toString(tieCount));
+        if (tieCount > 0) {
+          names.setText("Tied Constituency");
+          seats.setText(Integer.toString(tieCount));
+        } else {
+          break;
+        }
       } else {
         resUrl = resultlist.get(i).getPartySymbol();
         names.setText(resultlist.get(i).getPartyname());
@@ -208,6 +212,10 @@ public class ResultsSimplified extends AppCompatActivity {
       }
       Glide.with(this)
           .load(resUrl)
+          .error(
+              themeId == R.style.AppTheme_Light
+                  ? R.drawable.ic_error_outline_black_24dp
+                  : R.drawable.ic_error_outline_white_24dp)
           .listener(
               new RequestListener<Drawable>() {
                 @Override
@@ -217,9 +225,7 @@ public class ResultsSimplified extends AppCompatActivity {
                     Target<Drawable> target,
                     boolean isFirstResource) {
                   progress.setVisibility(View.GONE);
-                  if (themeId == R.style.AppTheme_Light)
-                    target.onLoadFailed(getDrawable(R.drawable.ic_error_outline_black_24dp));
-                  else target.onLoadFailed(getDrawable(R.drawable.ic_error_outline_white_24dp));
+                  syms.setPadding(10, 20, 10, 10);
                   return false;
                 }
 

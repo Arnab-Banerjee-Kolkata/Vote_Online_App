@@ -132,8 +132,8 @@ public class ConstRes extends Fragment {
       public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater layoutInflater =
             (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        ConstraintLayout v =
-            (ConstraintLayout) layoutInflater.inflate(R.layout.const_list_card, parent, false);
+        RelativeLayout v =
+            (RelativeLayout) layoutInflater.inflate(R.layout.const_list_card, parent, false);
         TextView con = v.findViewById(R.id.conName),
             sta = v.findViewById(R.id.stateName),
             can = v.findViewById(R.id.candName),
@@ -188,9 +188,6 @@ public class ConstRes extends Fragment {
         vot.setText("Votes : " + votes.get(position));
         if (ties.contains(position))
           v.setBackground(getResources().getDrawable(R.drawable.highlighter2));
-        if (ThemeManager.getThemeId() == R.style.AppTheme_Dark)
-          v.findViewById(R.id.consContainer)
-              .setBackground(getResources().getDrawable(android.R.drawable.dialog_holo_dark_frame));
         return v;
       }
     }

@@ -38,20 +38,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@android:color/transparent"
-            app:cardCornerRadius="5dp">
+            app:cardCornerRadius="5dp"
+            android:layout_margin="5dp">
 
         <ImageView
             android:id="@+id/imnum"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:gravity="center"/>
+            android:layout_gravity="center"/>
 
         <ProgressBar
             android:id="@+id/tableImageProgress"
             android:alpha=".5"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:gravity="center"/>
+            android:layout_gravity="center"/>
         </androidx.cardview.widget.CardView>
     </RelativeLayout>
 
