@@ -236,6 +236,7 @@ public class PublicAPICall {
                 jsonResponse = new JSONObject(response);
                 boolean validAuth = jsonResponse.getBoolean("validAuth");
                 boolean validBooth = jsonResponse.getBoolean("validBooth");
+                boolean validApproval = jsonResponse.getBoolean("validApproval");
                 boolean validOtp = jsonResponse.getBoolean("validOtp");
                 if (!validAuth) {
                   Toast.makeText(mContext, "Un-authourised access request", Toast.LENGTH_LONG)
@@ -243,6 +244,9 @@ public class PublicAPICall {
                   WaitScreen.terminate = true;
                 } else if (!validBooth) {
                   Toast.makeText(mContext, "Invalid Booth ID ! ", Toast.LENGTH_LONG).show();
+                  WaitScreen.terminate = true;
+                } else if (!validApproval) {
+                  Toast.makeText(mContext, "You are not approved to vote ! ", Toast.LENGTH_LONG).show();
                   WaitScreen.terminate = true;
                 } else if (!validOtp) {
                   Toast.makeText(mContext, "Incorrect OTP !", Toast.LENGTH_LONG).show();
@@ -505,7 +509,7 @@ public class PublicAPICall {
                     intent.putExtra("type", type);
                     intent.putExtra("status", status);
                     intent.putExtra("totalSeats", totalSeats);
-                    intent.putExtra("tieCount",tieCount);
+                    intent.putExtra("tieCount", tieCount);
                     myRunnable thread = new myRunnable(intent, mContext);
                     new Thread(thread).start();
                   }

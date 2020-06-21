@@ -41,6 +41,7 @@ public class VotingPage extends AppCompatActivity {
   private RelativeLayout waitrel;
   private Intent intent;
   private int themeId, themeId2, resid;
+  private static boolean alertPress = false;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +84,7 @@ public class VotingPage extends AppCompatActivity {
                     publicAPICall.storeVote(boothId, candidateId, voteCode, mContext, false);
                     Intent intent = new Intent(mContext, Thanks.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    alertPress = true;
                     startActivity(intent);
                     VotingPage.this.finish();
                   }
@@ -169,10 +171,17 @@ public class VotingPage extends AppCompatActivity {
 
   @Override
   protected void onUserLeaveHint() {
-    Log.d("Home", "pressed");
-    startService(intent);
-    finish();
+    if (!alertPress) {
+      startService(intent);
+      finish();
+    }
     super.onUserLeaveHint();
+  }
+
+  @Override
+  protected void onDestroy() {
+    alertPress = false;
+    super.onDestroy();
   }
 
   @Override
