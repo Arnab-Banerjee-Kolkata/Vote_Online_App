@@ -1,5 +1,6 @@
 package com.example.voteonlinebruh.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import androidx.annotation.NonNull;
@@ -25,10 +26,10 @@ import java.util.ArrayList;
 
 public class RecyclerViewForConstituencyDetailsAdapter
     extends RecyclerView.Adapter<RecyclerViewForConstituencyDetailsAdapter.ItemViewHolder> {
-  private ArrayList<ConstituencyDetailResult> list;
-  private ImageView partySym;
-  private Context context;
-  private boolean tie;
+  private final ArrayList<ConstituencyDetailResult> list;
+  private final ImageView partySym;
+  private final Context context;
+  private final boolean tie;
 
   public RecyclerViewForConstituencyDetailsAdapter(
       ArrayList<ConstituencyDetailResult> list, ImageView partySym, boolean tie, Context context) {
@@ -39,9 +40,14 @@ public class RecyclerViewForConstituencyDetailsAdapter
   }
 
   static class ItemViewHolder extends RecyclerView.ViewHolder {
-    TextView rank, candName, partyName, votes;
-    ImageView candImage, partyImage;
-    ProgressBar candProgress, partyProgress;
+    final TextView rank;
+    final TextView candName;
+    final TextView partyName;
+    final TextView votes;
+    final ImageView candImage;
+    final ImageView partyImage;
+    final ProgressBar candProgress;
+    final ProgressBar partyProgress;
 
     ItemViewHolder(@NonNull View itemView) {
       super(itemView);
@@ -62,10 +68,10 @@ public class RecyclerViewForConstituencyDetailsAdapter
     View v =
         LayoutInflater.from(viewGroup.getContext())
             .inflate(R.layout.const_detail_card, viewGroup, false);
-    ItemViewHolder ivh = new ItemViewHolder(v);
-    return ivh;
+      return new ItemViewHolder(v);
   }
 
+  @SuppressLint("SetTextI18n")
   @Override
   public void onBindViewHolder(@NonNull final ItemViewHolder itemViewHolder, int i) {
     final int themeId = ThemeManager.getThemeId();

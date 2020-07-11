@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">VoteOnlineBruh</string>
-    <string name="title_activity_login_page">LoginPage</string>
     <string name="web_host">http://www.remote-voting.rf.gd</string>
     <string name="private_web_host">http://private-poll.epizy.com</string>
     <!--    <string name="web_host">https://www.remote-voting.xyz</string>-->

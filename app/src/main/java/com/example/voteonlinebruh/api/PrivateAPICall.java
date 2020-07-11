@@ -1,5 +1,6 @@
 package com.example.voteonlinebruh.api;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -33,6 +34,7 @@ import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
 
+@SuppressWarnings("deprecation")
 public class PrivateAPICall {
 
   private boolean accountLoginResponse = false;
@@ -44,9 +46,9 @@ public class PrivateAPICall {
   private SharedPreferences.Editor editor;
   private PrivateElectionManager manager;
 
-  class myRunnable implements Runnable {
-    Intent intent;
-    Context context;
+  static class myRunnable implements Runnable {
+    final Intent intent;
+    final Context context;
 
     myRunnable(Intent intent, Context context) {
       this.intent = intent;
@@ -66,7 +68,7 @@ public class PrivateAPICall {
   }
 
   class RequestDelayRunnable implements Runnable {
-    int methodCode;
+    final int methodCode;
 
     RequestDelayRunnable(int methodCode) {
       this.methodCode = methodCode;
@@ -89,10 +91,11 @@ public class PrivateAPICall {
     }
   }
 
+  @SuppressLint("SetJavaScriptEnabled")
   private void storeCookie(final Context mContext, WebView webView) {
     Log.d("COOKIE: ", "CALLED");
     TIMES++;
-    String url = "";
+    String url;
     final CookieManager cookieManager;
     url = mContext.getString(R.string.private_web_host) + "/Check.php";
     CookieSyncManager.createInstance(mContext);
@@ -152,7 +155,7 @@ public class PrivateAPICall {
           @Override
           public void onResponse(String response) {
             if (!accountLoginResponse) {
-              JSONObject jsonResponse = null;
+              JSONObject jsonResponse;
               try {
                 Log.d("response", response);
                 jsonResponse = new JSONObject(response);
@@ -235,7 +238,7 @@ public class PrivateAPICall {
             new Response.Listener<String>() {
               @Override
               public void onResponse(String response) {
-                JSONObject jsonResponse = null;
+                JSONObject jsonResponse;
                 try {
                   Log.d("response", response);
                   jsonResponse = new JSONObject(response);

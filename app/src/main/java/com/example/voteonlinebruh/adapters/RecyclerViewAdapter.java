@@ -24,9 +24,9 @@ import com.example.voteonlinebruh.utility.ThemeManager;
 import java.util.ArrayList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.itemViewHolder> {
-  private ArrayList<RecyclerViewItem> recyclerViewItemArrayList;
+  private final ArrayList<RecyclerViewItem> recyclerViewItemArrayList;
   private OnItemClickListener mListener;
-  private Context context;
+  private final Context context;
 
   public RecyclerViewAdapter(ArrayList<RecyclerViewItem> recyclerViewItem_list, Context context) {
     recyclerViewItemArrayList = recyclerViewItem_list;
@@ -42,12 +42,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
   }
 
   static class itemViewHolder extends RecyclerView.ViewHolder {
-    ImageView imageView;
-    TextView textView1;
-    TextView textView2;
-    ImageView indicator;
-    ImageView candImage;
-    ProgressBar progress1, progress2;
+    final ImageView imageView;
+    final TextView textView1;
+    final TextView textView2;
+    final ImageView indicator;
+    final ImageView candImage;
+    final ProgressBar progress1;
+      final ProgressBar progress2;
 
     itemViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
       super(itemView);
@@ -77,8 +78,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     View v =
         LayoutInflater.from(viewGroup.getContext())
             .inflate(R.layout.voting_info_card, viewGroup, false);
-    itemViewHolder ivh = new itemViewHolder(v, mListener);
-    return ivh;
+      return new itemViewHolder(v, mListener);
   }
 
   @Override
@@ -149,8 +149,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
               }
             })
         .into(itemViewHolder.candImage);
-    itemViewHolder.textView1.setText(currentRecyclerViewItem.getPname());
-    itemViewHolder.textView2.setText(currentRecyclerViewItem.getCname());
+    itemViewHolder.textView1.setText(currentRecyclerViewItem.getPartyName());
+    itemViewHolder.textView2.setText(currentRecyclerViewItem.getCandidateName());
     int resid = currentRecyclerViewItem.getIndicator();
     Glide.with(context).load(resid).into(itemViewHolder.indicator);
   }

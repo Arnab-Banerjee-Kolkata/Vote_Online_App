@@ -1,5 +1,6 @@
 package com.example.voteonlinebruh.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -36,30 +37,32 @@ import com.example.voteonlinebruh.utility.ThemeManager;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+@SuppressWarnings({"FieldCanBeLocal", "deprecation", "ConstantConditions"})
 public class ConstRes extends Fragment {
 
   private static Bundle args;
   private static ArrayList cons_name, cand_name, par_name, p_img, c_img, votes;
   private static HashSet<Integer> ties;
   private static String state_name, stateCode, type;
-  private static int rows, electionId, stateElectionId;
+  private static int electionId;
+  private static int stateElectionId;
   private static ResultsDetailed context;
   private static ListView listView;
   private static SwipeRefreshLayout swipe;
   private static ConstraintLayout constraintLayout;
   private static ImageButton close;
-  public static ImageView infoIcon;
+  private static ImageView infoIcon;
   private static SwipeRefreshLayout.OnRefreshListener listener;
 
   public static ConstRes newInstance(Bundle args) {
     ConstRes constRes = new ConstRes();
-    ConstRes.args=args;
+    ConstRes.args = args;
     constRes.setArguments();
     return constRes;
   }
 
   @Override
-  public void onAttach(Activity activity) {
+  public void onAttach(@NonNull Activity activity) {
     super.onAttach(activity);
     context = (ResultsDetailed) activity;
   }
@@ -72,7 +75,6 @@ public class ConstRes extends Fragment {
     p_img = args.getStringArrayList("PAR_IMG");
     c_img = args.getStringArrayList("CAN_IMG");
     votes = args.getStringArrayList("VOTES");
-    rows = args.getInt("ROWS");
     type = args.getString("type");
     stateCode = args.getString("stateCode");
     electionId = args.getInt("ID");
@@ -119,9 +121,12 @@ public class ConstRes extends Fragment {
     swipe = view.findViewById(R.id.swipeRefreshConstFrag);
     swipe.setOnRefreshListener(listener);
     listView = view.findViewById(R.id.list3);
+    @SuppressWarnings("unchecked")
     class MyAdapter extends ArrayAdapter<ArrayList> {
-      ArrayList list;
-      Context context;
+      @SuppressWarnings("unused")
+      private final ArrayList list;
+
+      private final Context context;
 
       MyAdapter(ArrayList list, Context context) {
         super(context, R.layout.const_list_card, list);
@@ -129,10 +134,12 @@ public class ConstRes extends Fragment {
         this.context = context;
       }
 
+      @SuppressLint("SetTextI18n")
+      @NonNull
       public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater layoutInflater =
             (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        RelativeLayout v =
+        @SuppressLint("ViewHolder") RelativeLayout v =
             (RelativeLayout) layoutInflater.inflate(R.layout.const_list_card, parent, false);
         TextView con = v.findViewById(R.id.conName),
             sta = v.findViewById(R.id.stateName),
@@ -188,6 +195,10 @@ public class ConstRes extends Fragment {
         vot.setText("Votes : " + votes.get(position));
         if (ties.contains(position))
           v.setBackground(getResources().getDrawable(R.drawable.highlighter2));
+        if (ThemeManager.getThemeId() == R.style.AppTheme_Dark) {
+          ConstraintLayout temp = (ConstraintLayout) v.getChildAt(0);
+          temp.getChildAt(0).setBackground(getResources().getDrawable(android.R.drawable.dialog_holo_dark_frame));
+        }
         return v;
       }
     }

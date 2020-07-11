@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.voteonlinebruh.R;
@@ -20,8 +21,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class RecyclerViewForBoothListAdapter
     extends RecyclerView.Adapter<RecyclerViewForBoothListAdapter.ViewHolder> {
 
-  private NamedLocation[] namedLocations;
-  private Context context;
+  private final NamedLocation[] namedLocations;
+  private final Context context;
   private RecyclerViewForBoothListAdapter.OnItemClickListener mListener;
 
   public RecyclerViewForBoothListAdapter(NamedLocation[] locations, Context context) {
@@ -38,6 +39,7 @@ public class RecyclerViewForBoothListAdapter
     mListener = listener;
   }
 
+  @NonNull
   @Override
   public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     return new ViewHolder(
@@ -49,10 +51,7 @@ public class RecyclerViewForBoothListAdapter
    * shown. So we will need to bind the holder with the details of the next item.
    */
   @Override
-  public void onBindViewHolder(ViewHolder holder, int position) {
-    if (holder == null) {
-      return;
-    }
+  public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
     holder.bindView(position);
   }
 
@@ -63,10 +62,11 @@ public class RecyclerViewForBoothListAdapter
 
   class ViewHolder extends RecyclerView.ViewHolder implements OnMapReadyCallback {
 
-    MapView mapView;
-    TextView title, subtitle;
+    final MapView mapView;
+    final TextView title;
+    final TextView subtitle;
     GoogleMap map;
-    View layout;
+    final View layout;
 
     private ViewHolder(
             View itemView, final RecyclerViewForBoothListAdapter.OnItemClickListener listener) {
@@ -139,9 +139,9 @@ public class RecyclerViewForBoothListAdapter
 
   public static class NamedLocation {
 
-    public final String name;
-    public final String landmark;
-    public final LatLng location;
+    final String name;
+    final String landmark;
+    final LatLng location;
 
     public NamedLocation(String name, String landmark, LatLng location) {
       this.name = name;

@@ -1,9 +1,12 @@
 package com.example.voteonlinebruh.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.core.content.res.ResourcesCompat;
@@ -38,11 +41,15 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
+@SuppressWarnings({"FieldCanBeLocal", "deprecation"})
 public class OverallRes extends Fragment {
 
   private static Bundle args;
   private static ArrayList name, sym, seat;
+  private static HashMap map;
   private static int rows, totalSeats, electionId, tieCount;
   private static String type, stateCode;
   private static ResultsDetailed context;
@@ -65,7 +72,7 @@ public class OverallRes extends Fragment {
   }
 
   @Override
-  public void onAttach(Activity activity) {
+  public void onAttach(@NonNull Activity activity) {
     super.onAttach(activity);
     context = (ResultsDetailed) activity;
   }
@@ -80,14 +87,17 @@ public class OverallRes extends Fragment {
     stateCode = args.getString("stateCode");
     electionId = args.getInt("ID");
     tieCount = args.getInt("tieCount");
+    map = (HashMap) args.getSerializable("map");
   }
 
+  @SuppressLint("SetTextI18n")
   @Override
   public View onCreateView(
       LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     v = inflater.inflate(R.layout.fragment_overall_res, container, false);
     listener =
         new SwipeRefreshLayout.OnRefreshListener() {
+          @SuppressWarnings("ConstantConditions")
           @Override
           public void onRefresh() {
             PublicAPICall publicAPICall = new PublicAPICall();
@@ -112,8 +122,8 @@ public class OverallRes extends Fragment {
     chart.setDrawEntryLabels(false);
     chart.setUsePercentValues(false);
     values = new ArrayList<>();
-    for (int i = 0; i < rows; i++) {
-      values.add(new PieEntry(Float.parseFloat((String) seat.get(i)), (String) name.get(i)));
+    for (Object i : map.keySet()) {
+      values.add(new PieEntry((Integer) map.get(i),i.toString()));
     }
     dataSet = new PieDataSet(values, "");
     dataSet.setSliceSpace(3f);
@@ -134,7 +144,7 @@ public class OverallRes extends Fragment {
     if (tieCount > 0) values.add(new PieEntry(tieCount, "Ties"));
     chart.invalidate();
     chart.setData(data);
-    chart.setCenterText((int) data.getYValueSum()-tieCount + "/" + totalSeats);
+    chart.setCenterText((int) data.getYValueSum() - tieCount + "/" + totalSeats);
     chart.setCenterTextTypeface(ResourcesCompat.getFont(chart.getContext(), R.font.azo));
     chart.setCenterTextSize(15f);
     leg = chart.getLegend();
@@ -179,11 +189,10 @@ public class OverallRes extends Fragment {
       View view = inflater.inflate(R.layout.table_row, container, false);
       TableRow row = view.findViewById(R.id.rowwwww);
       if (i % 2 == 1) row.setBackgroundColor(getResources().getColor(R.color.shade));
-      View color = view.findViewById(R.id.color);
       TextView names = view.findViewById(R.id.partynum), seats = view.findViewById(R.id.seatnum);
       final ImageView syms = view.findViewById(R.id.imnum);
       final ProgressBar progress = view.findViewById(R.id.tableImageProgress);
-      String resurl="";
+      String resurl = "";
       if (i == rows) {
         if (tieCount > 0) {
           names.setText("Tied Constituency");
@@ -194,7 +203,7 @@ public class OverallRes extends Fragment {
       } else {
         names.setText((String) name.get(i));
         seats.setText((String) seat.get(i));
-        resurl= (String) sym.get(i);
+        resurl = (String) sym.get(i);
       }
       Glide.with(this)
           .load(resurl)
@@ -227,7 +236,6 @@ public class OverallRes extends Fragment {
                 }
               })
           .into(syms);
-      color.setBackgroundColor(legend[i].formColor);
       tableLayout.addView(row);
     }
     if (themeId == R.style.AppTheme_Light) {

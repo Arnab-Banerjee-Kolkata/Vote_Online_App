@@ -1,5 +1,6 @@
 package com.example.voteonlinebruh.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -13,7 +14,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.voteonlinebruh.R;
@@ -25,25 +25,21 @@ import java.util.HashMap;
 public class PublicElectionEntryPoint extends AppCompatActivity {
 
   private Button b;
-  private Toolbar toolbar;
-  private ImageView imageView1;
   private ListView listView;
-  private View view;
   private ProgressBar progressBar;
-  private ArrayAdapter<Object> adapter;
-  private int themeId;
-  protected static PublicElectionEntryPoint instance;
+  @SuppressLint("StaticFieldLeak")
+  static PublicElectionEntryPoint instance;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    themeId = ThemeManager.getThemeId();
+    int themeId = ThemeManager.getThemeId();
     setTheme(themeId);
     setContentView(R.layout.activity_public_election);
     instance = this;
-    toolbar = findViewById(R.id.toolbarpub);
+    Toolbar toolbar = findViewById(R.id.toolbarpub);
     listView = findViewById(R.id.list);
-    view = findViewById(R.id.bgContainer);
+    View view = findViewById(R.id.bgContainer);
     if (themeId == R.style.AppTheme_Light) {
       toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
       view.setBackground(getDrawable(android.R.drawable.dialog_holo_light_frame));
@@ -58,7 +54,7 @@ public class PublicElectionEntryPoint extends AppCompatActivity {
             onBackPressed();
           }
         });
-    imageView1 = findViewById(R.id.homeBg);
+    ImageView imageView1 = findViewById(R.id.homeBg);
     int resid = R.drawable.homebg;
     Glide.with(this).load(resid).into(imageView1);
     b = findViewById(R.id.login);
@@ -76,10 +72,11 @@ public class PublicElectionEntryPoint extends AppCompatActivity {
     publicAPICall.getBoothCities(getApplicationContext(), PublicElectionEntryPoint.this);
   }
 
+  @SuppressWarnings("ConstantConditions")
   public void release(@Nullable HashMap<String, String> cities) {
     if (null != cities) {
       final Object[] places = cities.keySet().toArray();
-      adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, places);
+      ArrayAdapter<Object> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, places);
       listView.setAdapter(adapter);
       listView.setOnItemClickListener(
           new AdapterView.OnItemClickListener() {

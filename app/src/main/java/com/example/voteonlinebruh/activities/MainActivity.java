@@ -1,5 +1,6 @@
 package com.example.voteonlinebruh.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -18,8 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
   private static boolean scheduledRestart = false;
   private ThemeManager TM;
-  private Toolbar toolbar;
-  private ImageButton button;
+  @SuppressLint("StaticFieldLeak")
   public static WebView webView;
   private ConstraintLayout pri, man, pub, res;
 
@@ -37,10 +37,10 @@ public class MainActivity extends AppCompatActivity {
       if (pref.getBoolean("themeLight", true)) TM.change(1);
       else TM.change(0);
     }
-    setTheme(TM.getThemeId());
+    setTheme(ThemeManager.getThemeId());
     setContentView(R.layout.activity_main);
     webView = findViewById(R.id.wv2);
-    toolbar = findViewById(R.id.toolbar);
+    Toolbar toolbar = findViewById(R.id.toolbar);
     toolbar.setNavigationOnClickListener(
         new View.OnClickListener() {
           @Override
@@ -48,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
             onBackPressed();
           }
         });
-    button = findViewById(R.id.themeToggle);
-    if (TM.getThemeId() == R.style.AppTheme_Light) {
+    ImageButton button = findViewById(R.id.themeToggle);
+    if (ThemeManager.getThemeId() == R.style.AppTheme_Light) {
       button.setImageDrawable(getDrawable(R.drawable.ic_moon_black_24dp));
       toolbar.setNavigationIcon(R.drawable.ic_close_black_24dp);
     } else {
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         new View.OnClickListener() {
           @Override
           public void onClick(View v) {
-            if (TM.getThemeId() == R.style.AppTheme_Light) {
+            if (ThemeManager.getThemeId() == R.style.AppTheme_Light) {
               TM.change(0);
               edit.putBoolean("themeLight", false);
               scheduledRestart = true;

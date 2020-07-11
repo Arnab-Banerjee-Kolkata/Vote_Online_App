@@ -1,5 +1,6 @@
 package com.example.voteonlinebruh.activities;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -21,22 +22,19 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class LandingPage extends AppCompatActivity {
-  private Handler handler = new Handler();
+  private final Handler handler = new Handler();
   private CountDownTimer countDownTimer;
-  private Toolbar toolbar;
   private ImageView clockmin, clockhour;
   private Animation rotatemin, rotatehour;
-  private DateFormat dateFormat;
-  private String time;
-  private int themeId;
 
+  @SuppressWarnings("ConstantConditions")
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    themeId = ThemeManager.getThemeId();
+    int themeId = ThemeManager.getThemeId();
     setTheme(themeId);
     setContentView(R.layout.activity_landing_page);
-    toolbar = findViewById(R.id.timertool);
+    Toolbar toolbar = findViewById(R.id.timertool);
     if (themeId == R.style.AppTheme_Light)
       toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
     else toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
@@ -56,6 +54,7 @@ public class LandingPage extends AppCompatActivity {
     rotatemin.setDuration(2000);
     rotatehour = AnimationUtils.loadAnimation(this, R.anim.rotate);
     rotatehour.setDuration(10000);
+    @SuppressWarnings("OverflowingLoopIndex")
     class myRunnable implements Runnable {
       @Override
       public void run() {
@@ -88,11 +87,11 @@ public class LandingPage extends AppCompatActivity {
     myRunnable thread = new myRunnable();
     new Thread(thread).start();
 
-    time = getIntent().getStringExtra("TIME");
+    String time = getIntent().getStringExtra("TIME");
 
     // TIMER CODE
 
-    dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    @SuppressLint("SimpleDateFormat") DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     Date date = null;
     try {
       date = dateFormat.parse(time);

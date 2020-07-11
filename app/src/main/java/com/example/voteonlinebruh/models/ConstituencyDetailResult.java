@@ -7,8 +7,11 @@ import com.example.voteonlinebruh.utility.CaseConverter;
 import java.io.Serializable;
 
 public class ConstituencyDetailResult implements Serializable {
-    private String name,image,partyName,partySymbol;
-    private int votes;
+    private final String name;
+    private final String image;
+    private final String partyName;
+    private final String partySymbol;
+    private final int votes;
 
     public ConstituencyDetailResult(String name, String image, String partyName, String partySymbol, int votes) {
         this.name = new CaseConverter().toCamelCase(name);

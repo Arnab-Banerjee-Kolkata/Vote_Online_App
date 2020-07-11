@@ -1,5 +1,6 @@
 package com.example.voteonlinebruh.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,21 +14,20 @@ import com.example.voteonlinebruh.utility.ThemeManager;
 
 public class VotingInstructions extends AppCompatActivity implements View.OnClickListener {
 
-  private Toolbar toolbar;
-  private Button proceed, demo;
+    private Button proceed, demo;
   private Context mContext;
-  protected static VotingInstructions instance;
-  private int themeId;
+  @SuppressLint("StaticFieldLeak")
+  static VotingInstructions instance;
 
-  @Override
+    @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    themeId = ThemeManager.getThemeId();
+        int themeId = ThemeManager.getThemeId();
     if (themeId == R.style.AppTheme_Light) setTheme(R.style.dTheme_Light);
     else setTheme(R.style.dTheme_Dark);
     setContentView(R.layout.activity_voting_instructions);
     instance = this;
-    toolbar = findViewById(R.id.toolbarIns);
+        Toolbar toolbar = findViewById(R.id.toolbarIns);
     if (themeId == R.style.AppTheme_Light)
       toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
     else toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
@@ -51,11 +51,6 @@ public class VotingInstructions extends AppCompatActivity implements View.OnClic
         });
     mContext = getApplicationContext();
     proceed.setOnClickListener(this);
-  }
-
-  @Override
-  public void finish() {
-    super.finish();
   }
 
   @Override

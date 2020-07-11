@@ -31,7 +31,8 @@
                     android:layout_marginTop="200dp"
                     android:gravity="center"
                     android:text="Party-wise Seat Distribution"
-                    android:textSize="16dp" />
+                    android:textSize="16dp"
+                    tools:ignore="SpUsage" />
 
                 <TableLayout
                     android:id="@+id/table"
@@ -45,7 +46,8 @@
                     <TableRow
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/button">
+                        android:background="@color/button"
+                        tools:ignore="UselessParent">
 
                         <TextView
                             android:layout_width="wrap_content"

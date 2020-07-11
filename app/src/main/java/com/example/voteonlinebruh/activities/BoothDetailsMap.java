@@ -1,16 +1,12 @@
 package com.example.voteonlinebruh.activities;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.view.ViewCompat;
-import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.FragmentActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,29 +23,28 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
+@SuppressWarnings("ConstantConditions")
 public class BoothDetailsMap extends FragmentActivity implements OnMapReadyCallback {
 
   private AppBarLayout appBarLayout;
   private CollapsingToolbarLayout collapsingToolbarLayout;
-  private GoogleMap mMap;
   private BoothDetailItem item;
-  private TextView city, locality, locality2, landmark, address, coordinates;
   private SupportMapFragment mapFragment;
-  private int themeId;
 
+  @SuppressLint("SetTextI18n")
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    themeId = ThemeManager.getThemeId();
+    int themeId = ThemeManager.getThemeId();
     setTheme(themeId);
     setContentView(R.layout.activity_booth_details_map);
     item = (BoothDetailItem) getIntent().getSerializableExtra("booth");
-    city = findViewById(R.id.cityName);
-    locality = findViewById(R.id.locality);
-    locality2 = findViewById(R.id.locality2);
-    landmark = findViewById(R.id.landmark);
-    address = findViewById(R.id.address);
-    coordinates = findViewById(R.id.coordinates);
+    TextView city = findViewById(R.id.cityName);
+    TextView locality = findViewById(R.id.locality);
+    TextView locality2 = findViewById(R.id.locality2);
+    TextView landmark = findViewById(R.id.landmark);
+    TextView address = findViewById(R.id.address);
+    TextView coordinates = findViewById(R.id.coordinates);
     city.setText(getIntent().getStringExtra("city"));
     locality.setText(item.getArea());
     locality2.setText("Booth in " + item.getArea());
@@ -73,10 +68,9 @@ public class BoothDetailsMap extends FragmentActivity implements OnMapReadyCallb
    */
   @Override
   public void onMapReady(GoogleMap googleMap) {
-    mMap = googleMap;
     LatLng area = new LatLng(item.getLat(), item.getLng());
-    mMap.addMarker(new MarkerOptions().position(area).title("Marker in " + item.getArea()));
-    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(area, 16f));
+    googleMap.addMarker(new MarkerOptions().position(area).title("Marker in " + item.getArea()));
+    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(area, 16f));
     View toolbar =
         ((View) mapFragment.getView().findViewById(Integer.parseInt("1")).getParent())
             .findViewById(Integer.parseInt("4"));
@@ -88,6 +82,7 @@ public class BoothDetailsMap extends FragmentActivity implements OnMapReadyCallb
     rlp.setMargins(0, 0, 50, 90);
   }
 
+  @SuppressWarnings("unused")
   public void onBackPressed(View view) {
     super.onBackPressed();
   }

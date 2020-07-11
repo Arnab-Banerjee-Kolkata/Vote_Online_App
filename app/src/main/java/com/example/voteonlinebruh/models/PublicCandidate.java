@@ -3,7 +3,7 @@ package com.example.voteonlinebruh.models;
 import java.io.Serializable;
 
 public class PublicCandidate implements Serializable {
-  private String name, partyName, image, symbol, id;
+  private final String name, partyName, image, symbol, id;
 
   public PublicCandidate(String id, String name, String partyName, String image, String symbol) {
     this.name = name;

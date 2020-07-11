@@ -5,6 +5,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
 
+@SuppressWarnings("WeakerAccess")
 public class NotificationChannelCreator extends Application {
 
   public static final String CHANNEL_ID = "Vote.Online";

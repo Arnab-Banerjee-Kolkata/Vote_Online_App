@@ -12,17 +12,13 @@ import com.example.voteonlinebruh.utility.ThemeManager;
 
 public class PrivateElectionEntryPoint extends AppCompatActivity {
 
-  private ImageView imageView1;
-  private Toolbar toolbar;
-  private int themeId;
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    themeId = ThemeManager.getThemeId();
+    int themeId = ThemeManager.getThemeId();
     setTheme(themeId);
     setContentView(R.layout.activity_private_election_entry_point);
-    toolbar = findViewById(R.id.toolbarpriv);
+    Toolbar toolbar = findViewById(R.id.toolbarpriv);
     if (themeId == R.style.AppTheme_Light)
       toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
     else toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
@@ -33,7 +29,7 @@ public class PrivateElectionEntryPoint extends AppCompatActivity {
             onBackPressed();
           }
         });
-    imageView1 = findViewById(R.id.privBg);
+    ImageView imageView1 = findViewById(R.id.privBg);
     int resid = R.drawable.vote2hands;
     Glide.with(this).load(resid).into(imageView1);
   }

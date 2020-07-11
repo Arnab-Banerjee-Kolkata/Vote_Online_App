@@ -8,7 +8,8 @@
     <WebView
         android:id="@+id/wv3"
         android:layout_width="0dp"
-        android:layout_height="0dp"/>
+        android:layout_height="0dp"
+        tools:ignore="MissingConstraints" />
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
@@ -23,7 +24,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitEnd"
-        android:alpha=".1"/>
+        android:alpha=".1"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/textView4"
@@ -57,7 +59,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:inputType="text"
-            android:paddingStart="10dp" />
+            android:paddingStart="10dp"
+            tools:ignore="LabelFor,RtlSymmetry"
+            android:importantForAutofill="no" />
 
     </LinearLayout>
 
@@ -83,68 +87,86 @@
         <EditText
             android:id="@+id/otp1"
             android:layout_width="50dp"
+            android:hint="0"
+            android:textColorHint="#4D808080"
             android:layout_height="wrap_content"
             android:layout_margin="3dp"
             android:gravity="center"
             android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
             android:inputType="textCapCharacters|textNoSuggestions"
             android:maxLength="1"
-            android:textSize="28dp" />
+            android:textSize="28dp"
+            android:importantForAutofill="no" />
 
         <EditText
             android:id="@+id/otp2"
             android:layout_width="50dp"
+            android:hint="0"
+            android:textColorHint="#4D808080"
             android:layout_height="wrap_content"
             android:layout_margin="3dp"
             android:gravity="center"
             android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
             android:inputType="textCapCharacters|textNoSuggestions"
             android:maxLength="1"
-            android:textSize="28dp" />
+            android:textSize="28dp"
+            android:importantForAutofill="no" />
 
         <EditText
             android:id="@+id/otp3"
             android:layout_width="50dp"
+            android:hint="0"
+            android:textColorHint="#4D808080"
             android:layout_height="wrap_content"
             android:layout_margin="3dp"
             android:gravity="center"
             android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
             android:inputType="textCapCharacters|textNoSuggestions"
             android:maxLength="1"
-            android:textSize="28dp" />
+            android:textSize="28dp"
+            android:importantForAutofill="no" />
 
         <EditText
             android:id="@+id/otp4"
             android:layout_width="50dp"
+            android:hint="0"
+            android:textColorHint="#4D808080"
             android:layout_height="wrap_content"
             android:layout_margin="3dp"
             android:gravity="center"
             android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
             android:inputType="textCapCharacters|textNoSuggestions"
             android:maxLength="1"
-            android:textSize="28dp" />
+            android:textSize="28dp"
+            android:importantForAutofill="no" />
 
         <EditText
             android:id="@+id/otp5"
             android:layout_width="50dp"
+            android:hint="0"
+            android:textColorHint="#4D808080"
             android:layout_height="wrap_content"
             android:layout_margin="3dp"
             android:gravity="center"
             android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
             android:inputType="textCapCharacters|textNoSuggestions"
             android:maxLength="1"
-            android:textSize="28dp" />
+            android:textSize="28dp"
+            android:importantForAutofill="no" />
 
         <EditText
             android:id="@+id/otp6"
             android:layout_width="50dp"
+            android:hint="0"
+            android:textColorHint="#4D808080"
             android:layout_height="wrap_content"
             android:layout_margin="3dp"
             android:gravity="center"
             android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
             android:inputType="textCapCharacters|textNoSuggestions"
             android:maxLength="1"
-            android:textSize="28dp" />
+            android:textSize="28dp"
+            android:importantForAutofill="no" />
 
     </LinearLayout>
 

@@ -24,22 +24,18 @@ import com.example.voteonlinebruh.utility.ThemeManager;
 
 public class PrivateElectionManager extends AppCompatActivity {
 
-  private Handler handler = new Handler();
-  private Toolbar toolbar;
+  private final Handler handler = new Handler();
   private ConstraintLayout login, register;
   private Animation fadein, fadeout, slideup, slidedown;
-  private TextView taptoreg, taptolog;
-  private Button loginmanage, registermanage;
   private EditText userid, password, email, pass1, pass2;
-  private int themeId;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    themeId = ThemeManager.getThemeId();
+    int themeId = ThemeManager.getThemeId();
     setTheme(themeId);
     setContentView(R.layout.activity_private_election_manager);
-    toolbar = findViewById(R.id.toolbarman);
+    Toolbar toolbar = findViewById(R.id.toolbarman);
     if (themeId == R.style.AppTheme_Light)
       toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
     else toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
@@ -62,8 +58,8 @@ public class PrivateElectionManager extends AppCompatActivity {
     fadein.setDuration(750);
     fadeout.setDuration(500);
 
-    taptoreg = findViewById(R.id.textView10);
-    taptolog = findViewById(R.id.textView11);
+    TextView taptoreg = findViewById(R.id.textView10);
+    TextView taptolog = findViewById(R.id.textView11);
     SpannableString content = new SpannableString(taptoreg.getText());
     content.setSpan(new UnderlineSpan(), 24, content.length()-1, 0);
     taptoreg.setText(content);
@@ -124,8 +120,8 @@ public class PrivateElectionManager extends AppCompatActivity {
 
     // ANIMATION CODE ENDS
 
-    loginmanage = findViewById(R.id.loginmanage);
-    registermanage = findViewById(R.id.registermanage);
+    Button loginmanage = findViewById(R.id.loginmanage);
+    Button registermanage = findViewById(R.id.registermanage);
     final SharedPreferences preferences = getSharedPreferences("Vote.Online.Account", MODE_PRIVATE);
     final SharedPreferences.Editor editor = preferences.edit();
 
@@ -208,7 +204,8 @@ public class PrivateElectionManager extends AppCompatActivity {
         });
   }
 
-  boolean invalide(String x) {
+  @SuppressWarnings("UnusedAssignment")
+  private boolean invalide(String x) {
     boolean ret = true;
     int c = 0;
 
@@ -234,7 +231,6 @@ public class PrivateElectionManager extends AppCompatActivity {
       else if (Character.isDigit(c)) flagDi = true;
       else if (specialChars.indexOf(c) >= 0) flagSp = true;
     }
-    if (flagDi && flagLo && flagSp && flagUp) return false;
-    else return true;
+    return !flagDi || !flagLo || !flagSp || !flagUp;
   }
 }

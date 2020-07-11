@@ -9,7 +9,8 @@
     <WebView
         android:id="@+id/wv7"
         android:layout_width="0dp"
-        android:layout_height="0dp" />
+        android:layout_height="0dp"
+        tools:ignore="MissingConstraints" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -33,7 +34,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@id/spinner"
                 android:padding="5dp"
-                android:src="@drawable/ic_keyboard_arrow_down_black_24dp" />
+                android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
+                tools:ignore="ContentDescription" />
 
             <Spinner
                 android:id="@+id/spinner"

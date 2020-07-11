@@ -19,7 +19,8 @@
         android:layout_height="match_parent"
         android:scaleType="fitEnd"
         android:alpha=".5"
-        android:id="@+id/homeBg"/>
+        android:id="@+id/homeBg"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/textView3"

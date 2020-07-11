@@ -1,5 +1,6 @@
 package com.example.voteonlinebruh.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,23 +15,15 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import com.example.voteonlinebruh.R;
 
-import static android.preference.PreferenceManager.getDefaultSharedPreferences;
-
+@SuppressWarnings("deprecation")
 public class Splash extends AppCompatActivity {
 
-  private static Splash _instance;
-  private RequestQueue _requestQueue;
-  private SharedPreferences _preferences;
-  private Handler handler = new Handler();
-  private Context mContext;
-  private RelativeLayout waitRel;
-  private WebView webView;
+  private final Handler handler = new Handler();
+    private RelativeLayout waitRel;
 
-  @Override
+    @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
@@ -39,11 +32,11 @@ public class Splash extends AppCompatActivity {
     else setTheme(R.style.AppTheme_Dark);
     setContentView(R.layout.activity_splash);
 
-    mContext = getApplicationContext();
+        Context mContext = getApplicationContext();
 
     waitRel = findViewById(R.id.waitRel);
 
-    webView = (WebView) findViewById(R.id.wv1);
+        WebView webView = findViewById(R.id.wv1);
 
     Thread thread =
         new Thread(
@@ -72,18 +65,13 @@ public class Splash extends AppCompatActivity {
               }
             });
     thread.start();
-
-    _instance = this;
-    _preferences = getDefaultSharedPreferences(this);
-
-    _requestQueue = Volley.newRequestQueue(this);
-
     storeCookie(mContext, webView, waitRel);
   }
 
-  public static void storeCookie(
-      final Context mContext, WebView webView, final RelativeLayout waitRel) {
-    String url = "";
+  @SuppressLint("SetJavaScriptEnabled")
+  private static void storeCookie(
+          final Context mContext, WebView webView, final RelativeLayout waitRel) {
+    String url;
     final CookieManager cookieManager;
     url = mContext.getString(R.string.web_host) + "/Check.php";
 
@@ -123,45 +111,6 @@ public class Splash extends AppCompatActivity {
     cookieManager.removeSessionCookie();
   }
 
-  public static void storeCookie(final Context mContext, WebView webView) {
-    String url = "";
-    final CookieManager cookieManager;
-    url = mContext.getString(R.string.web_host) + "/Check.php";
-
-    CookieSyncManager.createInstance(mContext);
-    cookieManager = CookieManager.getInstance();
-    webView.getSettings().setJavaScriptEnabled(true);
-
-    webView.setWebViewClient(
-        new WebViewClient() {
-
-          @Override
-          public void onPageFinished(WebView view, String url) {
-            super.onPageFinished(view, url);
-
-            cookieManager.setAcceptCookie(true);
-            final String cookie = cookieManager.getCookie(url);
-
-            // System.out.println(cookie);
-
-            SharedPreferences sharedPreferences =
-                mContext.getSharedPreferences("CookieDetails", MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("cookieStart", cookie);
-            editor.apply();
-          }
-        });
-
-    webView.setWebChromeClient(new WebChromeClient());
-    webView.loadUrl(url);
-
-    webView.clearCache(true);
-    webView.clearHistory();
-
-    cookieManager.removeAllCookie();
-    cookieManager.removeSessionCookie();
-  }
-
   @Override
   public void onWindowFocusChanged(boolean hasFocus) {
     super.onWindowFocusChanged(hasFocus);
@@ -173,12 +122,6 @@ public class Splash extends AppCompatActivity {
             | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
             | View.SYSTEM_UI_FLAG_FULLSCREEN
             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-  }
-
-  @Override
-  protected void onDestroy() {
-    _instance = null;
-    super.onDestroy();
   }
 
   @Override

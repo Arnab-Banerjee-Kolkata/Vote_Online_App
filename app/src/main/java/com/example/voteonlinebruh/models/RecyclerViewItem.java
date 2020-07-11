@@ -4,16 +4,16 @@ import com.example.voteonlinebruh.utility.CaseConverter;
 
 public class RecyclerViewItem {
 
-  private String pname, cname;
-  private int indicator;
-  private String symbol, image;
+  private final String partyName, candidateName;
+  private final int indicator;
+  private final String symbol, image;
 
-  public RecyclerViewItem(String symbol, String image, String pname, String cname, int indicator) {
+  public RecyclerViewItem(String symbol, String image, String partyName, String candidateName, int indicator) {
     this.image = image;
     CaseConverter converter = new CaseConverter();
     this.symbol = symbol;
-    this.cname = converter.toCamelCase(cname);
-    this.pname = pname;
+    this.candidateName = converter.toCamelCase(candidateName);
+    this.partyName = partyName;
     this.indicator = indicator;
   }
 
@@ -21,12 +21,12 @@ public class RecyclerViewItem {
     return symbol;
   }
 
-  public String getPname() {
-    return pname;
+  public String getPartyName() {
+    return partyName;
   }
 
-  public String getCname() {
-    return cname;
+  public String getCandidateName() {
+    return candidateName;
   }
 
   public int getIndicator() {

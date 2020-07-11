@@ -10,7 +10,8 @@
         android:id="@+id/wv1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        tools:ignore="MissingConstraints" />
 
     <ImageView
         android:layout_width="match_parent"
@@ -19,7 +20,8 @@
         android:layout_height="wrap_content"
         android:scaleType="fitEnd"
         android:src="@drawable/splashbg"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="ContentDescription" />
 
 
     <LinearLayout
@@ -36,7 +38,8 @@
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_gravity="center"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/ic_launcher"
+            tools:ignore="ContentDescription" />
 
         <Space
             android:layout_width="wrap_content"

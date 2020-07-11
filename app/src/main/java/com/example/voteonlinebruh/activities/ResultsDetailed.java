@@ -2,6 +2,8 @@ package com.example.voteonlinebruh.activities;
 
 import android.content.Intent;
 import com.google.android.material.tabs.TabLayout;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
@@ -25,33 +27,29 @@ import com.example.voteonlinebruh.models.StateListItem;
 import com.example.voteonlinebruh.utility.ThemeManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+@SuppressWarnings("unchecked")
 public class ResultsDetailed extends FragmentActivity {
-  private RelativeLayout rel, container;
+  private RelativeLayout rel;
   private FrameLayout swipeContainer;
   private TabLayout tabLayout;
-  private Toolbar toolbar;
   private String stateName, stateCode = "";
-  private Spinner spinner;
   private ViewPager viewPager;
-  private ArrayAdapter<String> arrayAdapter;
-  private Bundle args, args2;
-  private FragmentAdapter fragmentAdapter;
-  private ScreenControl screenControl = new ScreenControl();
-  private int themeid, electionId;
+  private final ScreenControl screenControl = new ScreenControl();
+  private int electionId;
   private ArrayList<StateListItem> list;
   private SwipeRefreshLayout swipe;
-  SwipeRefreshLayout.OnRefreshListener listener;
   private static boolean stopLoad = false;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    themeid = ThemeManager.getThemeId();
+    int themeid = ThemeManager.getThemeId();
     setTheme(themeid);
     setContentView(R.layout.activity_results_detailed);
-    toolbar = findViewById(R.id.toolbarvres);
+    Toolbar toolbar = findViewById(R.id.toolbarvres);
     toolbar.setNavigationOnClickListener(
         new View.OnClickListener() {
           @Override
@@ -62,13 +60,13 @@ public class ResultsDetailed extends FragmentActivity {
     viewPager = findViewById(R.id.pager);
     tabLayout = findViewById(R.id.tab);
     rel = findViewById(R.id.waitRel2);
-    container = findViewById(R.id.spinnerContainer);
+    RelativeLayout container = findViewById(R.id.spinnerContainer);
     swipe = findViewById(R.id.swipeRefreshDetailedPage);
     swipeContainer = findViewById(R.id.swipeContainer);
     Intent intent = getIntent();
     electionId = intent.getIntExtra("electionId", 0);
     final String type = intent.getStringExtra("type");
-    spinner = findViewById(R.id.spinner);
+    Spinner spinner = findViewById(R.id.spinner);
     if (themeid == R.style.AppTheme_Light) {
       tabLayout.setBackgroundColor(getResources().getColor(R.color.lightBg));
       spinner.setPopupBackgroundResource(R.drawable.spinnerbglight);
@@ -88,10 +86,12 @@ public class ResultsDetailed extends FragmentActivity {
       publicAPICall.getOverallResult(
           type, electionId, "", getApplicationContext(), ResultsDetailed.this);
     } else {
+      //noinspection unchecked
       list = (ArrayList<StateListItem>) intent.getSerializableExtra("list");
       String[] states = new String[list.size()];
       for (int i = 0; i < list.size(); i++) states[i] = list.get(i).getStateName();
-      arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, states);
+      ArrayAdapter<String> arrayAdapter =
+          new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, states);
       arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
       spinner.setAdapter(arrayAdapter);
       spinner.setOnItemSelectedListener(
@@ -110,7 +110,7 @@ public class ResultsDetailed extends FragmentActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
           });
-      listener =
+      SwipeRefreshLayout.OnRefreshListener listener =
           new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -123,9 +123,11 @@ public class ResultsDetailed extends FragmentActivity {
     }
   }
 
+  @SuppressWarnings({"unused", "ConstantConditions"})
   public void release(
       ArrayList<PartywiseResultList> partyresultlist,
       ArrayList<ConstituencyWiseResultList> constresultlist,
+      HashMap<String, Integer> allianceMap,
       int status,
       int totalSeats,
       int tieCount,
@@ -162,8 +164,8 @@ public class ResultsDetailed extends FragmentActivity {
         c_img.add(i.getCandidateImage());
         votes.add(Integer.toString(i.getVoteCount()));
       }
-      args = new Bundle();
-      args2 = new Bundle();
+      Bundle args = new Bundle();
+      Bundle args2 = new Bundle();
       args.putStringArrayList("NAMES", name);
       args.putStringArrayList("SEATS", seat);
       args.putIntegerArrayList("SYMS", sym);
@@ -173,6 +175,7 @@ public class ResultsDetailed extends FragmentActivity {
       args.putString("stateCode", stateCode);
       args.putInt("ID", electionId);
       args.putInt("tieCount", tieCount);
+      args.putSerializable("map", allianceMap);
       args2.putStringArrayList("CON_NAME", con_name);
       args2.putStringArrayList("CAND_NAME", can_name);
       args2.putStringArrayList("PAR_NAME", p_name);
@@ -186,8 +189,8 @@ public class ResultsDetailed extends FragmentActivity {
       args2.putString("stateCode", stateCode);
       args2.putInt("ROWS", constresultlist.size());
       removeFragments();
-      fragmentAdapter =
-          new FragmentAdapter(getBaseContext(), getSupportFragmentManager(), args, args2);
+      FragmentAdapter fragmentAdapter =
+          new FragmentAdapter(getSupportFragmentManager(), args, args2);
       viewPager.setAdapter(fragmentAdapter);
       viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
       tabLayout.getTabAt(0).select();
@@ -211,7 +214,7 @@ public class ResultsDetailed extends FragmentActivity {
   }
 
   @Override
-  protected void onSaveInstanceState(Bundle outState) {
+  protected void onSaveInstanceState(@NonNull Bundle outState) {
     super.onSaveInstanceState(outState);
     stopLoad = true;
   }

@@ -15,7 +15,8 @@
         android:elevation="1dp"
         android:src="@drawable/ic_close_white_24dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/demoContainer"
@@ -43,7 +44,8 @@
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbarDemo" />
+            app:layout_constraintTop_toBottomOf="@id/toolbarDemo"
+            tools:ignore="ContentDescription" />
 
         <ImageView
             android:id="@+id/tap1inner"
@@ -54,7 +56,8 @@
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbarDemo" />
+            app:layout_constraintTop_toBottomOf="@id/toolbarDemo"
+            tools:ignore="ContentDescription" />
 
         <ImageView
             android:id="@+id/tap2outer"
@@ -65,7 +68,8 @@
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbarDemo" />
+            app:layout_constraintTop_toBottomOf="@id/toolbarDemo"
+            tools:ignore="ContentDescription" />
 
         <ImageView
             android:id="@+id/tap2inner"
@@ -76,7 +80,8 @@
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbarDemo" />
+            app:layout_constraintTop_toBottomOf="@id/toolbarDemo"
+            tools:ignore="ContentDescription" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rec2"

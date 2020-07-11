@@ -1,5 +1,6 @@
 package com.example.voteonlinebruh.api;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,6 +33,7 @@ import com.example.voteonlinebruh.activities.Thanks;
 import com.example.voteonlinebruh.activities.VotingPage;
 import com.example.voteonlinebruh.activities.WaitScreen;
 import com.example.voteonlinebruh.models.*;
+import com.example.voteonlinebruh.utility.CaseConverter;
 import com.example.voteonlinebruh.utility.PostingService;
 
 import org.json.JSONArray;
@@ -40,13 +42,14 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
 
 public class PublicAPICall {
 
-  private int TIMES = 0;
+  private int TIMES;
   private boolean validateBoothOtpResponse,
       getPublicResultListResponse,
       getOverallResultResponse1,
@@ -62,6 +65,7 @@ public class PublicAPICall {
   private int totalSeats, stateElectionId, tieCount, electionId;
   private boolean release, service;
   private ArrayList<PartywiseResultList> list;
+  private HashMap<String, Integer> allianceMap;
   private Context mContext;
   private OtpPage otpPage;
   private ResultsSimplified resultSimplified;
@@ -84,9 +88,9 @@ public class PublicAPICall {
     getBoothLocationsResponse = false;
   }
 
-  class myRunnable implements Runnable {
-    Intent intent;
-    Context mContext;
+  static class myRunnable implements Runnable {
+    final Intent intent;
+    final Context mContext;
 
     myRunnable(Intent intent, Context mContext) {
       this.intent = intent;
@@ -106,7 +110,7 @@ public class PublicAPICall {
   }
 
   class RequestDelayRunnable implements Runnable {
-    int methodCode;
+    final int methodCode;
 
     RequestDelayRunnable(int methodCode) {
       this.methodCode = methodCode;
@@ -140,12 +144,13 @@ public class PublicAPICall {
                 mContext,
                 resultDetailed,
                 list,
+                allianceMap,
                 totalSeats,
                 tieCount,
                 stateElectionId);
             break;
           case 6: // getStateList
-            PublicAPICall.this.getStatelist(electionId, type, mContext);
+            PublicAPICall.this.getStateList(electionId, type, mContext);
             break;
           case 7: // storeVote
             PublicAPICall.this.storeVote(boothId, candidateId, voteCode, mContext, service);
@@ -169,47 +174,51 @@ public class PublicAPICall {
     }
   }
 
+  @SuppressWarnings("deprecation")
+  @SuppressLint("SetJavaScriptEnabled")
   private void storeCookie(final Context mContext, WebView webView) {
     Log.d("COOKIE: ", "CALLED");
     TIMES++;
-    String url = "";
+    String url;
     final CookieManager cookieManager;
     url = mContext.getString(R.string.web_host) + "/Check.php";
     CookieSyncManager.createInstance(mContext);
     cookieManager = CookieManager.getInstance();
-    webView.getSettings().setJavaScriptEnabled(true);
-    webView.setWebViewClient(
-        new WebViewClient() {
+    if (webView != null) {
+      webView.getSettings().setJavaScriptEnabled(true);
+      webView.setWebViewClient(
+          new WebViewClient() {
 
-          @Override
-          public void onPageFinished(WebView view, String url) {
-            super.onPageFinished(view, url);
-            cookieManager.setAcceptCookie(true);
-            final String cookie = cookieManager.getCookie(url);
-            SharedPreferences sharedPreferences =
-                mContext.getSharedPreferences("CookieDetails", MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("cookieStart", cookie);
-            editor.apply();
-            Log.d("COOKIE", "RECEIEVED");
-          }
+            @Override
+            public void onPageFinished(WebView view, String url) {
+              super.onPageFinished(view, url);
+              cookieManager.setAcceptCookie(true);
+              final String cookie = cookieManager.getCookie(url);
+              SharedPreferences sharedPreferences =
+                  mContext.getSharedPreferences("CookieDetails", MODE_PRIVATE);
+              SharedPreferences.Editor editor = sharedPreferences.edit();
+              editor.putString("cookieStart", cookie);
+              editor.apply();
+              Log.d("COOKIE", "RECEIVED");
+            }
 
-          @Override
-          public void onReceivedError(
-              WebView view, WebResourceRequest request, WebResourceError error) {
-            Log.d("Web Error: ", error.toString());
-          }
+            @Override
+            public void onReceivedError(
+                WebView view, WebResourceRequest request, WebResourceError error) {
+              Log.d("Web Error: ", error.toString());
+            }
 
-          @Override
-          public void onReceivedHttpError(
-              WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
-            Log.d("Http error: ", errorResponse.toString());
-          }
-        });
-    webView.setWebChromeClient(new WebChromeClient());
-    webView.loadUrl(url);
-    webView.clearCache(true);
-    webView.clearHistory();
+            @Override
+            public void onReceivedHttpError(
+                WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
+              Log.d("Http error: ", errorResponse.toString());
+            }
+          });
+      webView.setWebChromeClient(new WebChromeClient());
+      webView.loadUrl(url);
+      webView.clearCache(true);
+      webView.clearHistory();
+    }
     cookieManager.removeAllCookie();
     cookieManager.removeSessionCookie();
   }
@@ -221,15 +230,15 @@ public class PublicAPICall {
     this.mContext = mContext;
     this.otpPage = otpPage;
 
-    final ArrayList<PublicCandidate> candidates = new ArrayList<PublicCandidate>();
+    final ArrayList<PublicCandidate> candidates = new ArrayList<>();
     Response.Listener<String> listener =
         new Response.Listener<String>() {
+          @SuppressWarnings("SpellCheckingInspection")
           @Override
           public void onResponse(String response) {
             Log.d("RESPONSE: ", "RECEIVED");
             if (!validateBoothOtpResponse) {
-              Map<String, String> params = new HashMap<>();
-              JSONObject jsonResponse = null;
+              JSONObject jsonResponse;
 
               try {
                 if (response.trim().length() == 0) throw new JSONException("ZERO LENGTH");
@@ -239,14 +248,15 @@ public class PublicAPICall {
                 boolean validApproval = jsonResponse.getBoolean("validApproval");
                 boolean validOtp = jsonResponse.getBoolean("validOtp");
                 if (!validAuth) {
-                  Toast.makeText(mContext, "Un-authourised access request", Toast.LENGTH_LONG)
+                  Toast.makeText(mContext, "Un-authorised access request", Toast.LENGTH_LONG)
                       .show();
                   WaitScreen.terminate = true;
                 } else if (!validBooth) {
                   Toast.makeText(mContext, "Invalid Booth ID ! ", Toast.LENGTH_LONG).show();
                   WaitScreen.terminate = true;
                 } else if (!validApproval) {
-                  Toast.makeText(mContext, "You are not approved to vote ! ", Toast.LENGTH_LONG).show();
+                  Toast.makeText(mContext, "You are not approved to vote ! ", Toast.LENGTH_LONG)
+                      .show();
                   WaitScreen.terminate = true;
                 } else if (!validOtp) {
                   Toast.makeText(mContext, "Incorrect OTP !", Toast.LENGTH_LONG).show();
@@ -330,7 +340,7 @@ public class PublicAPICall {
           public void onErrorResponse(VolleyError error) {
             error.printStackTrace();
             Log.d("RESPONSE ERROR", error.toString());
-            // Toast.makeText(mContext, "Error occured. Try again " + TIMES,
+            // Toast.makeText(mContext, "Error occurred. Try again " + TIMES,
             // Toast.LENGTH_LONG).show();
             if (TIMES < 100 && !validateBoothOtpResponse) {
               PublicAPICall.this.storeCookie(mContext, MainActivity.webView);
@@ -358,7 +368,7 @@ public class PublicAPICall {
   public void getPublicResultList(final Context mContext) {
     this.mContext = mContext;
 
-    final ArrayList<ResultListItem> resultlist = new ArrayList<ResultListItem>();
+    final ArrayList<ResultListItem> resultList = new ArrayList<>();
 
     Response.Listener<String> listener =
         new Response.Listener<String>() {
@@ -367,10 +377,10 @@ public class PublicAPICall {
 
             if (!getPublicResultListResponse) {
 
-              JSONObject jsonResponse = null;
-
+              JSONObject jsonResponse;
               try {
                 jsonResponse = new JSONObject(response);
+                Log.d("response", response);
                 getPublicResultListResponse = true;
                 TIMES = 0;
                 boolean success = jsonResponse.getBoolean("success");
@@ -384,7 +394,7 @@ public class PublicAPICall {
 
                   for (int i = 0; i < len; i++) {
                     JSONObject elections = array.getJSONObject(i);
-                    resultlist.add(
+                    resultList.add(
                         new ResultListItem(
                             elections.getInt("electionId"),
                             elections.getInt("status"),
@@ -395,7 +405,7 @@ public class PublicAPICall {
                   }
                   final Intent intent = new Intent(mContext, ResultList.class);
                   intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                  intent.putExtra("list", resultlist);
+                  intent.putExtra("list", resultList);
 
                   myRunnable thread = new myRunnable(intent, mContext);
                   new Thread(thread).start();
@@ -456,7 +466,8 @@ public class PublicAPICall {
     this.resultSimplified = resultsSimplified;
     this.release = release;
 
-    final ArrayList<PartywiseResultList> partyresultlist = new ArrayList<PartywiseResultList>();
+    final ArrayList<PartywiseResultList> partyResultLists = new ArrayList<>();
+    final HashMap<String, Integer> allianceMap = new HashMap<>();
 
     Response.Listener<String> listener =
         new Response.Listener<String>() {
@@ -464,7 +475,7 @@ public class PublicAPICall {
           public void onResponse(String response) {
             if (!getOverallResultResponse1) {
 
-              JSONObject jsonResponse = null;
+              JSONObject jsonResponse;
 
               try {
                 jsonResponse = new JSONObject(response);
@@ -492,24 +503,32 @@ public class PublicAPICall {
 
                   for (int i = 0; i < len; i++) {
                     JSONObject elections = array.getJSONObject(i);
-                    partyresultlist.add(
+                    partyResultLists.add(
                         new PartywiseResultList(
                             elections.getString("partyName"),
                             elections.getInt("seatsWon"),
-                            elections.getString("partySymbol")));
+                            elections.getString("partySymbol"),
+                            elections.getString("alliance")));
+                  }
+                  JSONObject object = jsonResponse.getJSONObject("allianceList");
+                  Iterator<String> iterator = object.keys();
+                  while (iterator.hasNext()) {
+                    String i = iterator.next();
+                    allianceMap.put(new CaseConverter().toCamelCase(i), object.getInt(i));
                   }
                   if (release) {
                     if (!resultsSimplified.isDestroyed())
-                      resultsSimplified.populate(partyresultlist);
+                      resultsSimplified.populate(partyResultLists, allianceMap);
                   } else {
                     final Intent intent = new Intent(mContext, ResultsSimplified.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("list", partyresultlist);
+                    intent.putExtra("list", partyResultLists);
                     intent.putExtra("electionId", electionId);
                     intent.putExtra("type", type);
                     intent.putExtra("status", status);
                     intent.putExtra("totalSeats", totalSeats);
                     intent.putExtra("tieCount", tieCount);
+                    intent.putExtra("map", allianceMap);
                     myRunnable thread = new myRunnable(intent, mContext);
                     new Thread(thread).start();
                   }
@@ -559,7 +578,7 @@ public class PublicAPICall {
     queue.add(postShowOptions);
   }
 
-  // Overloaded method for statewise results
+  // Overloaded method for state-wise results
   public void getOverallResult(
       final String type,
       final int electionId,
@@ -572,15 +591,17 @@ public class PublicAPICall {
     this.mContext = mContext;
     this.resultDetailed = resultsDetailed;
 
-    final ArrayList<PartywiseResultList> partyresultlist = new ArrayList<PartywiseResultList>();
+    final ArrayList<PartywiseResultList> partyResultList = new ArrayList<>();
+    final HashMap<String, Integer> allianceMap = new HashMap<>();
 
     Response.Listener<String> listener =
         new Response.Listener<String>() {
+          @SuppressWarnings("unused")
           @Override
           public void onResponse(String response) {
             if (!getOverallResultResponse2) {
 
-              JSONObject jsonResponse = null;
+              JSONObject jsonResponse;
 
               try {
                 jsonResponse = new JSONObject(response);
@@ -600,7 +621,8 @@ public class PublicAPICall {
                   else if (!validType)
                     Toast.makeText(mContext, "Invalid election type !", Toast.LENGTH_LONG).show();
                   else if (!validElection)
-                    resultsDetailed.release(null, null, 0, 0, tieCount, stateElectionId, "", false);
+                    resultsDetailed.release(
+                        null, null, null, 0, 0, tieCount, stateElectionId, "", false);
                 } else {
                   int status = jsonResponse.getInt("status");
                   int totalSeats = jsonResponse.getInt("totalSeats");
@@ -610,11 +632,18 @@ public class PublicAPICall {
                   int len = array.length();
                   for (int i = 0; i < len; i++) {
                     JSONObject elections = array.getJSONObject(i);
-                    partyresultlist.add(
+                    partyResultList.add(
                         new PartywiseResultList(
                             elections.getString("partyName"),
                             elections.getInt("seatsWon"),
-                            elections.getString("partySymbol")));
+                            elections.getString("partySymbol"),
+                            elections.getString("alliance")));
+                  }
+                  JSONObject object = jsonResponse.getJSONObject("allianceList");
+                  Iterator<String> iterator = object.keys();
+                  while (iterator.hasNext()) {
+                    String i = iterator.next();
+                    allianceMap.put(new CaseConverter().toCamelCase(i), object.getInt(i));
                   }
                   getConstituencyResult(
                       type,
@@ -622,7 +651,8 @@ public class PublicAPICall {
                       stateCode,
                       mContext,
                       resultsDetailed,
-                      partyresultlist,
+                      partyResultList,
+                      allianceMap,
                       totalSeats,
                       tieCount,
                       stateElectionId);
@@ -678,6 +708,7 @@ public class PublicAPICall {
       final Context mContext,
       final ResultsDetailed resultsDetailed,
       final ArrayList<PartywiseResultList> list,
+      final HashMap<String, Integer> allianceMap,
       final int totalSeats,
       final int tieCount,
       final int stateElectionId) {
@@ -687,12 +718,12 @@ public class PublicAPICall {
     this.mContext = mContext;
     this.resultDetailed = resultsDetailed;
     this.list = list;
+    this.allianceMap = allianceMap;
     this.totalSeats = totalSeats;
     this.tieCount = tieCount;
     this.stateElectionId = stateElectionId;
 
-    final ArrayList<ConstituencyWiseResultList> constresultlist =
-        new ArrayList<ConstituencyWiseResultList>();
+    final ArrayList<ConstituencyWiseResultList> constituencyWiseResultLists = new ArrayList<>();
 
     Response.Listener<String> listener =
         new Response.Listener<String>() {
@@ -700,7 +731,7 @@ public class PublicAPICall {
           public void onResponse(String response) {
             if (!getConstituencyResultResponse) {
 
-              JSONObject jsonResponse = null;
+              JSONObject jsonResponse;
 
               try {
                 jsonResponse = new JSONObject(response);
@@ -719,7 +750,8 @@ public class PublicAPICall {
                   else if (!validType)
                     Toast.makeText(mContext, "Invalid election type !", Toast.LENGTH_LONG).show();
                   else if (!validElection)
-                    resultsDetailed.release(null, null, 0, 0, tieCount, stateElectionId, "", false);
+                    resultsDetailed.release(
+                        null, null, null, 0, 0, tieCount, stateElectionId, "", false);
                 } else {
                   int status = jsonResponse.getInt("status");
                   JSONArray array = jsonResponse.getJSONArray("results");
@@ -727,7 +759,7 @@ public class PublicAPICall {
 
                   for (int i = 0; i < len; i++) {
                     JSONObject elections = array.getJSONObject(i);
-                    constresultlist.add(
+                    constituencyWiseResultLists.add(
                         new ConstituencyWiseResultList(
                             elections.getString("constituencyName"),
                             elections.getString("candidateName"),
@@ -739,7 +771,8 @@ public class PublicAPICall {
                   if (!resultsDetailed.isDestroyed())
                     resultsDetailed.release(
                         list,
-                        constresultlist,
+                        constituencyWiseResultLists,
+                        allianceMap,
                         status,
                         totalSeats,
                         tieCount,
@@ -791,12 +824,12 @@ public class PublicAPICall {
     queue.add(postShowOptions);
   }
 
-  public void getStatelist(final int electionId, final String type, final Context mContext) {
+  public void getStateList(final int electionId, final String type, final Context mContext) {
     this.electionId = electionId;
     this.type = type;
     this.mContext = mContext;
 
-    final ArrayList<StateListItem> resultlist = new ArrayList<StateListItem>();
+    final ArrayList<StateListItem> stateListItems = new ArrayList<>();
 
     Response.Listener<String> listener =
         new Response.Listener<String>() {
@@ -804,7 +837,7 @@ public class PublicAPICall {
           public void onResponse(String response) {
 
             if (!getStateListResponse) {
-              JSONObject jsonResponse = null;
+              JSONObject jsonResponse;
 
               try {
                 jsonResponse = new JSONObject(response);
@@ -821,13 +854,13 @@ public class PublicAPICall {
 
                   for (int i = 0; i < len; i++) {
                     JSONObject elections = array.getJSONObject(i);
-                    resultlist.add(
+                    stateListItems.add(
                         new StateListItem(
                             elections.getString("name"), elections.getString("code")));
                   }
                   final Intent intent = new Intent(mContext, ResultsDetailed.class);
                   intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                  intent.putExtra("list", resultlist);
+                  intent.putExtra("list", stateListItems);
                   intent.putExtra("electionId", electionId);
                   intent.putExtra("type", type);
                   myRunnable thread = new myRunnable(intent, mContext);
@@ -888,7 +921,7 @@ public class PublicAPICall {
           public void onResponse(String response) {
 
             if (!getConstituencyDetailsResponse) {
-              JSONObject jsonResponse = null;
+              JSONObject jsonResponse;
               try {
                 jsonResponse = new JSONObject(response);
                 getConstituencyDetailsResponse = true;
@@ -970,7 +1003,7 @@ public class PublicAPICall {
           public void onResponse(String response) {
 
             if (!getBoothCitiesResponse) {
-              JSONObject jsonResponse = null;
+              JSONObject jsonResponse;
               try {
                 jsonResponse = new JSONObject(response);
                 getBoothCitiesResponse = true;
@@ -1051,7 +1084,7 @@ public class PublicAPICall {
       } else Thanks.instance.release(false);
       Log.d("Key found", "false");
     } else {
-      StringBuilder enVote = new StringBuilder("");
+      StringBuilder enVote = new StringBuilder();
       for (int i = 0; i < setNo.length(); i++)
         enVote.append(keySet.get(Character.toString(setNo.charAt(i))));
       for (int i = 0; i < candidateId.length(); i++)
@@ -1062,7 +1095,7 @@ public class PublicAPICall {
             public void onResponse(String response) {
 
               if (!storeVoteResponse) {
-                JSONObject jsonResponse = null;
+                JSONObject jsonResponse;
 
                 try {
                   Log.d("response", response);
@@ -1078,12 +1111,6 @@ public class PublicAPICall {
                       mContext.startService(intent);
                     } else Thanks.instance.release(true);
                   } else {
-                    boolean validAuth = jsonResponse.getBoolean("validAuth");
-                    boolean validBooth = jsonResponse.getBoolean("validBooth");
-                    boolean validIntegrity = jsonResponse.getBoolean("validIntegrity");
-                    boolean validApproval = jsonResponse.getBoolean("validApproval");
-                    boolean validGarbage = jsonResponse.getBoolean("validGarbage");
-                    boolean deleteApproval = jsonResponse.getBoolean("deleteApproval");
                     Log.d("response", response);
                     if (service) {
                       Intent intent = new Intent(mContext, PostingService.class);
@@ -1107,7 +1134,6 @@ public class PublicAPICall {
                       intent.putExtra("action", PostingService.ACTION_STOP_SERVICE);
                       mContext.startService(intent);
                     } else Thanks.instance.release(false);
-                    ;
                     Log.d("FAILED", "FAILED");
                   }
                 }
@@ -1162,7 +1188,7 @@ public class PublicAPICall {
           public void onResponse(String response) {
 
             if (!getRandomKeyResponse) {
-              JSONObject jsonResponse = null;
+              JSONObject jsonResponse;
 
               try {
                 jsonResponse = new JSONObject(response);
@@ -1236,10 +1262,10 @@ public class PublicAPICall {
           public void onResponse(String response) {
 
             if (!getBoothLocationsResponse) {
-              JSONObject jsonResponse = null;
+              JSONObject jsonResponse;
               try {
                 jsonResponse = new JSONObject(response);
-                getBoothCitiesResponse = true;
+                getBoothLocationsResponse = true;
                 TIMES = 0;
                 boolean success = jsonResponse.getBoolean("success");
                 boolean valid = jsonResponse.getBoolean("validAuth");

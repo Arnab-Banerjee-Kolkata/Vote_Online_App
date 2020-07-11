@@ -40,7 +40,8 @@
             android:src="@mipmap/ic_launcher"
             app:layout_constraintBottom_toBottomOf="@+id/linearLayout5"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="ContentDescription" />
 
         <RelativeLayout
             android:id="@+id/linearLayout5"
@@ -64,7 +65,9 @@
                 android:layout_margin="10dp"
                 android:background="@drawable/boxbg"
                 android:inputType="textEmailAddress"
-                android:padding="10dp" />
+                android:padding="10dp"
+                tools:ignore="LabelFor"
+                android:importantForAutofill="no" />
 
             <EditText
                 android:id="@+id/pass"
@@ -78,7 +81,9 @@
                 android:maxLength="20"
                 android:background="@drawable/boxbg"
                 android:inputType="textPassword"
-                android:padding="10dp"/>
+                android:padding="10dp"
+                tools:ignore="LabelFor"
+                android:importantForAutofill="no" />
 
             <TextView
                 android:id="@+id/uselessID2"
@@ -160,7 +165,8 @@
             android:src="@mipmap/ic_launcher"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView12"/>
+            app:layout_constraintTop_toBottomOf="@id/textView12"
+            tools:ignore="ContentDescription" />
 
         <ScrollView
             android:id="@+id/scrollView2"
@@ -192,7 +198,9 @@
                     android:layout_margin="10dp"
                     android:background="@drawable/boxbg"
                     android:inputType="textEmailAddress"
-                    android:padding="10dp"/>
+                    android:padding="10dp"
+                    tools:ignore="LabelFor"
+                    android:importantForAutofill="no" />
 
                 <EditText
                     android:id="@+id/password1"
@@ -203,7 +211,9 @@
                     android:maxLength="20"
                     android:background="@drawable/boxbg"
                     android:inputType="textPassword"
-                    android:padding="10dp"/>
+                    android:padding="10dp"
+                    tools:ignore="LabelFor"
+                    android:importantForAutofill="no" />
 
                 <EditText
                     android:id="@+id/password2"
@@ -217,7 +227,9 @@
                     android:maxLength="20"
                     android:background="@drawable/boxbg"
                     android:inputType="textPassword"
-                    android:padding="10dp"/>
+                    android:padding="10dp"
+                    tools:ignore="LabelFor"
+                    android:importantForAutofill="no" />
 
                 <TextView
                     android:id="@+id/uselessID4"

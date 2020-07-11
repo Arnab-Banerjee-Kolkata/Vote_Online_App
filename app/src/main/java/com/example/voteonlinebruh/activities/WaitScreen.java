@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -16,13 +15,15 @@ import com.example.voteonlinebruh.R;
 import com.example.voteonlinebruh.utility.ThemeManager;
 
 public class WaitScreen extends AppCompatActivity {
-  private Handler dotHandler = new Handler();
+  private final Handler dotHandler = new Handler();
   private ImageView left, right, imageView, imageView1;
-  private TextView label;
-  private Animation translate_up, translate_down, hands, handsback, mikeback, mike;
+    private Animation translate_up;
+    private Animation translate_down;
+    private Animation handsback;
+    private Animation mikeback;
+    private Animation mike;
   private boolean threadStop;
-  private int resid;
-  public static boolean terminate = false;
+    public static boolean terminate = false;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +32,11 @@ public class WaitScreen extends AppCompatActivity {
     setContentView(R.layout.activity_wait_screen);
     Intent intent = getIntent();
     String text = intent.getStringExtra("LABEL");
-    label = findViewById(R.id.label);
+      TextView label = findViewById(R.id.label);
     label.setText(text);
     left = findViewById(R.id.bg_left);
     right = findViewById(R.id.bg_right);
-    resid = R.drawable.wait_bg_left;
+      int resid = R.drawable.wait_bg_left;
     Glide.with(this).load(resid).into(left);
     resid = R.drawable.wait_bg_right;
     Glide.with(this).load(resid).into(right);
@@ -50,7 +51,7 @@ public class WaitScreen extends AppCompatActivity {
 
     translate_up = AnimationUtils.loadAnimation(this, R.anim.translate_up);
     translate_down = AnimationUtils.loadAnimation(this, R.anim.translate_down);
-    hands = AnimationUtils.loadAnimation(this, R.anim.entry_hands);
+      Animation hands = AnimationUtils.loadAnimation(this, R.anim.entry_hands);
     handsback = AnimationUtils.loadAnimation(this, R.anim.entry_hands_retract);
     mike = AnimationUtils.loadAnimation(this, R.anim.entry_mike);
     mikeback = AnimationUtils.loadAnimation(this, R.anim.entry_mike_retract);
@@ -90,7 +91,6 @@ public class WaitScreen extends AppCompatActivity {
       public void run() {
         try {
           for (int i = 0; i >= 0 && !threadStop; i++) {
-            Log.d("Wait Thread", "i=" + i);
             if (terminate) finish();
             switch (i % 4) {
               case 0:
@@ -154,7 +154,6 @@ public class WaitScreen extends AppCompatActivity {
 
   @Override
   public void finish() {
-    Log.d("Wait Thread", "Terminated");
     terminate = false;
     threadStop = true;
     super.finish();

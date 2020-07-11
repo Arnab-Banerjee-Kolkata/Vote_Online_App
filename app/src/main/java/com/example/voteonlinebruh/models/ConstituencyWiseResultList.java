@@ -5,8 +5,12 @@ import com.example.voteonlinebruh.utility.CaseConverter;
 import java.io.Serializable;
 
 public class ConstituencyWiseResultList implements Serializable {
-  private String constituencyName, candidateName, partyName, partySymbol, candidateImage;
-  private int voteCount;
+  private final String constituencyName;
+    private final String candidateName;
+    private final String partyName;
+    private final String partySymbol;
+    private final String candidateImage;
+  private final int voteCount;
 
   public ConstituencyWiseResultList(
       String constituencyName,

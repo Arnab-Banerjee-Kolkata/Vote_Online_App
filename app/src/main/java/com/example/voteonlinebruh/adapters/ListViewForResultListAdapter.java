@@ -1,5 +1,6 @@
 package com.example.voteonlinebruh.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,8 +19,8 @@ import com.example.voteonlinebruh.utility.CaseConverter;
 import java.util.ArrayList;
 
 public class ListViewForResultListAdapter extends ArrayAdapter<ResultListItem> {
-  ArrayList<ResultListItem> list;
-  Context context;
+  private final ArrayList<ResultListItem> list;
+  private final Context context;
 
   public ListViewForResultListAdapter(ArrayList<ResultListItem> list, Context context) {
     super(context, R.layout.election_card, list);
@@ -27,12 +28,13 @@ public class ListViewForResultListAdapter extends ArrayAdapter<ResultListItem> {
     this.context = context;
   }
 
+  @SuppressLint("SetTextI18n")
   @NonNull
   @Override
   public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
     LayoutInflater layoutInflater =
         (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    ConstraintLayout row =
+    @SuppressLint("ViewHolder") ConstraintLayout row =
         (ConstraintLayout) layoutInflater.inflate(R.layout.election_card, parent, false);
     TextView type, name, status, year;
     ImageView indicator;

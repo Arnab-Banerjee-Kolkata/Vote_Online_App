@@ -4,13 +4,14 @@ import java.io.Serializable;
 
 public class PartywiseResultList implements Serializable {
 
-  private String partyname, partySymbol;
-  private int seatsWon;
+  private final String partyname, partySymbol, alliance;
+  private final int seatsWon;
 
-  public PartywiseResultList(String partyname, int seatsWon, String partySymbol) {
+  public PartywiseResultList(String partyname, int seatsWon, String partySymbol, String alliance) {
     this.partyname = partyname;
     this.seatsWon = seatsWon;
     this.partySymbol = partySymbol;
+    this.alliance = alliance;
   }
 
   public int getSeatsWon() {
@@ -23,5 +24,9 @@ public class PartywiseResultList implements Serializable {
 
   public String getPartySymbol() {
     return partySymbol;
+  }
+
+  public String getAlliance() {
+    return alliance;
   }
 }

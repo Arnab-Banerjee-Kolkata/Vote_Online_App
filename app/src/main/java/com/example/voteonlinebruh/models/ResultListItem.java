@@ -5,8 +5,12 @@ import com.example.voteonlinebruh.utility.CaseConverter;
 import java.io.Serializable;
 
 public class ResultListItem implements Serializable {
-  private int electionId, status, year;
-  private String type, name, stateName;
+  private final int electionId;
+    private final int status;
+    private final int year;
+  private final String type;
+    private final String name;
+    private final String stateName;
 
   public ResultListItem(
       int electionId, int status, int year, String type, String name, String stateName) {

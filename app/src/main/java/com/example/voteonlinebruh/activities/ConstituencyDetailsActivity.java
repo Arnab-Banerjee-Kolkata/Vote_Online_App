@@ -16,19 +16,14 @@ import com.example.voteonlinebruh.utility.ThemeManager;
 import java.util.ArrayList;
 
 public class ConstituencyDetailsActivity extends AppCompatActivity {
-  private RecyclerView recyclerView;
-  private ImageView partySymbol, background;
-  private Toolbar toolbar;
-  private RecyclerView.LayoutManager layoutManager;
-  private int themeId;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    themeId = ThemeManager.getThemeId();
+    int themeId = ThemeManager.getThemeId();
     setTheme(themeId);
     setContentView(R.layout.activity_constituency_details);
-    toolbar = findViewById(R.id.toolbarDetails);
+    Toolbar toolbar = findViewById(R.id.toolbarDetails);
     if (themeId == R.style.AppTheme_Light) {
       toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
     } else {
@@ -41,7 +36,7 @@ public class ConstituencyDetailsActivity extends AppCompatActivity {
             onBackPressed();
           }
         });
-    ArrayList<ConstituencyDetailResult> list =
+    @SuppressWarnings("unchecked") ArrayList<ConstituencyDetailResult> list =
         (ArrayList<ConstituencyDetailResult>) getIntent().getSerializableExtra("list");
     boolean tie = false;
     if (list.get(0).getVotes() == list.get(1).getVotes()){
@@ -49,16 +44,16 @@ public class ConstituencyDetailsActivity extends AppCompatActivity {
     }
     else
     {
-      background=findViewById(R.id.imageViewCollapsing2);
+      ImageView background = findViewById(R.id.imageViewCollapsing2);
       background.setImageResource(R.drawable.winner_bg);
     }
-    recyclerView = findViewById(R.id.recyclerView);
-    partySymbol = findViewById(R.id.winningPartySym);
+    RecyclerView recyclerView = findViewById(R.id.recyclerView);
+    ImageView partySymbol = findViewById(R.id.winningPartySym);
     RecyclerViewForConstituencyDetailsAdapter adapter =
         new RecyclerViewForConstituencyDetailsAdapter(
             list, partySymbol,tie, this.getApplicationContext());
     recyclerView.setHasFixedSize(true);
-    layoutManager = new LinearLayoutManager(this);
+    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
     recyclerView.setLayoutManager(layoutManager);
     recyclerView.setAdapter(adapter);
   }

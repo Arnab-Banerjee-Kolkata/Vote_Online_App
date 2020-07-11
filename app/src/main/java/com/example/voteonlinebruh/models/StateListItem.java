@@ -5,7 +5,8 @@ import com.example.voteonlinebruh.utility.CaseConverter;
 import java.io.Serializable;
 
 public class StateListItem implements Serializable {
-  private String stateName, stateCode;
+  private final String stateName;
+    private final String stateCode;
 
   public StateListItem(String stateName, String stateCode) {
     this.stateName = new CaseConverter().toCamelCase(stateName);

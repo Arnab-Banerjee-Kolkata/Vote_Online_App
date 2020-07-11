@@ -1,5 +1,6 @@
 package com.example.voteonlinebruh.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -40,18 +41,19 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ResultsSimplified extends AppCompatActivity {
 
   private PieChart chart;
   private Toolbar toolbar;
   private Button button;
-  private PieDataSet dataSet;
-  private LayoutInflater layoutInflater;
   private TableLayout tableLayout;
-  SwipeRefreshLayout swipe;
-  SwipeRefreshLayout.OnRefreshListener listener;
-  private int themeId, status, totalSeats, tieCount;
+  private SwipeRefreshLayout swipe;
+  private SwipeRefreshLayout.OnRefreshListener listener;
+  private int themeId;
+  private int totalSeats;
+  private int tieCount;
   private boolean oneTimeDataLoad = false;
 
   @Override
@@ -76,7 +78,7 @@ public class ResultsSimplified extends AppCompatActivity {
           public void onClick(View v) {
             button.setEnabled(false);
             PublicAPICall publicAPICall = new PublicAPICall();
-            publicAPICall.getStatelist(
+            publicAPICall.getStateList(
                 intent.getIntExtra("electionId", 0),
                 intent.getStringExtra("type"),
                 getApplicationContext());
@@ -86,7 +88,7 @@ public class ResultsSimplified extends AppCompatActivity {
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
           }
         });
-    status = intent.getIntExtra("status", 0);
+    int status = intent.getIntExtra("status", 0);
     totalSeats = intent.getIntExtra("totalSeats", 0);
     tieCount = intent.getIntExtra("tieCount", 0);
     ImageView indicator = findViewById(R.id.indicator2);
@@ -98,9 +100,12 @@ public class ResultsSimplified extends AppCompatActivity {
         indicator.setImageResource(R.drawable.complete);
         break;
     }
+    @SuppressWarnings("unchecked")
     ArrayList<PartywiseResultList> resultlist =
         (ArrayList<PartywiseResultList>) intent.getSerializableExtra("list");
-
+    @SuppressWarnings("unchecked")
+    HashMap<String, Integer> alliance =
+        (HashMap<String, Integer>) intent.getSerializableExtra("map");
     chart = findViewById(R.id.chartoverall);
     tableLayout = findViewById(R.id.tableoverall);
     swipe = findViewById(R.id.swipeRefreshSimplifiedPage);
@@ -118,10 +123,12 @@ public class ResultsSimplified extends AppCompatActivity {
           }
         };
     swipe.setOnRefreshListener(listener);
-    populate(resultlist);
+    populate(resultlist, alliance);
   }
 
-  public void populate(ArrayList<PartywiseResultList> resultlist) {
+  @SuppressLint("SetTextI18n")
+  public void populate(
+      ArrayList<PartywiseResultList> resultlist, HashMap<String, Integer> alliance) {
     chart.setBackgroundColor(Color.TRANSPARENT);
     chart.setUsePercentValues(false);
     chart.getDescription().setEnabled(false);
@@ -136,11 +143,11 @@ public class ResultsSimplified extends AppCompatActivity {
     chart.setDrawEntryLabels(false);
     chart.setUsePercentValues(false);
     ArrayList<PieEntry> values = new ArrayList<>();
-    for (int i = 0; i < resultlist.size(); i++) {
-      values.add(new PieEntry(resultlist.get(i).getSeatsWon(), resultlist.get(i).getPartyname()));
+    for (String i : alliance.keySet()) {
+      values.add(new PieEntry(alliance.get(i),i));
     }
     if (tieCount > 0) values.add(new PieEntry(tieCount, "Ties"));
-    dataSet = new PieDataSet(values, "");
+    PieDataSet dataSet = new PieDataSet(values, "");
     dataSet.setSliceSpace(3f);
     dataSet.setSelectionShift(6f);
     dataSet.setColors(ColorTemplate.VORDIPLOM_COLORS);
@@ -171,7 +178,7 @@ public class ResultsSimplified extends AppCompatActivity {
     Legend leg = chart.getLegend();
     leg.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
     LegendEntry[] legend = leg.getEntries();
-    layoutInflater =
+    LayoutInflater layoutInflater =
         (LayoutInflater) this.getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     if (themeId == R.style.AppTheme_Light) {
       dataSet.setValueLineColor(Color.BLACK);
@@ -193,7 +200,6 @@ public class ResultsSimplified extends AppCompatActivity {
       View view = layoutInflater.inflate(R.layout.table_row, tableLayout, false);
       TableRow row = view.findViewById(R.id.rowwwww);
       if (i % 2 == 1) row.setBackgroundColor(getResources().getColor(R.color.shade));
-      View color = view.findViewById(R.id.color);
       TextView names = view.findViewById(R.id.partynum), seats = view.findViewById(R.id.seatnum);
       final ImageView syms = view.findViewById(R.id.imnum);
       final ProgressBar progress = view.findViewById(R.id.tableImageProgress);
@@ -241,7 +247,6 @@ public class ResultsSimplified extends AppCompatActivity {
                 }
               })
           .into(syms);
-      color.setBackgroundColor(legend[i].formColor);
       tableLayout.addView(row);
       swipe.setRefreshing(false);
     }

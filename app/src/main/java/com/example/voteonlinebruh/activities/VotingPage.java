@@ -10,7 +10,7 @@ import android.os.Bundle;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.util.Log;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -29,35 +29,34 @@ import com.example.voteonlinebruh.utility.ThemeManager;
 import java.util.ArrayList;
 
 public class VotingPage extends AppCompatActivity {
-  private ArrayList<RecyclerViewItem> recyclerViewItem_list;
   private int selected = -1;
   private Button done;
   private Context mContext;
   private ArrayList<PublicCandidate> publicCandidates;
-  private RecyclerView recyclerView;
   private RecyclerViewAdapter adapter;
   private LinearLayoutManager layoutManager;
-  private ScreenControl screenControl = new ScreenControl();
-  private RelativeLayout waitrel;
+  private final ScreenControl screenControl = new ScreenControl();
+  private RelativeLayout waitRel;
   private Intent intent;
-  private int themeId, themeId2, resid;
+  private int resId;
   private static boolean alertPress = false;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    themeId = ThemeManager.getThemeId();
+    int themeId = ThemeManager.getThemeId();
     setTheme(themeId);
+    int themeId2;
     if (themeId == R.style.AppTheme_Light) {
       themeId2 = R.style.ConfirmTheme_Light;
-      resid = R.drawable.bulboff_black;
+      resId = R.drawable.bulboff_black;
     } else {
       themeId2 = R.style.ConfirmTheme_Dark;
-      resid = R.drawable.bulboff_white;
+      resId = R.drawable.bulboff_white;
     }
     setContentView(R.layout.activity_voting_page);
     mContext = getApplicationContext();
-    waitrel = findViewById(R.id.waitRel3);
+    waitRel = findViewById(R.id.waitRel3);
     final String boothId = getIntent().getStringExtra("boothId");
     final String voteCode = getIntent().getStringExtra("code");
     intent = new Intent(this, PostingService.class);
@@ -66,9 +65,9 @@ public class VotingPage extends AppCompatActivity {
     intent.putExtra("action", PostingService.ACTION_START_SERVICE);
     PublicAPICall publicAPICall = new PublicAPICall();
     publicAPICall.getRandomKey(boothId, mContext, VotingPage.this);
-    waitrel.setVisibility(View.VISIBLE);
+    waitRel.setVisibility(View.VISIBLE);
     screenControl.makeScreenUnresponsive(VotingPage.this.getWindow());
-    // dialogbox
+    // Dialog box
     final AlertDialog.Builder builder =
         new AlertDialog.Builder(this, themeId2)
             .setTitle("Confirm Submission\n\n")
@@ -99,10 +98,11 @@ public class VotingPage extends AppCompatActivity {
                   }
                 });
     done = findViewById(R.id.donebutton);
-    publicCandidates = (ArrayList<PublicCandidate>) getIntent().getSerializableExtra("list");
+    //noinspection unchecked
+      publicCandidates = (ArrayList<PublicCandidate>) getIntent().getSerializableExtra("list");
     int len = publicCandidates.size();
 
-    recyclerViewItem_list = new ArrayList<>();
+    ArrayList<RecyclerViewItem> recyclerViewItem_list = new ArrayList<>();
 
     for (int i = 0; i < len; i++) {
       PublicCandidate candidate = publicCandidates.get(i);
@@ -112,9 +112,9 @@ public class VotingPage extends AppCompatActivity {
               candidate.getImage(),
               candidate.getPartyName(),
               candidate.getName(),
-              resid));
+              resId));
     }
-    recyclerView = findViewById(R.id.rec);
+    RecyclerView recyclerView = findViewById(R.id.rec);
     recyclerView.setHasFixedSize(true);
     layoutManager = new LinearLayoutManager(this);
     adapter = new RecyclerViewAdapter(recyclerViewItem_list, getApplicationContext());
@@ -129,14 +129,24 @@ public class VotingPage extends AppCompatActivity {
                 adapter.notifyItemChanged(selected);
               }
               CardView view = (CardView) layoutManager.findViewByPosition(position);
-              ConstraintLayout constraintLayout = (ConstraintLayout) view.getChildAt(0);
-              ConstraintLayout constraintLayout1 =
-                  (ConstraintLayout) constraintLayout.getChildAt(1);
-              ImageView indicator = (ImageView) constraintLayout1.getViewById(R.id.indicator);
-              if (resid == R.drawable.bulboff_white)
-                indicator.setImageResource(R.drawable.bulbon_white);
-              else indicator.setImageResource(R.drawable.bulbon_black);
-              selected = position;
+              ConstraintLayout constraintLayout = null;
+              if (view != null) {
+                constraintLayout = (ConstraintLayout) view.getChildAt(0);
+              }
+              ConstraintLayout constraintLayout1 = null;
+              if (constraintLayout != null) {
+                constraintLayout1 = (ConstraintLayout) constraintLayout.getChildAt(1);
+              }
+              ImageView indicator = null;
+              if (constraintLayout1 != null) {
+                indicator = (ImageView) constraintLayout1.getViewById(R.id.indicator);
+              }
+              if (indicator != null) {
+                if (resId == R.drawable.bulboff_white)
+                  indicator.setImageResource(R.drawable.bulbon_white);
+                else indicator.setImageResource(R.drawable.bulbon_black);
+                selected = position;
+              }
             }
           }
         });
@@ -162,7 +172,7 @@ public class VotingPage extends AppCompatActivity {
   }
 
   public void release() {
-    waitrel.setVisibility(View.GONE);
+    waitRel.setVisibility(View.GONE);
     screenControl.makeWindowResponsive(VotingPage.this.getWindow());
   }
 
@@ -195,14 +205,5 @@ public class VotingPage extends AppCompatActivity {
             | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
             | View.SYSTEM_UI_FLAG_FULLSCREEN
             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-  }
-
-  void logout() {
-    super.onBackPressed();
-  }
-
-  @Override
-  public void finish() {
-    super.finish();
   }
 }

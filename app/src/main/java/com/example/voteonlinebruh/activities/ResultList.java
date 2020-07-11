@@ -1,6 +1,5 @@
 package com.example.voteonlinebruh.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,21 +20,16 @@ import java.util.ArrayList;
 public class ResultList extends AppCompatActivity {
 
   private ListView listView;
-  private Context context;
-  private Toolbar toolbar;
   private ArrayList<ResultListItem> resultlist;
-  private ListViewForResultListAdapter arrayAdapter;
-  RelativeLayout listContainer;
-  private int themeId;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    themeId = ThemeManager.getThemeId();
+    int themeId = ThemeManager.getThemeId();
     setTheme(themeId);
     setContentView(R.layout.activity_election_result);
-    toolbar = findViewById(R.id.toolbarres);
-    listContainer = findViewById(R.id.listContainer2);
+    Toolbar toolbar = findViewById(R.id.toolbarres);
+    RelativeLayout listContainer = findViewById(R.id.listContainer2);
     if (themeId == R.style.AppTheme_Light) {
       toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
       listContainer.setBackground(getDrawable(android.R.drawable.dialog_holo_light_frame));
@@ -50,11 +44,11 @@ public class ResultList extends AppCompatActivity {
             onBackPressed();
           }
         });
-    context = this;
     Intent intent = getIntent();
+    //noinspection unchecked
     resultlist = (ArrayList<ResultListItem>) intent.getSerializableExtra("list");
     listView = findViewById(R.id.list2);
-    arrayAdapter = new ListViewForResultListAdapter(resultlist, this.getBaseContext());
+    ListViewForResultListAdapter arrayAdapter = new ListViewForResultListAdapter(resultlist, this.getBaseContext());
     listView.setAdapter(arrayAdapter);
     listView.setOnItemClickListener(
         new AdapterView.OnItemClickListener() {

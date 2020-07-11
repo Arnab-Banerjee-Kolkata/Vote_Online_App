@@ -1,5 +1,6 @@
 package com.example.voteonlinebruh.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Animatable;
@@ -26,9 +27,10 @@ import com.example.voteonlinebruh.utility.ThemeManager;
 
 public class Thanks extends AppCompatActivity {
   private boolean threadStop, success, play;
+  @SuppressLint("StaticFieldLeak")
   public static Thanks instance;
   private ImageView checkView;
-  private Handler handler = new Handler();
+  private final Handler handler = new Handler();
   private CardView cardView;
   private ProgressBar progressBar;
   private TextView textView;
@@ -36,12 +38,13 @@ public class Thanks extends AppCompatActivity {
   private SoundPool soundPool;
   private Vibrator v;
   private AudioManager am;
-  private int themeId, alertToneS, alertToneF;
+    private int alertToneS;
+    private int alertToneF;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    themeId = ThemeManager.getThemeId();
+      int themeId = ThemeManager.getThemeId();
     setTheme(themeId);
     setContentView(R.layout.activity_thanks);
     threadStop = false;
@@ -82,6 +85,7 @@ public class Thanks extends AppCompatActivity {
     v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
     am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
     class myRunnable implements Runnable {
+      @SuppressWarnings("StatementWithEmptyBody")
       @Override
       public void run() {
         while (!threadStop || !play) ;
@@ -109,6 +113,7 @@ public class Thanks extends AppCompatActivity {
             Thread.sleep(400);
             handler.post(
                 new Runnable() {
+                  @SuppressLint("SetTextI18n")
                   @Override
                   public void run() {
                     textView.setText(
@@ -144,6 +149,7 @@ public class Thanks extends AppCompatActivity {
             Thread.sleep(400);
             handler.post(
                 new Runnable() {
+                  @SuppressLint("SetTextI18n")
                   @Override
                   public void run() {
                     textView.setText(
@@ -169,6 +175,7 @@ public class Thanks extends AppCompatActivity {
     new Thread(thread).start();
   }
 
+  @SuppressWarnings("unused")
   public void goHome(View view) {
     super.onBackPressed();
   }

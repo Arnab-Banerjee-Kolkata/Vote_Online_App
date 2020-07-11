@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
@@ -32,10 +33,11 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                android:padding="2dp">
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:backgroundTint="@android:color/transparent"
                     app:cardCornerRadius="5dp">
@@ -44,8 +46,8 @@
                         android:id="@+id/cand_image"
                         android:layout_width="60dp"
                         android:layout_height="80dp"
-                        android:padding="3dp"
-                        android:scaleType="fitXY" />
+                        android:scaleType="fitXY"
+                        tools:ignore="ContentDescription" />
 
                     <ProgressBar
                         android:id="@+id/votingImageProgress2"
@@ -96,7 +98,8 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:padding="3dp"
-                    android:scaleType="fitXY" />
+                    android:scaleType="fitXY"
+                    tools:ignore="ContentDescription" />
 
                 <ProgressBar
                     android:id="@+id/votingImageProgress"
@@ -112,7 +115,8 @@
                 android:layout_height="40dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

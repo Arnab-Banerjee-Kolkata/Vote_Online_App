@@ -1,5 +1,6 @@
 package com.example.voteonlinebruh.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
@@ -15,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -33,30 +33,30 @@ import java.util.ArrayList;
 
 public class Demo extends AppCompatActivity {
 
-  private Handler handler = new Handler();
+  private final Handler handler = new Handler();
   private boolean threadstop = false;
   private Animation fadein, fadeout, scale_slow, scale_fast;
   private TextView message, message2;
-  private ImageButton cl;
-  private RecyclerView recyclerView;
-  private RecyclerViewAdapter adapter;
-  private LinearLayoutManager layoutManager;
-  private ConstraintLayout constraintLayout;
+    private RecyclerView recyclerView;
+    private ConstraintLayout constraintLayout;
   private RelativeLayout rel1, rel2;
   private ImageView tap1inner, tap1outer, tap2inner, tap2outer;
-  private Context context;
-  CardView view;
-  ConstraintLayout constraintLayout1, constraintLayout2, candImg;
-  TextView pname, cname;
-  RelativeLayout pimg;
-  ImageView indicator;
-  private int themeId, resid, resid2;
+    private CardView view;
+  private ConstraintLayout constraintLayout1;
+    private ConstraintLayout constraintLayout2;
+    private ConstraintLayout candImg;
+  private TextView pname;
+    private TextView cname;
+  private RelativeLayout pimg;
+  private ImageView indicator;
+    private int resid;
+    private int resid2;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     int tapinnerRes, tapouterRes;
-    themeId = ThemeManager.getThemeId();
+      int themeId = ThemeManager.getThemeId();
     if (themeId == R.style.AppTheme_Light) {
       setTheme(R.style.DialogTheme_Light);
       getWindow().setBackgroundDrawableResource(android.R.color.white);
@@ -86,15 +86,14 @@ public class Demo extends AppCompatActivity {
               resid));
     recyclerView = findViewById(R.id.rec2);
     recyclerView.setHasFixedSize(true);
-    layoutManager =
-        new LinearLayoutManager(this) {
+      LinearLayoutManager layoutManager = new LinearLayoutManager(this) {
           @Override
           public boolean canScrollVertically() {
-            return false;
+              return false;
           }
-        };
-    context = getApplicationContext();
-    adapter = new RecyclerViewAdapter(recyclerViewItem_list, context);
+      };
+      Context context = getApplicationContext();
+      RecyclerViewAdapter adapter = new RecyclerViewAdapter(recyclerViewItem_list, context);
     recyclerView.setLayoutManager(layoutManager);
     recyclerView.setAdapter(adapter);
     setFinishOnTouchOutside(false);
@@ -117,7 +116,7 @@ public class Demo extends AppCompatActivity {
     fadeout.setDuration(1000);
     scale_slow = AnimationUtils.loadAnimation(context, R.anim.scaleslow);
     scale_fast = AnimationUtils.loadAnimation(context, R.anim.scalefast);
-    cl = findViewById(R.id.closediag);
+      ImageButton cl = findViewById(R.id.closediag);
     cl.setOnClickListener(
         new View.OnClickListener() {
           @Override
@@ -145,17 +144,18 @@ public class Demo extends AppCompatActivity {
     layer[1] = getDrawable(R.drawable.highlighter);
     final TransitionDrawable drawable = new TransitionDrawable(layer);
 
+    @SuppressWarnings("DuplicateBranchesInSwitch")
     class AnimationHandler implements Runnable {
 
       @Override
       public void run() {
         try {
           for (int i = 0; !threadstop; i++) {
-            Log.d("Animation thread", Integer.toString(i));
             switch (i % 20) {
               case 0:
                 handler.post(
                     new Runnable() {
+                      @SuppressLint("SetTextI18n")
                       @Override
                       public void run() {
                         message.setText("This is the screen you will see in the voting area.");
@@ -186,6 +186,7 @@ public class Demo extends AppCompatActivity {
               case 2:
                 handler.post(
                     new Runnable() {
+                      @SuppressLint("SetTextI18n")
                       @Override
                       public void run() {
                         message.setText(
@@ -215,6 +216,7 @@ public class Demo extends AppCompatActivity {
                 candImg = (ConstraintLayout) constraintLayout2.getViewById(R.id.relativeLayout2);
                 handler.post(
                     new Runnable() {
+                      @SuppressLint("SetTextI18n")
                       @Override
                       public void run() {
                         candImg.setBackground(drawable);
@@ -237,6 +239,7 @@ public class Demo extends AppCompatActivity {
                 Thread.sleep(1000);
                 handler.post(
                     new Runnable() {
+                      @SuppressLint("SetTextI18n")
                       @Override
                       public void run() {
                         candImg.setBackgroundColor(
@@ -262,6 +265,7 @@ public class Demo extends AppCompatActivity {
               case 7:
                 handler.post(
                     new Runnable() {
+                      @SuppressLint("SetTextI18n")
                       @Override
                       public void run() {
                         cname.setBackgroundColor(
@@ -287,6 +291,7 @@ public class Demo extends AppCompatActivity {
               case 9:
                 handler.post(
                     new Runnable() {
+                      @SuppressLint("SetTextI18n")
                       @Override
                       public void run() {
                         pname.setBackgroundColor(
@@ -312,6 +317,7 @@ public class Demo extends AppCompatActivity {
               case 11:
                 handler.post(
                     new Runnable() {
+                      @SuppressLint("SetTextI18n")
                       @Override
                       public void run() {
                         pimg.setBackgroundColor(
@@ -337,6 +343,7 @@ public class Demo extends AppCompatActivity {
               case 13:
                 handler.post(
                     new Runnable() {
+                      @SuppressLint("SetTextI18n")
                       @Override
                       public void run() {
                         indicator.setBackgroundColor(
@@ -386,6 +393,7 @@ public class Demo extends AppCompatActivity {
                 Thread.sleep(1000);
                 handler.post(
                     new Runnable() {
+                      @SuppressLint("SetTextI18n")
                       @Override
                       public void run() {
                         message.setText("You can also change you choice if you wish to.");

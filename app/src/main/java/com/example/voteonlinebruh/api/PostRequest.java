@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
 import com.example.voteonlinebruh.R;
@@ -12,9 +11,8 @@ import com.example.voteonlinebruh.R;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PostRequest extends StringRequest {
-  int MY_SOCKET_TIMEOUT_MS = 60000;
-  Context mContext;
+class PostRequest extends StringRequest {
+  private final Context mContext;
 
   public PostRequest(
       Context mContext,
@@ -24,15 +22,16 @@ public class PostRequest extends StringRequest {
       Response.ErrorListener errorListener) {
     super(Method.POST, url, params, listener, errorListener);
     this.mContext = mContext;
+    int MY_SOCKET_TIMEOUT_MS = 60000;
     this.setRetryPolicy(
         new DefaultRetryPolicy(
-            MY_SOCKET_TIMEOUT_MS,
+                MY_SOCKET_TIMEOUT_MS,
             DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
             DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
   }
 
   @Override
-  public Map<String, String> getHeaders() throws AuthFailureError {
+  public Map<String, String> getHeaders() {
 
     Map<String, String> headers = new HashMap<>();
     SharedPreferences sharedPreferences =

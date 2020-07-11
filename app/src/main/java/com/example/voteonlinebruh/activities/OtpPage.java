@@ -23,20 +23,17 @@ import com.example.voteonlinebruh.utility.ThemeManager;
 public class OtpPage extends AppCompatActivity {
   private Context mContext;
   private Button login;
-  private TextView disclaimer;
-  private ImageView imageView;
-  private EditText ets[], boothid;
-  private Toolbar toolbar;
-  private int themeId, resid;
+  private EditText[] ets;
+  private EditText boothid;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    themeId = ThemeManager.getThemeId();
+    int themeId = ThemeManager.getThemeId();
     setTheme(themeId);
     setContentView(R.layout.activity_otp_page);
-    disclaimer = findViewById(R.id.textView4);
-    toolbar = findViewById(R.id.toolbarotp);
+    TextView disclaimer = findViewById(R.id.textView4);
+    Toolbar toolbar = findViewById(R.id.toolbarotp);
     if (themeId == R.style.AppTheme_Light) {
       toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
       disclaimer.setBackgroundResource(R.drawable.spinnerbglight);
@@ -52,8 +49,8 @@ public class OtpPage extends AppCompatActivity {
           }
         });
     mContext = getApplicationContext();
-    imageView = findViewById(R.id.otpbg);
-    resid = R.drawable.log_bot;
+    ImageView imageView = findViewById(R.id.otpbg);
+    int resid = R.drawable.log_bot;
     Glide.with(this).load(resid).into(imageView);
     // ET CODE
 
@@ -74,7 +71,7 @@ public class OtpPage extends AppCompatActivity {
     boothid = findViewById(R.id.boothid);
 
     class textFocus implements TextWatcher {
-      private View view;
+      private final View view;
 
       private textFocus(View view) {
         this.view = view;
@@ -115,9 +112,9 @@ public class OtpPage extends AppCompatActivity {
       }
     }
     class listener implements View.OnKeyListener {
-      private int index;
+      private final int index;
 
-      public listener(int index) {
+      listener(int index) {
         this.index = index;
       }
 
@@ -153,26 +150,25 @@ public class OtpPage extends AppCompatActivity {
           @Override
           public void onClick(View v) {
             try {
-              String otp;
+              StringBuilder otp;
               WaitScreen.terminate = false;
-              otp = "";
-              for (EditText x : ets) otp += x.getText().toString();
+              otp = new StringBuilder();
+              for (EditText x : ets) otp.append(x.getText().toString());
               if (boothid.getText().toString().isEmpty()) {
                 throw new Exception("Please enter the booth ID !");
               }
               if (otp.length() != 6) {
-                otp = "";
                 throw new Exception("Please enter OTP !");
               }
               String boothId = boothid.getText().toString();
               if (!validInput(boothId)) {
                 throw new Exception("Invalid Booth ID !");
               }
-              if (!validInput(otp)) {
+              if (!validInput(otp.toString())) {
                 throw new Exception("Invalid OTP !");
               }
               login.setEnabled(false);
-              String OTP = otp;
+              String OTP = otp.toString();
               PublicAPICall publicAPICall = new PublicAPICall();
               publicAPICall.validateBoothOtp(boothId, OTP, mContext, OtpPage.this);
 
@@ -189,6 +185,7 @@ public class OtpPage extends AppCompatActivity {
         });
   }
 
+  @SuppressWarnings("BooleanMethodIsAlwaysInverted")
   private boolean validInput(String s) {
     char c;
     boolean retval = true;
@@ -212,10 +209,5 @@ public class OtpPage extends AppCompatActivity {
   public void onBackPressed() {
     super.onBackPressed();
     overridePendingTransition(R.anim.prev_act_from_left_to_right, R.anim.curr_act_go_to_right);
-  }
-
-  @Override
-  public void finish() {
-    super.finish();
   }
 }
