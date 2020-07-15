@@ -510,11 +510,14 @@ public class PublicAPICall {
                             elections.getString("partySymbol"),
                             elections.getString("alliance")));
                   }
-                  JSONObject object = jsonResponse.getJSONObject("allianceList");
-                  Iterator<String> iterator = object.keys();
-                  while (iterator.hasNext()) {
-                    String i = iterator.next();
-                    allianceMap.put(new CaseConverter().toCamelCase(i), object.getInt(i));
+                  try {
+                    JSONObject object = jsonResponse.getJSONObject("allianceList");
+                    Iterator<String> iterator = object.keys();
+                    while (iterator.hasNext()) {
+                      String i = iterator.next();
+                      allianceMap.put(new CaseConverter().toCamelCase(i), object.getInt(i));
+                    }
+                  } catch (JSONException e) {
                   }
                   if (release) {
                     if (!resultsSimplified.isDestroyed())
@@ -639,11 +642,14 @@ public class PublicAPICall {
                             elections.getString("partySymbol"),
                             elections.getString("alliance")));
                   }
-                  JSONObject object = jsonResponse.getJSONObject("allianceList");
-                  Iterator<String> iterator = object.keys();
-                  while (iterator.hasNext()) {
-                    String i = iterator.next();
-                    allianceMap.put(new CaseConverter().toCamelCase(i), object.getInt(i));
+                  try {
+                    JSONObject object = jsonResponse.getJSONObject("allianceList");
+                    Iterator<String> iterator = object.keys();
+                    while (iterator.hasNext()) {
+                      String i = iterator.next();
+                      allianceMap.put(new CaseConverter().toCamelCase(i), object.getInt(i));
+                    }
+                  } catch (JSONException e) {
                   }
                   getConstituencyResult(
                       type,
