@@ -1,3 +1,61 @@
+# Screen shots
+
+<table width="500" border="0" cellpadding="5">
+
+<tr>
+
+<td align="center" valign="center">
+<img src="https://github.com/Arnab-Banerjee-Kolkata/Vote_Online_App/tree/master/SampleImages/ph1" alt="description here" />
+<br />
+</td>
+
+<td align="center" valign="center">
+<img src="https://github.com/Arnab-Banerjee-Kolkata/Vote_Online_App/tree/master/SampleImages/phn2" alt="description here" />
+<br />
+</td>
+
+</tr>
+
+<tr>
+
+<td align="center" valign="center">
+<img src="https://github.com/Arnab-Banerjee-Kolkata/Vote_Online_App/tree/master/SampleImages/phn3" alt="description here" />
+<br />
+</td>
+
+<td align="center" valign="center">
+<img src="https://github.com/Arnab-Banerjee-Kolkata/Vote_Online_App/tree/master/SampleImages/phn4" alt="description here" />
+<br />
+</td>
+
+</tr>
+
+<tr>
+
+<td align="center" valign="center">
+<img src="https://github.com/Arnab-Banerjee-Kolkata/Vote_Online_App/tree/master/SampleImages/phn5" alt="description here" />
+<br />
+</td>
+
+<td align="center" valign="center">
+<img src="https://github.com/Arnab-Banerjee-Kolkata/Vote_Online_App/tree/master/SampleImages/phn6" alt="description here" />
+<br />
+</td>
+
+</tr>
+
+<tr>
+
+<td align="center" valign="center">
+<img src="https://github.com/Arnab-Banerjee-Kolkata/Vote_Online_App/tree/master/SampleImages/phn7" alt="description here" />
+<br />
+</td>
+
+</tr>
+
+</table>
+
+
 # Demonstration Video
 
 https://drive.google.com/file/d/1-8MAnlsEy63o3watSNZj3OkcaUjzvpmV/view?usp=sharing
