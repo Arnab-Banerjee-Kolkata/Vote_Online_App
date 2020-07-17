@@ -14,10 +14,6 @@
 <br />
 </td>
 
-</tr>
-
-<tr>
-
 <td align="center" valign="center">
 <img src="https://github.com/Arnab-Banerjee-Kolkata/Vote_Online_App/blob/master/SampleImages/phn3.png" alt="description here" />
 <br />
@@ -28,23 +24,20 @@
 <br />
 </td>
 
-</tr>
-
-<tr>
-
 <td align="center" valign="center">
 <img src="https://github.com/Arnab-Banerjee-Kolkata/Vote_Online_App/blob/master/SampleImages/phn5.png" alt="description here" />
 <br />
 </td>
 
+</tr>
+
+
+<tr>
+
 <td align="center" valign="center">
 <img src="https://github.com/Arnab-Banerjee-Kolkata/Vote_Online_App/blob/master/SampleImages/phn6.png" alt="description here" />
 <br />
 </td>
-
-</tr>
-
-<tr>
 
 <td align="center" valign="center">
 <img src="https://github.com/Arnab-Banerjee-Kolkata/Vote_Online_App/blob/master/SampleImages/phn7.png" alt="description here" />
