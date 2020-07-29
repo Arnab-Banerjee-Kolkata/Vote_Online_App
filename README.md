@@ -10,7 +10,7 @@
 </td>
 
 <td align="center" valign="center">
-<img src="https://github.com/Arnab-Banerjee-Kolkata/Vote_Online_App/blob/master/SampleImages/phn2.png" alt="description here" height="275" width="150" />
+<img src="https://github.com/Arnab-Banerjee-Kolkata/Vote_Online_App/blob/master/SampleImages/phn2.png" alt="description here" height="285" width="150" />
 <br />
 </td>
 
