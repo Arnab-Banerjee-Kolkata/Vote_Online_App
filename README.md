@@ -1,3 +1,5 @@
+# Vote_Online_App
+Voting application for remote voting platform. Users can use this to cast vote securely and anonimously, locate available remote booths and view published election results and details.
 # Screen shots
 
 <table width="500" border="0" cellpadding="5">
@@ -53,14 +55,9 @@
 
 https://drive.google.com/file/d/1-8MAnlsEy63o3watSNZj3OkcaUjzvpmV/view?usp=sharing
 
-# Vote_Online_App
-<br>
-<br>
-<br>
-<b>SECURITY MEASURES</b><br><br>
-
-1. postAuthKey: Authentication key to validate that a request is made from our app or website<br>
-2. smsAuthKey: Authentication key to validate that our app or website wants to use the paid sms service<br>
+# SECURITY MEASURES
+1. postAuthKey: Authentication key to validate that a request is made from our app or website <br>
+2. smsAuthKey: Authentication key to validate that our app or website wants to use the paid sms service <br>
 <br>
 <br>
 3. Booth OTP: To validate that no one can log in to booth outside the designated office<br>
